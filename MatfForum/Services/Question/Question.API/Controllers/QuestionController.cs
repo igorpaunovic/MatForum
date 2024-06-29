@@ -10,7 +10,6 @@ public class QuestionController(ILogger<QuestionController> logger) : Controller
     [HttpGet(Name = "GetQuestions")]
     public IEnumerable<Question> Get()
     {
-        logger.LogError("WTF");
         Question[] questions = new Question[]
             {
                 new Question
