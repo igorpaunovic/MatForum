@@ -6,17 +6,11 @@
 # Navigate to project root
 cd MatfForum/docker
 
-# Build and run just the user service
-docker-compose up --build
-
-# Or run in background
+# Build and run
 docker-compose up --build -d
 
 # View logs
-docker-compose logs -f user-service
-
-# Stop
-docker-compose down
+docker logs -f matforum-user-service
 ```
 
 ## 🧪 How to test
