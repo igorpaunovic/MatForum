@@ -19,6 +19,7 @@ docker logs -f user-service
 
 ## 🦴 Structure
 
+```
 MatForum/
 ├── src/
 │   ├── ApiGateway/
@@ -57,3 +58,4 @@ MatForum/
 ├── docker/
 ├── docs/
 └── MatForum.sln
+```
