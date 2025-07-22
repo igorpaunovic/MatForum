@@ -4,7 +4,7 @@
 
 ```
 # Navigate to project root
-cd MatfForum/docker
+cd MatfForum/docker_compose
 
 # Build and run
 docker-compose up --build -d
