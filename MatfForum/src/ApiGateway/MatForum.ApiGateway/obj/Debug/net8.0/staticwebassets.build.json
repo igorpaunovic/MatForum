@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "Ql9dAfSuPJrrlKGTGu5gOSUaJkg7HIZQpCQS303PvaI=",
+  "Source": "MatForum.ApiGateway",
+  "BasePath": "_content/MatForum.ApiGateway",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

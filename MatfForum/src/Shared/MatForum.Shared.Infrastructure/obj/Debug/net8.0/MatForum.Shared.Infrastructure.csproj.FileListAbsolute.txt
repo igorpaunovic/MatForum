@@ -1,0 +1,12 @@
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Infrastructure/bin/Debug/net8.0/MatForum.Shared.Infrastructure.deps.json
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Infrastructure/bin/Debug/net8.0/MatForum.Shared.Infrastructure.dll
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Infrastructure/bin/Debug/net8.0/MatForum.Shared.Infrastructure.pdb
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Infrastructure/obj/Debug/net8.0/MatForum.Shared.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Infrastructure/obj/Debug/net8.0/MatForum.Shared.Infrastructure.AssemblyInfoInputs.cache
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Infrastructure/obj/Debug/net8.0/MatForum.Shared.Infrastructure.AssemblyInfo.cs
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Infrastructure/obj/Debug/net8.0/MatForum.Shared.Infrastructure.csproj.CoreCompileInputs.cache
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Infrastructure/obj/Debug/net8.0/MatForum.Shared.Infrastructure.sourcelink.json
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Infrastructure/obj/Debug/net8.0/MatForum.Shared.Infrastructure.dll
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Infrastructure/obj/Debug/net8.0/refint/MatForum.Shared.Infrastructure.dll
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Infrastructure/obj/Debug/net8.0/MatForum.Shared.Infrastructure.pdb
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Infrastructure/obj/Debug/net8.0/ref/MatForum.Shared.Infrastructure.dll

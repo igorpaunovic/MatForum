@@ -1,0 +1,132 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {
+      "MatForum.Shared.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/MatForum.Shared.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MatForum.Shared.Infrastructure.dll": {}
+        }
+      },
+      "MatForum.User.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/MatForum.User.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MatForum.User.Domain.dll": {}
+        }
+      },
+      "MatForum.User.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "MatForum.Shared.Infrastructure": "1.0.0",
+          "MatForum.User.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/MatForum.User.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MatForum.User.Infrastructure.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MatForum.Shared.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../../../Shared/MatForum.Shared.Infrastructure/MatForum.Shared.Infrastructure.csproj",
+      "msbuildProject": "../../../Shared/MatForum.Shared.Infrastructure/MatForum.Shared.Infrastructure.csproj"
+    },
+    "MatForum.User.Domain/1.0.0": {
+      "type": "project",
+      "path": "../MatForum.User.Domain/MatForum.User.Domain.csproj",
+      "msbuildProject": "../MatForum.User.Domain/MatForum.User.Domain.csproj"
+    },
+    "MatForum.User.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../MatForum.User.Infrastructure/MatForum.User.Infrastructure.csproj",
+      "msbuildProject": "../MatForum.User.Infrastructure/MatForum.User.Infrastructure.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "MatForum.User.Domain >= 1.0.0",
+      "MatForum.User.Infrastructure >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "/Users/igorpaunovic/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/Users/igorpaunovic/Git/MatForum/MatfForum/src/Services/User/MatForum.User.Application/MatForum.User.Application.csproj",
+      "projectName": "MatForum.User.Application",
+      "projectPath": "/Users/igorpaunovic/Git/MatForum/MatfForum/src/Services/User/MatForum.User.Application/MatForum.User.Application.csproj",
+      "packagesPath": "/Users/igorpaunovic/.nuget/packages/",
+      "outputPath": "/Users/igorpaunovic/Git/MatForum/MatfForum/src/Services/User/MatForum.User.Application/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/Users/igorpaunovic/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {
+            "/Users/igorpaunovic/Git/MatForum/MatfForum/src/Services/User/MatForum.User.Domain/MatForum.User.Domain.csproj": {
+              "projectPath": "/Users/igorpaunovic/Git/MatForum/MatfForum/src/Services/User/MatForum.User.Domain/MatForum.User.Domain.csproj"
+            },
+            "/Users/igorpaunovic/Git/MatForum/MatfForum/src/Services/User/MatForum.User.Infrastructure/MatForum.User.Infrastructure.csproj": {
+              "projectPath": "/Users/igorpaunovic/Git/MatForum/MatfForum/src/Services/User/MatForum.User.Infrastructure/MatForum.User.Infrastructure.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      }
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.411/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "MatForum.Shared.Infrastructure/1.0.0": {
+        "runtime": {
+          "MatForum.Shared.Infrastructure.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MatForum.Shared.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

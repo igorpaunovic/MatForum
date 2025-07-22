@@ -1,0 +1,12 @@
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Domain/bin/Debug/net8.0/MatForum.Shared.Domain.deps.json
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Domain/bin/Debug/net8.0/MatForum.Shared.Domain.dll
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Domain/bin/Debug/net8.0/MatForum.Shared.Domain.pdb
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Domain/obj/Debug/net8.0/MatForum.Shared.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Domain/obj/Debug/net8.0/MatForum.Shared.Domain.AssemblyInfoInputs.cache
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Domain/obj/Debug/net8.0/MatForum.Shared.Domain.AssemblyInfo.cs
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Domain/obj/Debug/net8.0/MatForum.Shared.Domain.csproj.CoreCompileInputs.cache
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Domain/obj/Debug/net8.0/MatForum.Shared.Domain.sourcelink.json
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Domain/obj/Debug/net8.0/MatForum.Shared.Domain.dll
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Domain/obj/Debug/net8.0/refint/MatForum.Shared.Domain.dll
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Domain/obj/Debug/net8.0/MatForum.Shared.Domain.pdb
+/Users/igorpaunovic/Git/MatForum/MatfForum/src/Shared/MatForum.Shared.Domain/obj/Debug/net8.0/ref/MatForum.Shared.Domain.dll
