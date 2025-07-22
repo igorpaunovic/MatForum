@@ -10,7 +10,7 @@ cd MatfForum/docker
 docker-compose up --build -d
 
 # View logs
-docker logs -f matforum-user-service
+docker logs -f user-service
 ```
 
 ## 🧪 How to test
