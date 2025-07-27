@@ -15,15 +15,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatForum.Shared.Domain", "s
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{1B299E18-29C8-4200-934C-C5EC998180CF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User", "User", "{8785AFE8-528F-4B40-B50D-99B2130A8789}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserManagement", "UserManagement", "{8785AFE8-528F-4B40-B50D-99B2130A8789}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatForum.User.API", "src\Services\User\MatForum.User.API\MatForum.User.API.csproj", "{655C374E-04A1-4A7C-B05C-5E50F4C09DDD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatForum.UserManagement.API", "src\Services\UserManagement\MatForum.UserManagement.API\MatForum.UserManagement.API.csproj", "{655C374E-04A1-4A7C-B05C-5E50F4C09DDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatForum.User.Domain", "src\Services\User\MatForum.User.Domain\MatForum.User.Domain.csproj", "{F66364E5-4BC5-4D48-915D-6C424BA11197}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatForum.UserManagement.Domain", "src\Services\UserManagement\MatForum.UserManagement.Domain\MatForum.UserManagement.Domain.csproj", "{F66364E5-4BC5-4D48-915D-6C424BA11197}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatForum.User.Application", "src\Services\User\MatForum.User.Application\MatForum.User.Application.csproj", "{959BA5CE-B303-4EAC-9211-F04B490263AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatForum.UserManagement.Application", "src\Services\UserManagement\MatForum.UserManagement.Application\MatForum.UserManagement.Application.csproj", "{959BA5CE-B303-4EAC-9211-F04B490263AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatForum.User.Infrastructure", "src\Services\User\MatForum.User.Infrastructure\MatForum.User.Infrastructure.csproj", "{C9F1EBB1-94FA-4FF5-8C71-1E9BCBF878C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatForum.UserManagement.Infrastructure", "src\Services\UserManagement\MatForum.UserManagement.Infrastructure\MatForum.UserManagement.Infrastructure.csproj", "{C9F1EBB1-94FA-4FF5-8C71-1E9BCBF878C9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateway", "ApiGateway", "{69AFD2B2-69F3-45EE-90A6-D1368AC0626B}"
 EndProject
