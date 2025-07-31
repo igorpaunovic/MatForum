@@ -2,7 +2,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MatForum.UserManagement.Domain\MatForum.UserManagement.Domain.csproj" />
-    <ProjectReference Include="..\MatForum.UserManagement.Infrastructure\MatForum.UserManagement.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\" />
   </ItemGroup>
 
   <PropertyGroup>
