@@ -31,6 +31,7 @@ public class UserService(IUserRepository userRepository) : IUserService
     {
         var user = new User
         {
+            Id = createUserDto.Id,
             FirstName = createUserDto.FirstName,
             LastName = createUserDto.LastName,
             Email = createUserDto.Email,
@@ -49,11 +50,11 @@ public class UserService(IUserRepository userRepository) : IUserService
             return null;
         }
         
-        existingUser.FirstName = updateUserDto.FirstName;
-        existingUser.LastName = updateUserDto.LastName;
-        existingUser.Email = updateUserDto.Email;
-        existingUser.Username = updateUserDto.Username;
-        existingUser.DateOfBirth = updateUserDto.DateOfBirth;
+        existingUser.FirstName = updateUserDto.FirstName ?? existingUser.FirstName;
+        existingUser.LastName = updateUserDto.LastName ?? existingUser.LastName;
+        existingUser.Email = updateUserDto.Email ?? existingUser.Email;
+        existingUser.Username = updateUserDto.Username ?? existingUser.Username;
+        existingUser.DateOfBirth = updateUserDto.DateOfBirth ?? existingUser.DateOfBirth;
         existingUser.UpdatedAt = DateTime.UtcNow;
 
         return await userRepository.Update(id, existingUser);
