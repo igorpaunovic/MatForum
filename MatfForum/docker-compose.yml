@@ -12,3 +12,15 @@ services:
     ports:
       - "5001:80"
     restart: on-failure
+    
+  question-service:
+    build:
+      context: .
+      dockerfile: src/Services/ForumQuestion/MatForum.ForumQuestion.API/Dockerfile
+    container_name: question-service
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5002:80"
+    restart: on-failure
