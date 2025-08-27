@@ -1,5 +1,5 @@
 using MatForum.ForumQuestion.Application.DTOs;
-using MatForum.ForumQuestion.Application.Services;
+using MatForum.ForumQuestion.Application.Interfaces; 
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,9 +11,9 @@ namespace MatForum.ForumQuestion.API.Controllers
     [Route("api/[controller]")]
     public class QuestionsController : ControllerBase
     {
-        private readonly QuestionService _questionService;
+        private readonly IForumQuestionService _questionService;
 
-        public QuestionsController(QuestionService questionService)
+        public QuestionsController(IForumQuestionService questionService)
         {
             _questionService = questionService;
         }

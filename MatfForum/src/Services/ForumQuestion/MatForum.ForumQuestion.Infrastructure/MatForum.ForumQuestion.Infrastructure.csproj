@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Shared\MatForum.Shared.Infrastructure\MatForum.Shared.Infrastructure.csproj" />
       <ProjectReference Include="..\MatForum.ForumQuestion.Application\MatForum.ForumQuestion.Application.csproj" />
       <ProjectReference Include="..\MatForum.ForumQuestion.Domain\MatForum.ForumQuestion.Domain.csproj" />
     </ItemGroup>
