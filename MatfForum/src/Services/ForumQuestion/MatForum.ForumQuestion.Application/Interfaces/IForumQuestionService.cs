@@ -7,10 +7,10 @@ namespace MatForum.ForumQuestion.Application.Interfaces
 {
     public interface IForumQuestionService
     {
-        Task<QuestionDto> CreateQuestionAsync(CreateQuestionCommand command);
-        Task<QuestionDto> GetQuestionByIdAsync(Guid id);
-        Task<IEnumerable<QuestionDto>> GetAllQuestionsAsync();
-        Task<bool> UpdateQuestionAsync(UpdateQuestionCommand command);
-        Task<bool> DeleteQuestionAsync(Guid id);
+        Task<QuestionDto> CreateQuestion(CreateQuestionCommand command);
+        Task<QuestionDto> GetQuestionById(Guid id);
+        Task<IEnumerable<QuestionDto>> GetAllQuestions();
+        Task<bool> UpdateQuestion(UpdateQuestionCommand command);
+        Task<bool> DeleteQuestion(Guid id);
     }
 }

@@ -21,7 +21,7 @@ namespace MatForum.ForumQuestion.Application.Services
             _userService = userService;
         }
 
-        public async Task<QuestionDto> CreateQuestionAsync(CreateQuestionCommand command)
+        public async Task<QuestionDto> CreateQuestion(CreateQuestionCommand command)
         {
             // Fetch the user information from the user service using the correct method.
             var user = await _userService.GetById(command.CreatedByUserId);
@@ -50,7 +50,7 @@ namespace MatForum.ForumQuestion.Application.Services
             };
         }
 
-        public async Task<QuestionDto> GetQuestionByIdAsync(Guid id)
+        public async Task<QuestionDto> GetQuestionById(Guid id)
         {
             var question = await _questionRepository.GetById(id);
             if (question == null) return null;
@@ -76,7 +76,7 @@ namespace MatForum.ForumQuestion.Application.Services
             };
         }
 
-        public async Task<IEnumerable<QuestionDto>> GetAllQuestionsAsync()
+        public async Task<IEnumerable<QuestionDto>> GetAllQuestions()
         {
             var questions = await _questionRepository.GetAll();
             var questionDtos = new List<QuestionDto>();
@@ -106,7 +106,7 @@ namespace MatForum.ForumQuestion.Application.Services
             return questionDtos;
         }
 
-        public async Task<bool> UpdateQuestionAsync(UpdateQuestionCommand command)
+        public async Task<bool> UpdateQuestion(UpdateQuestionCommand command)
         {
             var question = await _questionRepository.GetById(command.Id);
             var id = command.Id;
@@ -117,7 +117,7 @@ namespace MatForum.ForumQuestion.Application.Services
             return true;
         }
 
-        public async Task<bool> DeleteQuestionAsync(Guid id)
+        public async Task<bool> DeleteQuestion(Guid id)
         {
             var question = await _questionRepository.GetById(id);
             if (question == null) return false;
