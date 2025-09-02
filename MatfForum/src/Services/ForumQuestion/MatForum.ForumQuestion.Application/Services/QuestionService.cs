@@ -2,6 +2,7 @@ using MatForum.ForumQuestion.Application.DTOs;
 using MatForum.ForumQuestion.Application.Interfaces;
 using MatForum.ForumQuestion.Domain.Entities;
 using MatForum.UserManagement.Application.Interfaces;
+using MatForum.UserManagement.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace MatForum.ForumQuestion.Application.Services
     public class ForumQuestionService : IForumQuestionService
     {
         private readonly IQuestionRepository _questionRepository;
-        private readonly IUserService _userService; // <-- ADDED dependency on IUserService
+        private readonly IUserService _userService;
 
         public ForumQuestionService(IQuestionRepository questionRepository, IUserService userService)
         {
@@ -22,33 +23,14 @@ namespace MatForum.ForumQuestion.Application.Services
 
         public async Task<QuestionDto> CreateQuestionAsync(CreateQuestionCommand command)
         {
-            // Fetch the user information from the user service
+            // Fetch the user information from the user service using the correct method.
             var user = await _userService.GetById(command.CreatedByUserId);
-            //
-            // var users = await _userService.GetAll();
-            //
-            // Console.WriteLine($"All users: ");
-            // foreach (var u in users)
-            // {
-            //     Console.WriteLine(u.Username);
-            // }
-            //
-            // // Console logging for debugging purposes.
-            // Console.WriteLine($"Attempting to create question for user ID: {command.CreatedByUserId}");
-            // if (user != null)
-            // {
-            //     Console.WriteLine($"Found user: {user.Username}");
-            // }
-            // else
-            // {
-            //     Console.WriteLine("User not found.");
-            // }
-            //
-            // if (user == null)
-            // {
-            //     throw new InvalidOperationException("Cannot create question for a non-existent user.");
-            // }
-            //
+
+            if (user == null)
+            {
+                throw new InvalidOperationException("Cannot create question for a non-existent user.");
+            }
+            
             // Domain validation is handled by Question constructor
             var question = new Question(command.Title, command.Content, command.CreatedByUserId, command.Tags);
             await _questionRepository.Create(question);
@@ -59,7 +41,7 @@ namespace MatForum.ForumQuestion.Application.Services
                 Title = question.Title,
                 Content = question.Content,
                 CreatedByUserId = question.CreatedByUserId,
-                AuthorName = user?.Username ?? "Unknown User", // Populate AuthorName with the retrieved username or a placeholder
+                AuthorName = user?.Username ?? "Unknown User",
                 CreatedDate = question.CreatedDate,
                 LastModifiedDate = question.LastModifiedDate,
                 Views = question.Views,
@@ -76,7 +58,7 @@ namespace MatForum.ForumQuestion.Application.Services
             question.IncrementViews(); // Business rule: view increments on fetch
             await _questionRepository.Update(id, question); // Persist updated view count
             
-            // Fetch the user information from the user service
+            // Fetch the user information from the user service using the correct method.
             var user = await _userService.GetById(question.CreatedByUserId);
 
             return new QuestionDto
@@ -85,7 +67,7 @@ namespace MatForum.ForumQuestion.Application.Services
                 Title = question.Title,
                 Content = question.Content,
                 CreatedByUserId = question.CreatedByUserId,
-                AuthorName = user?.Username ?? "Unknown User", // Populate AuthorName with the retrieved username or a placeholder
+                AuthorName = user?.Username ?? "Unknown User", // Use the User domain entity to get the username
                 CreatedDate = question.CreatedDate,
                 LastModifiedDate = question.LastModifiedDate,
                 Views = question.Views,
@@ -99,10 +81,12 @@ namespace MatForum.ForumQuestion.Application.Services
             var questions = await _questionRepository.GetAll();
             var questionDtos = new List<QuestionDto>();
             
+            var users = (await _userService.GetAll()).ToDictionary(u => u.Id);
+            
             foreach (var q in questions)
             {
-                // Fetch the user for each question
-                var user = await _userService.GetById(q.CreatedByUserId);
+                // Look up the user in the dictionary.
+                users.TryGetValue(q.CreatedByUserId, out var user);
                 
                 questionDtos.Add(new QuestionDto
                 {
@@ -110,7 +94,7 @@ namespace MatForum.ForumQuestion.Application.Services
                     Title = q.Title,
                     Content = q.Content,
                     CreatedByUserId = q.CreatedByUserId,
-                    AuthorName = user?.Username ?? "Unknown User", // Populate with the retrieved username
+                    AuthorName = user?.Username ?? "Unknown User", // Use the User domain entity to get the username
                     CreatedDate = q.CreatedDate,
                     LastModifiedDate = q.LastModifiedDate,
                     Views = q.Views,
