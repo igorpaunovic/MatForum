@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using MatForum.UserManagement.Application.DTOs;
-using MatForum.UserManagement.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,8 +22,6 @@ builder.Services.AddScoped<IForumQuestionService, ForumQuestionService>();
 // Register the HttpClient for the UserServiceHttpClient
 builder.Services.AddHttpClient<IUserService, UserServiceHttpClient>(client =>
 {
-    // Use the service name from docker-compose.yml for inter-container communication.
-    // The port is the internal container port (80)
     client.BaseAddress = new Uri("http://user-service");
 });
 

@@ -1,4 +1,4 @@
-using MatForum.Shared.Domain.Interfaces; // Assuming this is the namespace for IGenericRepository
+using MatForum.Shared.Domain.Interfaces; 
 using MatForum.ForumQuestion.Domain.Entities;
 
 namespace MatForum.ForumQuestion.Application.Interfaces
