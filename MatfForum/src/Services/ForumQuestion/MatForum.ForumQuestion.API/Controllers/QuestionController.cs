@@ -1,5 +1,5 @@
 using MatForum.ForumQuestion.Application.DTOs;
-using MatForum.ForumQuestion.Application.Services;
+using MatForum.ForumQuestion.Application.Interfaces; 
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,9 +11,9 @@ namespace MatForum.ForumQuestion.API.Controllers
     [Route("api/[controller]")]
     public class QuestionsController : ControllerBase
     {
-        private readonly QuestionService _questionService;
+        private readonly IForumQuestionService _questionService;
 
-        public QuestionsController(QuestionService questionService)
+        public QuestionsController(IForumQuestionService questionService)
         {
             _questionService = questionService;
         }
@@ -34,7 +34,7 @@ namespace MatForum.ForumQuestion.API.Controllers
 
             try
             {
-                var createdQuestion = await _questionService.CreateQuestionAsync(command);
+                var createdQuestion = await _questionService.CreateQuestion(command);
                 return CreatedAtAction(nameof(GetQuestionById), new { id = createdQuestion.Id }, createdQuestion);
             }
             catch (ArgumentException ex) // Catching domain-level validation errors
@@ -46,7 +46,7 @@ namespace MatForum.ForumQuestion.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<QuestionDto>> GetQuestionById(Guid id)
         {
-            var question = await _questionService.GetQuestionByIdAsync(id);
+            var question = await _questionService.GetQuestionById(id);
             if (question == null)
             {
                 return NotFound();
@@ -57,7 +57,7 @@ namespace MatForum.ForumQuestion.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<QuestionDto>>> GetAllQuestions()
         {
-            var questions = await _questionService.GetAllQuestionsAsync();
+            var questions = await _questionService.GetAllQuestions();
             return Ok(questions);
         }
 
@@ -75,7 +75,7 @@ namespace MatForum.ForumQuestion.API.Controllers
 
             try
             {
-                var updated = await _questionService.UpdateQuestionAsync(command);
+                var updated = await _questionService.UpdateQuestion(command);
                 if (!updated)
                 {
                     return NotFound();
@@ -91,7 +91,7 @@ namespace MatForum.ForumQuestion.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuestion(Guid id)
         {
-            var deleted = await _questionService.DeleteQuestionAsync(id);
+            var deleted = await _questionService.DeleteQuestion(id);
             if (!deleted)
             {
                 return NotFound();

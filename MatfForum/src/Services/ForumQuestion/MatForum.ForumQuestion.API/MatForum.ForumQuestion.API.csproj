@@ -11,6 +11,7 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\..\UserManagement\MatForum.UserManagement.Infrastructure\MatForum.UserManagement.Infrastructure.csproj" />
       <ProjectReference Include="..\MatForum.ForumQuestion.Application\MatForum.ForumQuestion.Application.csproj" />
       <ProjectReference Include="..\MatForum.ForumQuestion.Infrastructure\MatForum.ForumQuestion.Infrastructure.csproj" />
     </ItemGroup>
