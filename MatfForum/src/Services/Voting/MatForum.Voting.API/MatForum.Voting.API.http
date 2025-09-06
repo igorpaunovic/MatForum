@@ -1,0 +1,51 @@
+### Vote on a question (upvote)
+POST https://localhost:7003/api/votes/vote
+Content-Type: application/json
+
+{
+  "questionId": "12345678-1234-1234-1234-123456789012",
+  "userId": "87654321-4321-4321-4321-210987654321",
+  "voteType": 1
+}
+
+### Vote on a question (downvote)
+POST https://localhost:7003/api/votes/vote
+Content-Type: application/json
+
+{
+  "questionId": "12345678-1234-1234-1234-123456789012",
+  "userId": "87654321-4321-4321-4321-210987654321",
+  "voteType": -1
+}
+
+### Change vote from upvote to downvote
+PUT https://localhost:7003/api/votes/change
+Content-Type: application/json
+
+{
+  "questionId": "12345678-1234-1234-1234-123456789012",
+  "userId": "87654321-4321-4321-4321-210987654321",
+  "newVoteType": -1
+}
+
+### Remove vote (set to neutral)
+DELETE https://localhost:7003/api/votes/remove
+Content-Type: application/json
+
+{
+  "questionId": "12345678-1234-1234-1234-123456789012",
+  "userId": "87654321-4321-4321-4321-210987654321"
+}
+
+### Get user's vote for a specific question
+GET https://localhost:7003/api/votes/user/12345678-1234-1234-1234-123456789012/87654321-4321-4321-4321-210987654321
+
+### Get vote summary for a question (without user context)
+GET https://localhost:7003/api/votes/summary/12345678-1234-1234-1234-123456789012
+
+### Get vote summary for a question (with user context)
+GET https://localhost:7003/api/votes/summary/12345678-1234-1234-1234-123456789012?userId=87654321-4321-4321-4321-210987654321
+
+### Get all votes for a question
+GET https://localhost:7003/api/votes/question/12345678-1234-1234-1234-123456789012
+
