@@ -24,3 +24,15 @@ services:
     ports:
       - "5002:80"
     restart: on-failure
+  
+  voting-service:
+    build:
+      context: .
+      dockerfile: src/Services/Voting/MatForum.Voting.API/Dockerfile
+    container_name: voting-service
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5003:80"
+    restart: on-failure
