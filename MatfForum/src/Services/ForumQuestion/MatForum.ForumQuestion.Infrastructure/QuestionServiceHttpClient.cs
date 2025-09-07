@@ -1,5 +1,6 @@
 using MatForum.ForumQuestion.Application.Interfaces;
 using MatForum.ForumQuestion.Application.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
@@ -28,9 +29,11 @@ namespace MatForum.ForumQuestion.Infrastructure
             return JsonSerializer.Deserialize<QuestionDto>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
-        public async Task<QuestionDto> GetQuestionById(Guid id)
+        public async Task<QuestionDto?> GetQuestionById(Guid id)
         {
             var response = await _httpClient.GetAsync($"api/questions/{id}");
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                return null;
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<QuestionDto>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });

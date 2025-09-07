@@ -50,7 +50,7 @@ namespace MatForum.ForumQuestion.Application.Services
             };
         }
 
-        public async Task<QuestionDto> GetQuestionById(Guid id)
+        public async Task<QuestionDto?> GetQuestionById(Guid id)
         {
             var question = await _questionRepository.GetById(id);
             if (question == null) return null;
