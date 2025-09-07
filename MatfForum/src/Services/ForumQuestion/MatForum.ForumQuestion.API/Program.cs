@@ -12,6 +12,19 @@ using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
+const string CorsPolicy = "ViteDev";
+
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(CorsPolicy, policy =>
+        policy.WithOrigins("http://localhost:5173") 
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+    );
+});
+
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -48,6 +61,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// CORS before auth
+app.UseCors(CorsPolicy);
 
 app.UseAuthorization();
 
