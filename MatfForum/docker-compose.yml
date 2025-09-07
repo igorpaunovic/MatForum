@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:15
+    container_name: matforum-postgres
+    environment:
+      - POSTGRES_DB=matforum
+      - POSTGRES_USER=matforum_user
+      - POSTGRES_PASSWORD=matforum_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    restart: on-failure
   user-service:
     build:
       context: .
@@ -21,8 +34,11 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=matforum;Username=matforum_user;Password=matforum_password
     ports:
       - "5002:80"
+    depends_on:
+      - postgres
     restart: on-failure
   
   voting-service:
@@ -33,6 +49,12 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=matforum;Username=matforum_user;Password=matforum_password
     ports:
       - "5003:80"
+    depends_on:
+      - postgres
     restart: on-failure
+
+volumes:
+  postgres_data:

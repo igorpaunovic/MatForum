@@ -14,7 +14,7 @@ public class Question : BaseEntity
     public List<string> Tags { get; private set; } = new List<string>();
 
     // Constructor for creating new questions
-    public Question(string title, string content, Guid createdByUserId, List<string> tags = null)
+    public Question(string title, string content, Guid createdByUserId, List<string>? tags = null)
     {
         if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException("Title cannot be empty.", nameof(title));
         if (string.IsNullOrWhiteSpace(content)) throw new ArgumentException("Content cannot be empty.", nameof(content));
@@ -32,7 +32,7 @@ public class Question : BaseEntity
     }
 
     // Methods for domain behavior
-    public void Update(string title, string content, List<string> tags = null)
+    public void Update(string title, string content, List<string>? tags = null)
     {
         if (string.IsNullOrWhiteSpace(title)) throw new ArgumentException("Title cannot be empty.", nameof(title));
         if (string.IsNullOrWhiteSpace(content)) throw new ArgumentException("Content cannot be empty.", nameof(content));

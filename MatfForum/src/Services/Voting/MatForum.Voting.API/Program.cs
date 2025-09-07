@@ -1,6 +1,8 @@
 using MatForum.Voting.Application.Interfaces;
 using MatForum.Voting.Application.Services;
 using MatForum.Voting.Infrastructure.Repositories;
+using MatForum.Voting.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,11 +13,22 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add Entity Framework
+builder.Services.AddDbContext<VotingDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 // Register services
-builder.Services.AddScoped<IVoteRepository, InMemoryVoteRepository>();
+builder.Services.AddScoped<IVoteRepository, EfVoteRepository>();
 builder.Services.AddScoped<IVoteService, VoteService>();
 
 var app = builder.Build();
+
+// Ensure database is created
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<VotingDbContext>();
+    context.Database.EnsureCreated();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
