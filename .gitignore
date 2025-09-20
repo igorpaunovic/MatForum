@@ -1,0 +1,99 @@
+# --- IDEs ---
+.vs/
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sln.iml
+slnx.sqlite
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+
+# --- .NET build outputs ---
+**/bin/
+**/obj/
+[Ll]og/
+[Ll]ogs/
+[Bb]uild[Ll]og.*
+*.binlog
+
+# Config/cache/etc.
+project.lock.json
+project.fragment.lock.json
+artifacts/
+Generated\ Files/
+BenchmarkDotNet.Artifacts/
+
+# --- Test & coverage ---
+[Tt]est[Rr]esult*/
+coverage*/
+coverage*.json
+coverage*.xml
+coverage*.info
+*.coverage
+*.coveragexml
+
+# --- Tooling caches ---
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+.axoCover/*
+!?*.axoCover/settings.json
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+.fake/
+.paket/paket.exe
+paket-files/
+
+# --- Node / front-end ---
+**/node_modules/
+**/dist/
+**/build/
+
+# --- Publish/deploy artifacts ---
+publish/
+*.[Pp]ublish.xml
+*.pubxml
+*.publishproj
+*.azurePubxml
+csx/
+AppPackages/
+BundleArtifacts/
+*.appx*
+*.appxupload
+
+# --- SQL & BI ---
+*.mdf
+*.ldf
+*.ndf
+*.rdl.data
+*.bim.layout
+*.bim_*.settings
+*.rptproj.rsuser
+
+# --- Misc project files ---
+*.user
+*.suo
+*.rsuser
+*.sln.docstates
+*.tmp
+*.temp
+*.bak
+*.log
+.history/
+.localhistory/
+_MigrationBackup/
+
+# --- Security-sensitive (keep a .env.example committed) ---
+.env
+.env.*
+!.env.example
+appsettings.*.local.json
+
