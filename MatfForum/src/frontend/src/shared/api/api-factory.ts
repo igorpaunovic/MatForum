@@ -34,6 +34,7 @@ interface IApiOptions extends AxiosRequestConfig {
 const createApi = ({ commonPrefix, ...rest }: IApiOptions) => {
   const api = axios.create({
     baseURL: import.meta.env.DEV
+    feature/api-gateway
       ? `http://localhost:5000/api/${commonPrefix}/`  // ovo je privremeno ovde treba da stoji adresa API Gateway-a ... 
       : `http://localhost:5000/${commonPrefix}/`, 
     ...rest,
