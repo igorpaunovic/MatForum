@@ -1,17 +1,6 @@
+version: '3.8'
+
 services:
-  matforum.apigateway:
-    image: ${DOCKER_REGISTRY-}matforumapigateway
-    build:
-      context: .
-      dockerfile: src/ApiGateway/MatForum.ApiGateway/Dockerfile
-    environment:
-      - ASPNETCORE_URLS=http://+:5000 
-    ports:
-      - "5000:5000"
-    depends_on:
-      - user-service
-      - question-service
-      - voting-service
   postgres:
     image: postgres:15
     container_name: matforum-postgres
@@ -25,7 +14,6 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     restart: on-failure
-
   user-service:
     build:
       context: .
@@ -67,7 +55,6 @@ services:
     depends_on:
       - postgres
     restart: on-failure
-
 
 volumes:
   postgres_data:
