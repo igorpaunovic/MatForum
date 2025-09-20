@@ -1,22 +1,15 @@
 import type { router } from '@/app/router'
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
+import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { Toaster } from 'sonner'
+import Navbar from "@/components/layout/navbar.tsx";
 
 export const Route = createRootRoute({
   component: () => (
     <>
-      <div className="p-2 flex gap-2">
-        <Link to="/" className="[&.active]:font-bold">
-          Home
-        </Link>{' '}
-        <Link to="/questions" className="[&.active]:font-bold">
-          Questions
-        </Link>{' '}
-      </div>
-      <hr />
+      <Navbar />
       <Outlet />
-       <Toaster position="top-right" richColors closeButton />
+      <Toaster position="top-right" richColors closeButton />
       <TanStackRouterDevtools />
     </>
   ),
