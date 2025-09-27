@@ -22,11 +22,11 @@ export default function HeroSection() {
 
         <p className="text-gray-600 mb-6 max-w-2xl mx-auto min-h-[3rem]">
           {displayText}
-          {isTyping ? (
-            <span className="inline-block w-[1px] h-5 bg-black align-middle" />
-          ) : (
-            <span className="inline-block w-[1px] h-5 bg-black align-middle animate-caret-blink" />
-          )}
+          <span
+            className={`inline-block w-px h-5 bg-black align-middle ${
+              isTyping ? "" : "animate-caret-blink"
+            }`}
+          />
         </p>
 
         <div className="flex gap-4 justify-center mt-8">
