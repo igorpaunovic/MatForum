@@ -5,7 +5,7 @@ import { useSlideIn} from "@/hooks/useSlideIn";
 
 export default function HeroSection() {
   const headerVisible = useSlideIn(200)
-  const { displayText } = useTypewriter(
+  const { displayText, isTyping, isComplete } = useTypewriter(
     "Your community for mathematics, programming, and academic discussions.",
     30,
     1000
@@ -22,7 +22,11 @@ export default function HeroSection() {
 
         <p className="text-gray-600 mb-6 max-w-2xl mx-auto min-h-[3rem]">
           {displayText}
-          <span className="inline-block w-0.5 h-5 bg-black ml-1 align-middle animate-caret-blink" />
+          {isTyping ? (
+            <span className="inline-block w-[1px] h-5 bg-black align-middle" />
+          ) : (
+            <span className="inline-block w-[1px] h-5 bg-black align-middle animate-caret-blink" />
+          )}
         </p>
 
         <div className="flex gap-4 justify-center mt-8">
