@@ -1,4 +1,5 @@
 import type { Question } from '@/lib/types'
+import TagList from "@/components/common/Taglist.tsx";
 
 const QuestionCard = ({ title, content, authorName, createdAt, tags }: Question) => {
   return (
@@ -10,13 +11,7 @@ const QuestionCard = ({ title, content, authorName, createdAt, tags }: Question)
         <span>{createdAt}</span>
       </div>
       {tags && (
-        <div className="flex gap-2 mt-2">
-          {tags.map(tag => (
-            <span key={tag} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
-              {tag}
-            </span>
-          ))}
-        </div>
+        <TagList tags={tags} />
       )}
     </div>
   );
