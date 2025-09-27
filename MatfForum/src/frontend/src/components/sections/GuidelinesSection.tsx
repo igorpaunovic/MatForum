@@ -1,7 +1,7 @@
 export default function GuidelinesSection() {
   return (
     <div className="mb-12">
-      <h2 className="text-xl font-bold mb-6">Community Guidelines</h2>
+      <h2 className="text-xl font-bold mb-6 text-center">Community Guidelines</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="border rounded p-4 hover:shadow-md transition-shadow">
           <h3 className="font-semibold mb-3 text-green-600">Do's</h3>
