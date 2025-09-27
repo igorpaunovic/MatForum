@@ -5,7 +5,7 @@ import { useSlideIn} from "@/hooks/useSlideIn";
 
 export default function HeroSection() {
   const headerVisible = useSlideIn(200)
-  const { displayText, isTyping, isComplete } = useTypewriter(
+  const { displayText, isTyping } = useTypewriter(
     "Your community for mathematics, programming, and academic discussions.",
     30,
     1000
