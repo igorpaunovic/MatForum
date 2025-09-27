@@ -11,12 +11,12 @@ export const Route = createFileRoute('/')({
 
 function RouteComponent() {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <>
       <HeroSection />
       <GuidelinesSection />
       <QuickStartSection />
       <PopularTopicsSection />
       <CTASection />
-    </div>
+    </>
   )
 }

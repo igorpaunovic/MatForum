@@ -13,9 +13,9 @@ function QuestionComponent() {
   if (!questionsData) return <div>Something went wrong</div>;
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <>
       <h1 className="text-2xl font-bold mb-6">Questions</h1>
       <QuestionList questions={questionsData} />
-    </div>
+    </>
   );
 }

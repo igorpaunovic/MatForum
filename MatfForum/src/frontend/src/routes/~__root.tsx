@@ -8,7 +8,9 @@ export const Route = createRootRoute({
   component: () => (
     <>
       <Navbar />
-      <Outlet />
+      <main className="container mx-auto px-4 py-8">
+        <Outlet />
+      </main>
       <Toaster position="top-right" richColors closeButton />
       <TanStackRouterDevtools />
     </>
