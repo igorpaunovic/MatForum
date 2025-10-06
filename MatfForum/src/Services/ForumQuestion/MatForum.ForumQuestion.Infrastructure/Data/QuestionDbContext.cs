@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MatForum.ForumQuestion.Domain.Entities;
+using MatForum.Shared.Domain.Common;
 
 namespace MatForum.ForumQuestion.Infrastructure.Data
 {
@@ -30,10 +31,10 @@ namespace MatForum.ForumQuestion.Infrastructure.Data
                 entity.Property(e => e.CreatedByUserId)
                     .IsRequired();
                 
-                entity.Property(e => e.CreatedDate)
+                entity.Property(e => e.CreatedAt)
                     .IsRequired();
                 
-                entity.Property(e => e.LastModifiedDate)
+                entity.Property(e => e.UpdatedAt)
                     .IsRequired();
                 
                 entity.Property(e => e.Views)
@@ -47,17 +48,17 @@ namespace MatForum.ForumQuestion.Infrastructure.Data
                 entity.Property(e => e.Tags)
                     .HasColumnType("text[]"); // PostgreSQL array type
                 
-                entity.Property(e => e.CreatedAt)
+                entity.Property(e => ((BaseEntity)e).CreatedAt)
                     .IsRequired()
                     .HasDefaultValueSql("NOW()");
                 
-                entity.Property(e => e.UpdatedAt)
+                entity.Property(e => ((BaseEntity)e).UpdatedAt)
                     .IsRequired()
                     .HasDefaultValueSql("NOW()");
 
                 // Create indexes
                 entity.HasIndex(e => e.CreatedByUserId);
-                entity.HasIndex(e => e.CreatedDate);
+                entity.HasIndex(e => e.CreatedAt);
                 entity.HasIndex(e => e.IsClosed);
                 entity.HasIndex(e => e.Views);
             });

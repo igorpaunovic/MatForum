@@ -28,7 +28,7 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
         public async Task<IEnumerable<Question>> GetAllAsync()
         {
             return await _context.Questions
-                .OrderByDescending(q => q.CreatedDate)
+                .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }
 
@@ -60,7 +60,7 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
         {
             return await _context.Questions
                 .Where(q => q.CreatedByUserId == userId)
-                .OrderByDescending(q => q.CreatedDate)
+                .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }
 
@@ -68,7 +68,7 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
         {
             return await _context.Questions
                 .Where(q => q.Tags.Contains(tag.ToLowerInvariant()))
-                .OrderByDescending(q => q.CreatedDate)
+                .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }
 
@@ -76,7 +76,7 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
         {
             return await _context.Questions
                 .Where(q => q.IsClosed)
-                .OrderByDescending(q => q.CreatedDate)
+                .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }
 
@@ -84,7 +84,7 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
         {
             return await _context.Questions
                 .Where(q => !q.IsClosed)
-                .OrderByDescending(q => q.CreatedDate)
+                .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }
 
@@ -98,7 +98,7 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
         public async Task<IEnumerable<Question>> GetAll()
         {
             return await _context.Questions
-                .OrderByDescending(q => q.CreatedDate)
+                .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }
 

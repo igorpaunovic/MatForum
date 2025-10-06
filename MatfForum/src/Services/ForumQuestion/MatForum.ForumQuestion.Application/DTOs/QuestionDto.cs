@@ -10,8 +10,8 @@ namespace MatForum.ForumQuestion.Application.DTOs
         public required string Content { get; set; }
         public Guid CreatedByUserId { get; set; }
         public required string AuthorName { get; set; }
-        public DateTimeOffset CreatedDate { get; set; }
-        public DateTimeOffset LastModifiedDate { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset UpdatedAt { get; set; }
         public int Views { get; set; }
         public bool IsClosed { get; set; }
         public List<string> Tags { get; set; } = new List<string>();

@@ -1,3 +1,4 @@
+using MatForum.Shared.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using MatForum.Voting.Domain.Entities;
 
@@ -30,17 +31,17 @@ namespace MatForum.Voting.Infrastructure.Data
                     .IsRequired()
                     .HasConversion<int>(); // Convert enum to int
                 
-                entity.Property(e => e.CreatedDate)
-                    .IsRequired();
-                
-                entity.Property(e => e.LastModifiedDate)
-                    .IsRequired();
-                
                 entity.Property(e => e.CreatedAt)
+                    .IsRequired();
+                
+                entity.Property(e => e.UpdatedAt)
+                    .IsRequired();
+                
+                entity.Property(e => ((BaseEntity)e).CreatedAt)
                     .IsRequired()
                     .HasDefaultValueSql("NOW()");
                 
-                entity.Property(e => e.UpdatedAt)
+                entity.Property(e => ((BaseEntity)e).UpdatedAt)
                     .IsRequired()
                     .HasDefaultValueSql("NOW()");
 

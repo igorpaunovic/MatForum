@@ -107,4 +107,11 @@ public class UsersController(IUserService userService) : ControllerBase
 
         return NoContent();
     }
-} 
+
+    [HttpGet("{id}/exists")]
+    public async Task<IActionResult> Exists(Guid id)
+    {
+        var exists = await userService.GetById(id) != null;
+        return exists ? Ok() : NotFound();
+    }
+}

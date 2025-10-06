@@ -34,6 +34,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=matforum;Username=matforum_user;Password=matforum_password
     ports:
       - "5001:80"
     restart: on-failure
@@ -66,6 +67,19 @@ services:
       - "5003:80"
     depends_on:
       - postgres
+    restart: on-failure
+    
+  answer-service:
+    build:
+      context: .
+      dockerfile: src/Services/QuestionAnswer/MatForum.QuestionAnswer.API/Dockerfile
+    container_name: answer-service
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=matforum;Username=matforum_user;Password=matforum_password
+    ports:
+      - "5004:80"
     restart: on-failure
 
 

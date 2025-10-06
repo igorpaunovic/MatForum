@@ -116,8 +116,8 @@ namespace MatForum.Voting.Application.Services
                 QuestionId = vote.QuestionId,
                 UserId = vote.UserId,
                 VoteType = vote.VoteType,
-                CreatedDate = vote.CreatedDate,
-                LastModifiedDate = vote.LastModifiedDate
+                CreatedDate = vote.CreatedAt,
+                LastModifiedDate = vote.UpdatedAt
             };
         }
     }

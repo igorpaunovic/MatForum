@@ -7,8 +7,8 @@ public class Question : BaseEntity
     public string Title { get; private set; }
     public string Content { get; private set; }
     public Guid CreatedByUserId { get; private set; } // Logical ID for user
-    public DateTimeOffset CreatedDate { get; private set; }
-    public DateTimeOffset LastModifiedDate { get; private set; }
+    // public DateTimeOffset CreatedAt { get; private set; }
+    // public DateTimeOffset UpdatedAt { get; private set; }
     public int Views { get; private set; }
     public bool IsClosed { get; private set; }
     public List<string> Tags { get; private set; } = new List<string>();
@@ -24,8 +24,8 @@ public class Question : BaseEntity
         Title = title;
         Content = content;
         CreatedByUserId = createdByUserId;
-        CreatedDate = DateTimeOffset.UtcNow;
-        LastModifiedDate = CreatedDate;
+        base.CreatedAt = DateTime.UtcNow;
+        base.UpdatedAt = base.CreatedAt;
         Views = 0;
         IsClosed = false;
         Tags = tags ?? new List<string>();
@@ -39,7 +39,7 @@ public class Question : BaseEntity
 
         Title = title;
         Content = content;
-        LastModifiedDate = DateTimeOffset.UtcNow;
+        base.UpdatedAt = DateTime.UtcNow;
         Tags = tags ?? new List<string>();
     }
 
