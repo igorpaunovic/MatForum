@@ -7,8 +7,8 @@ public class Vote : BaseEntity
     public Guid QuestionId { get; private set; }
     public Guid UserId { get; private set; }
     public VoteType VoteType { get; private set; }
-    public DateTimeOffset CreatedDate { get; private set; }
-    public DateTimeOffset LastModifiedDate { get; private set; }
+    // public DateTimeOffset CreatedAt { get; private set; }
+    // public DateTimeOffset UpdatedAt { get; private set; }
 
     // Constructor for creating new votes
     public Vote(Guid questionId, Guid userId, VoteType voteType)
@@ -20,22 +20,22 @@ public class Vote : BaseEntity
         QuestionId = questionId;
         UserId = userId;
         VoteType = voteType;
-        CreatedDate = DateTimeOffset.UtcNow;
-        LastModifiedDate = CreatedDate;
+        CreatedAt = DateTime.UtcNow;
+        UpdatedAt = CreatedAt;
     }
 
     // Method to change vote type (upvote to downvote or vice versa)
     public void ChangeVoteType(VoteType newVoteType)
     {
         VoteType = newVoteType;
-        LastModifiedDate = DateTimeOffset.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
     }
 
     // Method to remove vote (set to neutral)
     public void RemoveVote()
     {
         VoteType = VoteType.Neutral;
-        LastModifiedDate = DateTimeOffset.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
     }
 
     // Method to check if vote is active (not neutral)

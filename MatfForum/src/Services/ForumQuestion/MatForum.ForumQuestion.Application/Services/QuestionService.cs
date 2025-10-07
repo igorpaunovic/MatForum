@@ -42,8 +42,8 @@ namespace MatForum.ForumQuestion.Application.Services
                 Content = question.Content,
                 CreatedByUserId = question.CreatedByUserId,
                 AuthorName = user?.Username ?? "Unknown User",
-                CreatedDate = question.CreatedDate,
-                LastModifiedDate = question.LastModifiedDate,
+                CreatedAt = question.CreatedAt,
+                UpdatedAt = question.UpdatedAt,
                 Views = question.Views,
                 IsClosed = question.IsClosed,
                 Tags = question.Tags
@@ -68,8 +68,8 @@ namespace MatForum.ForumQuestion.Application.Services
                 Content = question.Content,
                 CreatedByUserId = question.CreatedByUserId,
                 AuthorName = user?.Username ?? "Unknown User", // Use the User domain entity to get the username
-                CreatedDate = question.CreatedDate,
-                LastModifiedDate = question.LastModifiedDate,
+                CreatedAt = question.CreatedAt,
+                UpdatedAt = question.UpdatedAt,
                 Views = question.Views,
                 IsClosed = question.IsClosed,
                 Tags = question.Tags
@@ -95,8 +95,8 @@ namespace MatForum.ForumQuestion.Application.Services
                     Content = q.Content,
                     CreatedByUserId = q.CreatedByUserId,
                     AuthorName = user?.Username ?? "Unknown User", // Use the User domain entity to get the username
-                    CreatedDate = q.CreatedDate,
-                    LastModifiedDate = q.LastModifiedDate,
+                    CreatedAt = q.CreatedAt,
+                    UpdatedAt = q.UpdatedAt,
                     Views = q.Views,
                     IsClosed = q.IsClosed,
                     Tags = q.Tags

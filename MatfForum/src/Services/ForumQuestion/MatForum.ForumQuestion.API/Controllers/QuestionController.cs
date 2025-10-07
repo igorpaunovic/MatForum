@@ -98,5 +98,12 @@ namespace MatForum.ForumQuestion.API.Controllers
             }
             return NoContent();
         }
+
+        [HttpGet("{id}/exists")]
+        public async Task<IActionResult> Exists(Guid id)
+        {
+            var exists = await _questionService.GetQuestionById(id) != null;
+            return exists ? Ok() : NotFound();
+        }
     }
 }
