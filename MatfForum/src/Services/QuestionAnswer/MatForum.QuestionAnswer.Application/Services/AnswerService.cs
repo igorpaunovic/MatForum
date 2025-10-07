@@ -28,7 +28,7 @@ public class AnswerService : IAnswerService
         var answerEntity = Answer.Create(content, questionId, authorId);
 
         // 3. Persist via the repository
-        await _answerRepository.AddAsync(answerEntity, cancellationToken);
+        await _answerRepository.Create(answerEntity); 
 
         // 4. Return the new ID
         return answerEntity.Id;
@@ -36,13 +36,14 @@ public class AnswerService : IAnswerService
 
     public async Task<AnswerDto?> GetAnswerByIdAsync(Guid answerId, CancellationToken cancellationToken)
     {
-        var answer = await _answerRepository.GetByIdAsync(answerId, cancellationToken);
+        var answer = await _answerRepository.GetById(answerId); 
         if (answer == null) return null;
         return new AnswerDto
         {
             Id = answer.Id,
             Content = answer.Content,
             CreatedAt = answer.CreatedAt,
+            UpdatedAt = answer.UpdatedAt, 
             QuestionId = answer.QuestionId,
             AuthorId = answer.AuthorId
         };
@@ -50,14 +51,32 @@ public class AnswerService : IAnswerService
 
     public async Task<IEnumerable<AnswerDto>> GetAnswersByQuestionIdAsync(Guid questionId, CancellationToken cancellationToken)
     {
-        var answers = await _answerRepository.GetByQuestionIdAsync(questionId, cancellationToken);
+        var answers = await _answerRepository.GetByQuestionIdAsync(questionId); 
         return answers.Select(answer => new AnswerDto
         {
             Id = answer.Id,
             Content = answer.Content,
             CreatedAt = answer.CreatedAt,
+            UpdatedAt = answer.UpdatedAt, 
             QuestionId = answer.QuestionId,
             AuthorId = answer.AuthorId
         });
+    }
+
+    public async Task<Guid?> UpdateAnswerAsync(Guid answerId, string content, CancellationToken cancellationToken)
+    {
+        var answer = await _answerRepository.GetById(answerId);
+        if (answer == null) return null;
+        answer.Content = content;
+        answer.UpdatedAt = DateTime.UtcNow; // Set UpdatedAt when answer is updated
+        await _answerRepository.Update(answerId, answer);
+        return answerId;
+    }
+
+    public async Task<bool> DeleteAnswerAsync(Guid answerId, CancellationToken cancellationToken)
+    {
+        var answer = await _answerRepository.GetById(answerId);
+        if (answer == null) return false;
+        return await _answerRepository.Delete(answerId);
     }
 }

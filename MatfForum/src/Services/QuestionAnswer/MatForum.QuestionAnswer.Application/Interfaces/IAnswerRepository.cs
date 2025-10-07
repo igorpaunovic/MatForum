@@ -1,10 +1,9 @@
 using MatForum.QuestionAnswer.Domain.Entities;
+using MatForum.Shared.Domain.Interfaces;
 
 namespace MatForum.QuestionAnswer.Application.Interfaces;
 
-public interface IAnswerRepository
+public interface IAnswerRepository : IGenericRepository<Answer>
 {
-    Task AddAsync(Answer answer, CancellationToken cancellationToken);
-    Task<Answer?> GetByIdAsync(Guid answerId, CancellationToken cancellationToken);
-    Task<IEnumerable<Answer>> GetByQuestionIdAsync(Guid questionId, CancellationToken cancellationToken);
+    Task<IEnumerable<Answer>> GetByQuestionIdAsync(Guid questionId);
 }
