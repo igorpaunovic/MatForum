@@ -20,7 +20,7 @@ services:
       - POSTGRES_USER=matforum_user
       - POSTGRES_PASSWORD=matforum_password
     ports:
-      - "5432:5432"
+      - "15432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
