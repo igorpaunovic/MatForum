@@ -57,6 +57,33 @@ public class AnswersController : ControllerBase
         var answers = await _answerService.GetAnswersByQuestionIdAsync(questionId, cancellationToken);
         return Ok(answers);
     }
+
+    [HttpPut("{answerId}")]
+    public async Task<IActionResult> UpdateAnswer(Guid answerId, [FromBody] UpdateAnswerRequest request, CancellationToken cancellationToken)
+    {
+        var answer = await _answerService.GetAnswerByIdAsync(answerId, cancellationToken);
+        if (answer == null)
+            return NotFound(new { Message = "Answer not found." });
+
+        // You may want to validate question/user existence here as well
+        var updatedAnswerId = await _answerService.UpdateAnswerAsync(answerId, request.Content, cancellationToken);
+        if (updatedAnswerId == null)
+            return BadRequest(new { Message = "Update failed." });
+        return Ok(new { answerId = updatedAnswerId });
+    }
+
+    [HttpDelete("{answerId}")]
+    public async Task<IActionResult> DeleteAnswer(Guid answerId, CancellationToken cancellationToken)
+    {
+        var answer = await _answerService.GetAnswerByIdAsync(answerId, cancellationToken);
+        if (answer == null)
+            return NotFound(new { Message = "Answer not found." });
+
+        var deleted = await _answerService.DeleteAnswerAsync(answerId, cancellationToken);
+        if (!deleted)
+            return BadRequest(new { Message = "Delete failed." });
+        return NoContent();
+    }
 }
 
 public class CreateAnswerRequest
@@ -64,4 +91,9 @@ public class CreateAnswerRequest
     public required string Content { get; set; }
     public required Guid QuestionId { get; set; }
     public required Guid UserId { get; set; }
+}
+
+public class UpdateAnswerRequest
+{
+    public required string Content { get; set; }
 }

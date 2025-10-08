@@ -1,10 +1,11 @@
+using MatForum.Shared.Domain.Common;
+
 namespace MatForum.QuestionAnswer.Domain.Entities;
 
-public class Answer
+public class Answer : BaseEntity
 {
     public Guid Id { get; private set; }
-    public string Content { get; private set; }
-    public DateTime CreatedAt { get; private set; }
+    public string Content { get; set; }
 
     // --- CONNECTIONS TO OTHER SERVICES ---
     public Guid QuestionId { get; private set; } // Link to ForumQuestion
@@ -27,7 +28,8 @@ public class Answer
             Content = content,
             QuestionId = questionId,
             AuthorId = authorId,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
     }
 }
