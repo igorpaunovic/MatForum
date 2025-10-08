@@ -1,8 +1,7 @@
 using MatForum.ForumQuestion.Application.Interfaces;
 using MatForum.ForumQuestion.Application.Services;
 using MatForum.ForumQuestion.Infrastructure.Repositories;
-using MatForum.UserManagement.Application.Interfaces;
-using MatForum.UserManagement.Infrastructure;
+using MatForum.ForumQuestion.Infrastructure.Clients;
 using MatForum.ForumQuestion.Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
