@@ -12,9 +12,9 @@ namespace MatForum.ForumQuestion.Application.Services
     public class ForumQuestionService : IForumQuestionService
     {
         private readonly IQuestionRepository _questionRepository;
-        private readonly IUserProfileService _userService;
+        private readonly IUserService _userService;
 
-        public ForumQuestionService(IQuestionRepository questionRepository, IUserProfileService userService)
+        public ForumQuestionService(IQuestionRepository questionRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
             _userService = userService;
