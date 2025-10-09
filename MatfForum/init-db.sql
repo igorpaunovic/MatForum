@@ -1,6 +1,13 @@
 -- MatForum Database Initialization Script
 -- This script creates the necessary tables for Question and Voting services
 
+-- Drop existing triggers and functions if they exist (cleanup from previous runs)
+DROP TRIGGER IF EXISTS update_questions_updated_at ON "Questions";
+DROP TRIGGER IF EXISTS update_votes_updated_at ON "Votes";
+DROP TRIGGER IF EXISTS update_answers_updated_at ON "Answers";
+DROP TRIGGER IF EXISTS update_users_updated_at ON "Users";
+DROP FUNCTION IF EXISTS update_updated_at_column();
+
 -- Create Users table
 CREATE TABLE IF NOT EXISTS "Users" (
     "Id" UUID PRIMARY KEY,
@@ -27,13 +34,12 @@ CREATE TABLE IF NOT EXISTS "Questions" (
 );
 
 -- Create Votes table
+-- Note: Using TIMESTAMP (without time zone) to avoid DateTime Kind issues with Npgsql
 CREATE TABLE IF NOT EXISTS "Votes" (
     "Id" UUID PRIMARY KEY,
     "QuestionId" UUID NOT NULL,
     "UserId" UUID NOT NULL,
     "VoteType" INTEGER NOT NULL, -- -1 for downvote, 0 for neutral, 1 for upvote
---     "CreatedDate" TIMESTAMP WITH TIME ZONE NOT NULL,
---     "LastModifiedDate" TIMESTAMP WITH TIME ZONE NOT NULL,
     "CreatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
     "UpdatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE("QuestionId", "UserId") -- Ensure one vote per user per question
@@ -116,8 +122,8 @@ INSERT INTO "Votes" ("Id", "QuestionId", "UserId", "VoteType", "CreatedAt", "Upd
 ON CONFLICT ("QuestionId", "UserId") DO NOTHING;
 
 -- Insert some sample answers
-INSERT INTO "Answers" ("Id", "Content", "CreatedAt", "QuestionId", "AuthorId") VALUES
-    ('750e8400-e29b-41d4-a716-446655440001', 'Consider using the repository pattern to implement clean architecture.', NOW(), '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440010'),
-    ('750e8400-e29b-41d4-a716-446655440002', 'Microservices can communicate synchronously using HTTP REST or gRPC, and asynchronously using message brokers like RabbitMQ or Kafka.', NOW(), '550e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440011'),
-    ('750e8400-e29b-41d4-a716-446655440003', 'Dapper generally has better performance due to its lightweight nature and direct mapping to SQL.', NOW(), '550e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440012')
+INSERT INTO "Answers" ("Id", "Content", "CreatedAt", "UpdatedAt", "QuestionId", "AuthorId") VALUES
+    ('750e8400-e29b-41d4-a716-446655440001', 'Consider using the repository pattern to implement clean architecture.', NOW(), NOW(), '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440010'),
+    ('750e8400-e29b-41d4-a716-446655440002', 'Microservices can communicate synchronously using HTTP REST or gRPC, and asynchronously using message brokers like RabbitMQ or Kafka.', NOW(), NOW(), '550e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440011'),
+    ('750e8400-e29b-41d4-a716-446655440003', 'Dapper generally has better performance due to its lightweight nature and direct mapping to SQL.', NOW(), NOW(), '550e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440012')
 ON CONFLICT ("Id") DO NOTHING;

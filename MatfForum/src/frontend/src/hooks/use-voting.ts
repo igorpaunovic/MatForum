@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import votingService, { type VoteType, votingConfigKey } from "@/services/api-voting-service";
 
 // Za sada koristimo hardkodovan userId - kasnije će biti iz auth konteksta
-const TEMP_USER_ID = "00000000-0000-0000-0000-000000000001";
+const TEMP_USER_ID = "550e8400-e29b-41d4-a716-446655440010";
 
 export const useVoteSummary = (questionId: string) => {
   return useQuery({
