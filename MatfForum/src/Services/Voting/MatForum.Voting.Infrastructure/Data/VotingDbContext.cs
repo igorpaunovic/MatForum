@@ -19,37 +19,26 @@ namespace MatForum.Voting.Infrastructure.Data
             modelBuilder.Entity<Vote>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.Id).ValueGeneratedNever(); // We generate GUIDs in the domain
+                entity.Property(e => e.Id).ValueGeneratedNever();
                 
-                entity.Property(e => e.QuestionId)
-                    .IsRequired();
-                
-                entity.Property(e => e.UserId)
-                    .IsRequired();
+                entity.Property(e => e.QuestionId).IsRequired();
+                entity.Property(e => e.UserId).IsRequired();
                 
                 entity.Property(e => e.VoteType)
                     .IsRequired()
-                    .HasConversion<int>(); // Convert enum to int
+                    .HasConversion<int>();
                 
                 entity.Property(e => e.CreatedAt)
+                    .HasColumnName("CreatedAt")
+                    .HasColumnType("timestamp with time zone")
                     .IsRequired();
                 
                 entity.Property(e => e.UpdatedAt)
+                    .HasColumnName("UpdatedAt")
+                    .HasColumnType("timestamp with time zone")
                     .IsRequired();
-                
-                entity.Property(e => ((BaseEntity)e).CreatedAt)
-                    .IsRequired()
-                    .HasDefaultValueSql("NOW()");
-                
-                entity.Property(e => ((BaseEntity)e).UpdatedAt)
-                    .IsRequired()
-                    .HasDefaultValueSql("NOW()");
 
-                // Create unique constraint for one vote per user per question
-                entity.HasIndex(e => new { e.QuestionId, e.UserId })
-                    .IsUnique();
-
-                // Create indexes for better performance
+                entity.HasIndex(e => new { e.QuestionId, e.UserId }).IsUnique();
                 entity.HasIndex(e => e.QuestionId);
                 entity.HasIndex(e => e.UserId);
                 entity.HasIndex(e => e.VoteType);
