@@ -5,7 +5,8 @@ namespace MatForum.Voting.Application.DTOs
     public class VoteDto
     {
         public Guid Id { get; set; }
-        public Guid QuestionId { get; set; }
+        public Guid? QuestionId { get; set; }
+        public Guid? AnswerId { get; set; }
         public Guid UserId { get; set; }
         public VoteType VoteType { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
@@ -14,27 +15,31 @@ namespace MatForum.Voting.Application.DTOs
 
     public class VoteQuestionCommand
     {
-        public Guid QuestionId { get; set; }
+        public Guid? QuestionId { get; set; }
+        public Guid? AnswerId { get; set; }
         public Guid UserId { get; set; }
         public VoteType VoteType { get; set; }
     }
 
     public class ChangeVoteCommand
     {
-        public Guid QuestionId { get; set; }
+        public Guid? QuestionId { get; set; }
+        public Guid? AnswerId { get; set; }
         public Guid UserId { get; set; }
         public VoteType NewVoteType { get; set; }
     }
 
     public class RemoveVoteCommand
     {
-        public Guid QuestionId { get; set; }
+        public Guid? QuestionId { get; set; }
+        public Guid? AnswerId { get; set; }
         public Guid UserId { get; set; }
     }
 
     public class QuestionVoteSummaryDto
     {
-        public Guid QuestionId { get; set; }
+        public Guid? QuestionId { get; set; }
+        public Guid? AnswerId { get; set; }
         public int Upvotes { get; set; }
         public int Downvotes { get; set; }
         public int TotalVotes { get; set; }

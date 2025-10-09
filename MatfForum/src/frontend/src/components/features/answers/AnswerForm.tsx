@@ -6,11 +6,12 @@ import type { CreateAnswerRequest } from '@/lib/types';
 
 interface AnswerFormProps {
   questionId: string;
+  parentAnswerId?: string | null; // Optional - for replying to another answer
   onAnswerSubmitted?: () => void;
   onCancel?: () => void;
 }
 
-const AnswerForm = ({ questionId, onAnswerSubmitted, onCancel }: AnswerFormProps) => {
+const AnswerForm = ({ questionId, parentAnswerId, onAnswerSubmitted, onCancel }: AnswerFormProps) => {
   const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +32,8 @@ const AnswerForm = ({ questionId, onAnswerSubmitted, onCancel }: AnswerFormProps
       const request: CreateAnswerRequest = {
         content: content.trim(),
         questionId,
-        userId: '550e8400-e29b-41d4-a716-446655440011' // Placeholder userId
+        userId: '550e8400-e29b-41d4-a716-446655440011', // Placeholder userId
+        parentAnswerId: parentAnswerId || null
       };
 
       await answerService.createAnswer(request);
@@ -45,15 +47,19 @@ const AnswerForm = ({ questionId, onAnswerSubmitted, onCancel }: AnswerFormProps
     }
   };
 
+  const isReply = !!parentAnswerId;
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mt-4 p-4 border rounded-lg bg-gray-50">
       <div className="space-y-2">
-        <Label htmlFor="answer-content">Your Answer</Label>
+        <Label htmlFor="answer-content">
+          {isReply ? 'Your Reply' : 'Your Answer'}
+        </Label>
         <textarea
           id="answer-content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="Write your answer here..."
+          placeholder={isReply ? "Write your reply here..." : "Write your answer here..."}
           className="w-full min-h-[120px] px-3 py-2 rounded-md border border-input bg-white text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:opacity-50"
           disabled={isSubmitting}
         />
@@ -78,7 +84,7 @@ const AnswerForm = ({ questionId, onAnswerSubmitted, onCancel }: AnswerFormProps
           type="submit"
           disabled={isSubmitting || !content.trim()}
         >
-          {isSubmitting ? 'Submitting...' : 'Submit Answer'}
+          {isSubmitting ? 'Submitting...' : (isReply ? 'Submit Reply' : 'Submit Answer')}
         </Button>
       </div>
     </form>

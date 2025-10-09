@@ -19,30 +19,60 @@ namespace MatForum.Voting.Application.Services
 
         public async Task<VoteDto> VoteQuestionAsync(VoteQuestionCommand command)
         {
-            // Check if user already voted on this question
-            var existingVote = await _voteRepository.GetByQuestionAndUserAsync(command.QuestionId, command.UserId);
-            
-            if (existingVote != null)
+            // Validate: must have either QuestionId or AnswerId, not both
+            if (command.QuestionId.HasValue && command.AnswerId.HasValue)
+                throw new ArgumentException("Cannot vote on both question and answer simultaneously.");
+            if (!command.QuestionId.HasValue && !command.AnswerId.HasValue)
+                throw new ArgumentException("Must specify either QuestionId or AnswerId.");
+
+            Vote existingVote;
+            Vote newVote;
+
+            if (command.QuestionId.HasValue)
             {
-                // User already voted, update the existing vote
-                existingVote.ChangeVoteType(command.VoteType);
-                await _voteRepository.UpdateAsync(existingVote);
-                
-                return MapToDto(existingVote);
+                // Voting on a question
+                existingVote = await _voteRepository.GetByQuestionAndUserAsync(command.QuestionId.Value, command.UserId);
+                if (existingVote != null)
+                {
+                    existingVote.ChangeVoteType(command.VoteType);
+                    await _voteRepository.UpdateAsync(existingVote);
+                    return MapToDto(existingVote);
+                }
+                newVote = Vote.CreateForQuestion(command.QuestionId.Value, command.UserId, command.VoteType);
             }
             else
             {
-                // New vote
-                var vote = new Vote(command.QuestionId, command.UserId, command.VoteType);
-                await _voteRepository.AddAsync(vote);
-                
-                return MapToDto(vote);
+                // Voting on an answer
+                existingVote = await _voteRepository.GetByAnswerAndUserAsync(command.AnswerId!.Value, command.UserId);
+                if (existingVote != null)
+                {
+                    existingVote.ChangeVoteType(command.VoteType);
+                    await _voteRepository.UpdateAsync(existingVote);
+                    return MapToDto(existingVote);
+                }
+                newVote = Vote.CreateForAnswer(command.AnswerId!.Value, command.UserId, command.VoteType);
             }
+
+            await _voteRepository.AddAsync(newVote);
+            return MapToDto(newVote);
         }
 
         public async Task<VoteDto> ChangeVoteAsync(ChangeVoteCommand command)
         {
-            var existingVote = await _voteRepository.GetByQuestionAndUserAsync(command.QuestionId, command.UserId);
+            Vote existingVote;
+            
+            if (command.QuestionId.HasValue)
+            {
+                existingVote = await _voteRepository.GetByQuestionAndUserAsync(command.QuestionId.Value, command.UserId);
+            }
+            else if (command.AnswerId.HasValue)
+            {
+                existingVote = await _voteRepository.GetByAnswerAndUserAsync(command.AnswerId.Value, command.UserId);
+            }
+            else
+            {
+                throw new ArgumentException("Must specify either QuestionId or AnswerId.");
+            }
             
             if (existingVote == null)
             {
@@ -57,7 +87,20 @@ namespace MatForum.Voting.Application.Services
 
         public async Task<bool> RemoveVoteAsync(RemoveVoteCommand command)
         {
-            var existingVote = await _voteRepository.GetByQuestionAndUserAsync(command.QuestionId, command.UserId);
+            Vote existingVote;
+            
+            if (command.QuestionId.HasValue)
+            {
+                existingVote = await _voteRepository.GetByQuestionAndUserAsync(command.QuestionId.Value, command.UserId);
+            }
+            else if (command.AnswerId.HasValue)
+            {
+                existingVote = await _voteRepository.GetByAnswerAndUserAsync(command.AnswerId.Value, command.UserId);
+            }
+            else
+            {
+                throw new ArgumentException("Must specify either QuestionId or AnswerId.");
+            }
             
             if (existingVote == null)
             {
@@ -78,7 +121,31 @@ namespace MatForum.Voting.Application.Services
 
         public async Task<QuestionVoteSummaryDto> GetQuestionVoteSummaryAsync(Guid questionId, Guid? userId = null)
         {
-            var votes = await _voteRepository.GetByQuestionIdAsync(questionId);
+            return await GetVoteSummaryAsync(questionId, null, userId);
+        }
+
+        public async Task<QuestionVoteSummaryDto> GetAnswerVoteSummaryAsync(Guid answerId, Guid? userId = null)
+        {
+            return await GetVoteSummaryAsync(null, answerId, userId);
+        }
+
+        private async Task<QuestionVoteSummaryDto> GetVoteSummaryAsync(Guid? questionId, Guid? answerId, Guid? userId)
+        {
+            IEnumerable<Vote> votes;
+            
+            if (questionId.HasValue)
+            {
+                votes = await _voteRepository.GetByQuestionIdAsync(questionId.Value);
+            }
+            else if (answerId.HasValue)
+            {
+                votes = await _voteRepository.GetByAnswerIdAsync(answerId.Value);
+            }
+            else
+            {
+                throw new ArgumentException("Must specify either QuestionId or AnswerId.");
+            }
+
             var activeVotes = votes.Where(v => v.IsActive).ToList();
 
             var upvotes = activeVotes.Count(v => v.VoteType == VoteType.Upvote);
@@ -95,6 +162,7 @@ namespace MatForum.Voting.Application.Services
             return new QuestionVoteSummaryDto
             {
                 QuestionId = questionId,
+                AnswerId = answerId,
                 Upvotes = upvotes,
                 Downvotes = downvotes,
                 TotalVotes = totalVotes,
@@ -114,6 +182,7 @@ namespace MatForum.Voting.Application.Services
             {
                 Id = vote.Id,
                 QuestionId = vote.QuestionId,
+                AnswerId = vote.AnswerId,
                 UserId = vote.UserId,
                 VoteType = vote.VoteType,
                 CreatedDate = vote.CreatedAt,

@@ -85,7 +85,7 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Quest
               size="sm"
               onClick={() => setShowReplyForm(!showReplyForm)}
             >
-              {showReplyForm ? 'Cancel' : 'Reply'}
+              {showReplyForm ? 'Cancel' : 'Answer Question'}
             </Button>
             <Button
               variant="ghost"
@@ -111,7 +111,7 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Quest
               {isLoadingAnswers ? (
                 <div className="text-center py-4 text-gray-500">Loading answers...</div>
               ) : (
-                <AnswerList answers={answers} />
+                <AnswerList answers={answers} onReplySubmitted={loadAnswers} />
               )}
             </div>
           )}

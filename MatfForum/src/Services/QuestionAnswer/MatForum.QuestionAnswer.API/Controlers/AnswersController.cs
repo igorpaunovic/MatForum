@@ -36,6 +36,7 @@ public class AnswersController : ControllerBase
             request.Content,
             request.QuestionId,
             request.UserId,
+            request.ParentAnswerId,
             cancellationToken
         );
 
@@ -91,6 +92,7 @@ public class CreateAnswerRequest
     public required string Content { get; set; }
     public required Guid QuestionId { get; set; }
     public required Guid UserId { get; set; }
+    public Guid? ParentAnswerId { get; set; } // Optional - for replying to another answer
 }
 
 public class UpdateAnswerRequest
