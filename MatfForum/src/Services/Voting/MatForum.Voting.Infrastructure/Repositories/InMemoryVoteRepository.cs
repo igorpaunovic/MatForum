@@ -25,9 +25,21 @@ namespace MatForum.Voting.Infrastructure.Repositories
             return Task.FromResult(vote);
         }
 
+        public Task<Vote> GetByAnswerAndUserAsync(Guid answerId, Guid userId)
+        {
+            var vote = _votes.Values.FirstOrDefault(v => v.AnswerId == answerId && v.UserId == userId);
+            return Task.FromResult(vote);
+        }
+
         public Task<IEnumerable<Vote>> GetByQuestionIdAsync(Guid questionId)
         {
             var votes = _votes.Values.Where(v => v.QuestionId == questionId).ToList();
+            return Task.FromResult<IEnumerable<Vote>>(votes);
+        }
+
+        public Task<IEnumerable<Vote>> GetByAnswerIdAsync(Guid answerId)
+        {
+            var votes = _votes.Values.Where(v => v.AnswerId == answerId).ToList();
             return Task.FromResult<IEnumerable<Vote>>(votes);
         }
 
@@ -61,9 +73,15 @@ namespace MatForum.Voting.Infrastructure.Repositories
             return Task.CompletedTask;
         }
 
-        public Task<bool> ExistsAsync(Guid questionId, Guid userId)
+        public Task<bool> ExistsForQuestionAsync(Guid questionId, Guid userId)
         {
             var exists = _votes.Values.Any(v => v.QuestionId == questionId && v.UserId == userId);
+            return Task.FromResult(exists);
+        }
+
+        public Task<bool> ExistsForAnswerAsync(Guid answerId, Guid userId)
+        {
+            var exists = _votes.Values.Any(v => v.AnswerId == answerId && v.UserId == userId);
             return Task.FromResult(exists);
         }
     }

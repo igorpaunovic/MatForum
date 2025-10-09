@@ -12,6 +12,7 @@ namespace MatForum.Voting.Application.Interfaces
         Task<bool> RemoveVoteAsync(RemoveVoteCommand command);
         Task<VoteDto> GetUserVoteAsync(Guid questionId, Guid userId);
         Task<QuestionVoteSummaryDto> GetQuestionVoteSummaryAsync(Guid questionId, Guid? userId = null);
+        Task<QuestionVoteSummaryDto> GetAnswerVoteSummaryAsync(Guid answerId, Guid? userId = null);
         Task<IEnumerable<VoteDto>> GetQuestionVotesAsync(Guid questionId);
     }
 }

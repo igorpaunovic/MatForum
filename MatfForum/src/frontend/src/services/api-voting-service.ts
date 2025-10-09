@@ -11,7 +11,8 @@ export const VOTE_TYPE_NEUTRAL = 0;
 export type VoteType = -1 | 0 | 1;
 
 export interface VoteSummary {
-  questionId: string;
+  questionId?: string | null;
+  answerId?: string | null;
   upvotes: number;
   downvotes: number;
   totalVotes: number;
@@ -19,7 +20,8 @@ export interface VoteSummary {
 }
 
 export interface VoteCommand {
-  questionId: string;
+  questionId?: string | null;
+  answerId?: string | null;
   userId: string;
   voteType: VoteType;
 }
@@ -33,15 +35,21 @@ const getVoteSummary = async (questionId: string, userId?: string): Promise<Vote
   return await votingApi.get(`summary/${questionId}`, { params }).then((res) => res.data);
 };
 
-const removeVote = async (questionId: string, userId: string) => {
+const getAnswerVoteSummary = async (answerId: string, userId?: string): Promise<VoteSummary> => {
+  const params = userId ? { userId } : {};
+  return await votingApi.get(`summary/answer/${answerId}`, { params }).then((res) => res.data);
+};
+
+const removeVote = async (questionId?: string | null, answerId?: string | null, userId?: string) => {
   return await votingApi.delete('remove', { 
-    data: { questionId, userId } 
+    data: { questionId, answerId, userId } 
   }).then((res) => res.data);
 };
 
 const votingService = {
   vote,
   getVoteSummary,
+  getAnswerVoteSummary,
   removeVote
 };
 

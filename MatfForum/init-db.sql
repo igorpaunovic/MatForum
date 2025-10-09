@@ -33,19 +33,7 @@ CREATE TABLE IF NOT EXISTS "Questions" (
     "Tags" TEXT[]
 );
 
--- Create Votes table
--- Note: Using TIMESTAMP (without time zone) to avoid DateTime Kind issues with Npgsql
-CREATE TABLE IF NOT EXISTS "Votes" (
-    "Id" UUID PRIMARY KEY,
-    "QuestionId" UUID NOT NULL,
-    "UserId" UUID NOT NULL,
-    "VoteType" INTEGER NOT NULL, -- -1 for downvote, 0 for neutral, 1 for upvote
-    "CreatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
-    "UpdatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
-    UNIQUE("QuestionId", "UserId") -- Ensure one vote per user per question
-);
-
--- Create Answers table
+-- Create Answers table (must be before Votes because Votes references Answers)
 CREATE TABLE IF NOT EXISTS "Answers" (
     "Id" UUID PRIMARY KEY,
     "Content" TEXT NOT NULL,
@@ -64,6 +52,26 @@ CREATE TABLE IF NOT EXISTS "Answers" (
     ) -- ParentAnswerId can be null (top-level) or not null (nested reply)
 );
 
+-- Create Votes table (after Answers because it references Answers)
+-- Note: Using TIMESTAMP (without time zone) to avoid DateTime Kind issues with Npgsql
+CREATE TABLE IF NOT EXISTS "Votes" (
+    "Id" UUID PRIMARY KEY,
+    "QuestionId" UUID NULL, -- Vote on a question (null if voting on answer)
+    "AnswerId" UUID NULL, -- Vote on an answer (null if voting on question)
+    "UserId" UUID NOT NULL,
+    "VoteType" INTEGER NOT NULL, -- -1 for downvote, 0 for neutral, 1 for upvote
+    "CreatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
+    "UpdatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
+    CHECK (
+        ("QuestionId" IS NOT NULL AND "AnswerId" IS NULL) OR 
+        ("QuestionId" IS NULL AND "AnswerId" IS NOT NULL)
+    ), -- Ensure vote is either for question or answer, not both
+    UNIQUE("QuestionId", "UserId"), -- One vote per user per question
+    UNIQUE("AnswerId", "UserId"), -- One vote per user per answer
+    FOREIGN KEY ("QuestionId") REFERENCES "Questions"("Id") ON DELETE CASCADE,
+    FOREIGN KEY ("AnswerId") REFERENCES "Answers"("Id") ON DELETE CASCADE
+);
+
 -- Create indexes for answers
 CREATE INDEX IF NOT EXISTS "IX_Answers_QuestionId" ON "Answers"("QuestionId");
 CREATE INDEX IF NOT EXISTS "IX_Answers_AuthorId" ON "Answers"("AuthorId");
@@ -76,6 +84,7 @@ CREATE INDEX IF NOT EXISTS IX_Questions_IsClosed ON "Questions"("IsClosed");
 CREATE INDEX IF NOT EXISTS IX_Questions_Views ON "Questions"("Views");
 
 CREATE INDEX IF NOT EXISTS IX_Votes_QuestionId ON "Votes"("QuestionId");
+CREATE INDEX IF NOT EXISTS IX_Votes_AnswerId ON "Votes"("AnswerId");
 CREATE INDEX IF NOT EXISTS IX_Votes_UserId ON "Votes"("UserId");
 CREATE INDEX IF NOT EXISTS IX_Votes_VoteType ON "Votes"("VoteType");
 
@@ -123,19 +132,19 @@ INSERT INTO "Questions" ("Id", "Title", "Content", "CreatedByUserId", "CreatedAt
     ('550e8400-e29b-41d4-a716-446655440003', 'Entity Framework vs Dapper performance', 'I need to choose between Entity Framework and Dapper for my new project. What are the performance implications?', '550e8400-e29b-41d4-a716-446655440012', NOW(), NOW(), 23, FALSE, ARRAY['entity-framework', 'dapper', 'performance', 'orm'])
 ON CONFLICT ("Id") DO NOTHING;
 
--- Insert some sample votes
-INSERT INTO "Votes" ("Id", "QuestionId", "UserId", "VoteType", "CreatedAt", "UpdatedAt") VALUES
-    ('650e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440020', 1, NOW(), NOW()),
-    ('650e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440021', 1, NOW(), NOW()),
-    ('650e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440022', -1, NOW(), NOW()),
-    ('650e8400-e29b-41d4-a716-446655440004', '550e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440020', 1, NOW(), NOW()),
-    ('650e8400-e29b-41d4-a716-446655440005', '550e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440021', 1, NOW(), NOW()),
-    ('650e8400-e29b-41d4-a716-446655440006', '550e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440022', 1, NOW(), NOW())
+-- Insert some sample votes (only for questions, AnswerId is NULL)
+INSERT INTO "Votes" ("Id", "QuestionId", "AnswerId", "UserId", "VoteType", "CreatedAt", "UpdatedAt") VALUES
+    ('650e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440001', NULL, '550e8400-e29b-41d4-a716-446655440020', 1, NOW(), NOW()),
+    ('650e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440001', NULL, '550e8400-e29b-41d4-a716-446655440021', 1, NOW(), NOW()),
+    ('650e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440001', NULL, '550e8400-e29b-41d4-a716-446655440022', -1, NOW(), NOW()),
+    ('650e8400-e29b-41d4-a716-446655440004', '550e8400-e29b-41d4-a716-446655440002', NULL, '550e8400-e29b-41d4-a716-446655440020', 1, NOW(), NOW()),
+    ('650e8400-e29b-41d4-a716-446655440005', '550e8400-e29b-41d4-a716-446655440003', NULL, '550e8400-e29b-41d4-a716-446655440021', 1, NOW(), NOW()),
+    ('650e8400-e29b-41d4-a716-446655440006', '550e8400-e29b-41d4-a716-446655440003', NULL, '550e8400-e29b-41d4-a716-446655440022', 1, NOW(), NOW())
 ON CONFLICT ("QuestionId", "UserId") DO NOTHING;
 
--- Insert some sample answers
-INSERT INTO "Answers" ("Id", "Content", "CreatedAt", "UpdatedAt", "QuestionId", "AuthorId") VALUES
-    ('750e8400-e29b-41d4-a716-446655440001', 'Consider using the repository pattern to implement clean architecture.', NOW(), NOW(), '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440010'),
-    ('750e8400-e29b-41d4-a716-446655440002', 'Microservices can communicate synchronously using HTTP REST or gRPC, and asynchronously using message brokers like RabbitMQ or Kafka.', NOW(), NOW(), '550e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440011'),
-    ('750e8400-e29b-41d4-a716-446655440003', 'Dapper generally has better performance due to its lightweight nature and direct mapping to SQL.', NOW(), NOW(), '550e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440012')
+-- Insert some sample answers (ParentAnswerId is NULL for top-level answers)
+INSERT INTO "Answers" ("Id", "Content", "CreatedAt", "UpdatedAt", "QuestionId", "AuthorId", "ParentAnswerId") VALUES
+    ('750e8400-e29b-41d4-a716-446655440001', 'Consider using the repository pattern to implement clean architecture.', NOW(), NOW(), '550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440010', NULL),
+    ('750e8400-e29b-41d4-a716-446655440002', 'Microservices can communicate synchronously using HTTP REST or gRPC, and asynchronously using message brokers like RabbitMQ or Kafka.', NOW(), NOW(), '550e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440011', NULL),
+    ('750e8400-e29b-41d4-a716-446655440003', 'Dapper generally has better performance due to its lightweight nature and direct mapping to SQL.', NOW(), NOW(), '550e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440012', NULL)
 ON CONFLICT ("Id") DO NOTHING;
