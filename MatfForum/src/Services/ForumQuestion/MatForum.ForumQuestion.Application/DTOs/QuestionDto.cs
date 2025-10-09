@@ -28,8 +28,9 @@ namespace MatForum.ForumQuestion.Application.DTOs
     public class UpdateQuestionCommand
     {
         public Guid Id { get; set; }
-        public required string Title { get; set; }
-        public required string Content { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty;
         public List<string> Tags { get; set; } = new List<string>();
+        public Guid UpdatedByUserId { get; set; }
     }
 }

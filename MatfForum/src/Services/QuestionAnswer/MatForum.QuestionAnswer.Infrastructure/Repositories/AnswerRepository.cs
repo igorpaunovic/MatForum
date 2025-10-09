@@ -1,4 +1,5 @@
 using MatForum.QuestionAnswer.Application.Interfaces;
+using MatForum.Shared.Domain.Interfaces;
 using MatForum.QuestionAnswer.Domain.Entities;
 using MatForum.QuestionAnswer.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -14,21 +15,47 @@ public class AnswerRepository : IAnswerRepository
         _context = context;
     }
 
-    public async Task AddAsync(Answer answer, CancellationToken cancellationToken)
+    public async Task<Answer?> GetById(Guid id)
     {
-        await _context.Answers.AddAsync(answer, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
-    }
-    
-    public async Task<Answer?> GetByIdAsync(Guid answerId, CancellationToken cancellationToken)
-    {
-        return await _context.Answers.FindAsync(new object[] { answerId }, cancellationToken);
+        return await _context.Answers.FindAsync(id);
     }
 
-    public async Task<IEnumerable<Answer>> GetByQuestionIdAsync(Guid questionId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Answer>> GetAll()
+    {
+        return await _context.Answers.ToListAsync();
+    }
+
+    public async Task<Answer> Create(Answer entity)
+    {
+        await _context.Answers.AddAsync(entity);
+        await _context.SaveChangesAsync();
+        return entity;
+    }
+
+    public async Task<Answer?> Update(Guid id, Answer entity)
+    {
+        var existingAnswer = await _context.Answers.FindAsync(id);
+        if (existingAnswer == null) return null;
+
+        _context.Entry(existingAnswer).CurrentValues.SetValues(entity);
+        await _context.SaveChangesAsync();
+        return existingAnswer;
+    }
+
+    public async Task<bool> Delete(Guid id)
+    {
+        var answer = await _context.Answers.FindAsync(id);
+        if (answer == null) return false;
+
+        _context.Answers.Remove(answer);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<IEnumerable<Answer>> GetByQuestionIdAsync(Guid questionId)
     {
         return await _context.Answers
             .Where(a => a.QuestionId == questionId)
-            .ToListAsync(cancellationToken);
+            .ToListAsync();
     }
 }
