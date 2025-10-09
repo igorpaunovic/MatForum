@@ -1,4 +1,5 @@
 import type { Answer } from '@/lib/types';
+import { formatDate } from '@/lib/utils';
 
 interface AnswerListProps {
   answers: Answer[];
@@ -30,13 +31,7 @@ const AnswerList = ({ answers }: AnswerListProps) => {
             </span>
             <span>•</span>
             <span>
-              {new Date(answer.createdAt).toLocaleDateString('sr-Latn-RS', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              })}
+              {formatDate(answer.createdAt)}
             </span>
           </div>
         </div>

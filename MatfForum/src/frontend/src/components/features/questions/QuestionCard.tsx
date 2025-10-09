@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import AnswerForm from '@/components/features/answers/AnswerForm';
 import AnswerList from '@/components/features/answers/AnswerList';
 import answerService from '@/services/api-answer-service';
+import { formatDate } from '@/lib/utils';
 
 const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Question) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
@@ -71,7 +72,7 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Quest
           <p className="text-gray-600 mb-3">{content}</p>
           <div className="flex justify-between items-center text-sm text-gray-500">
             <span>By {authorName}</span>
-            <span>{createdAt}</span>
+            <span>{formatDate(createdAt)}</span>
           </div>
           {tags && (
             <TagList tags={tags} />
