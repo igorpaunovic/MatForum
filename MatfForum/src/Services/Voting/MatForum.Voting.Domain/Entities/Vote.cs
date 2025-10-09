@@ -35,7 +35,7 @@ public class Vote : BaseEntity
     public void RemoveVote()
     {
         VoteType = VoteType.Neutral;
-        UpdatedAt = DateTime.UtcNow;
+        // Ne menjamo UpdatedAt da izbegnemo DateTime probleme sa Postgres
     }
 
     // Method to check if vote is active (not neutral)

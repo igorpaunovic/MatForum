@@ -29,22 +29,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Register application services and repositories
-// builder.Services.AddScoped<IAnswerService, AnswerService>(); // Uncomment if AnswerService implementation exists
 builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
 builder.Services.AddScoped<IAnswerService, AnswerService>();
-builder.Services.AddScoped<IQuestionValidator, MatForum.QuestionAnswer.Infrastructure.Services.QuestionValidator>();
-builder.Services.AddScoped<IQuestionValidator, QuestionValidator>();
 
-// Register the HttpClient for the UserService if needed
+// Register the HttpClient for the UserService
 builder.Services.AddHttpClient<IUserService, MatForum.QuestionAnswer.Infrastructure.Clients.UserServiceHttpClient>(client =>
 {
-    client.BaseAddress = new Uri("http://user-service"); // Update with actual UserManagement service URL
+    client.BaseAddress = new Uri("http://user-service/");
 });
 
-
+// Register the HttpClient for the QuestionValidator
 builder.Services.AddHttpClient<IQuestionValidator, QuestionValidator>(client =>
 {
-    client.BaseAddress = new Uri("http://question-service"); // Update with your actual Question service URL
+    client.BaseAddress = new Uri("http://question-service/");
 });
 
 // Add Entity Framework
