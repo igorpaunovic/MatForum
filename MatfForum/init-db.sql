@@ -34,13 +34,12 @@ CREATE TABLE IF NOT EXISTS "Questions" (
 );
 
 -- Create Votes table
+-- Note: Using TIMESTAMP (without time zone) to avoid DateTime Kind issues with Npgsql
 CREATE TABLE IF NOT EXISTS "Votes" (
     "Id" UUID PRIMARY KEY,
     "QuestionId" UUID NOT NULL,
     "UserId" UUID NOT NULL,
     "VoteType" INTEGER NOT NULL, -- -1 for downvote, 0 for neutral, 1 for upvote
---     "CreatedDate" TIMESTAMP WITH TIME ZONE NOT NULL,
---     "LastModifiedDate" TIMESTAMP WITH TIME ZONE NOT NULL,
     "CreatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
     "UpdatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE("QuestionId", "UserId") -- Ensure one vote per user per question

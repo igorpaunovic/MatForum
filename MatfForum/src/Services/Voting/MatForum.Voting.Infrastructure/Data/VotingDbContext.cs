@@ -28,14 +28,15 @@ namespace MatForum.Voting.Infrastructure.Data
                     .IsRequired()
                     .HasConversion<int>();
                 
+                // Use timestamp without time zone to avoid DateTime Kind issues
                 entity.Property(e => e.CreatedAt)
                     .HasColumnName("CreatedAt")
-                    .HasColumnType("timestamp with time zone")
+                    .HasColumnType("timestamp without time zone")
                     .IsRequired();
                 
                 entity.Property(e => e.UpdatedAt)
                     .HasColumnName("UpdatedAt")
-                    .HasColumnType("timestamp with time zone")
+                    .HasColumnType("timestamp without time zone")
                     .IsRequired();
 
                 entity.HasIndex(e => new { e.QuestionId, e.UserId }).IsUnique();

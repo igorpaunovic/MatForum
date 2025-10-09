@@ -4,6 +4,9 @@ using MatForum.Voting.Infrastructure.Repositories;
 using MatForum.Voting.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
+// Enable legacy timestamp behavior to use timestamp without time zone
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
