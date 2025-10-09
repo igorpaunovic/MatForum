@@ -19,15 +19,18 @@ export interface VoteSummary {
 export interface Answer {
   id: string;
   content: string;
-  questionId: string;
-  userId: string;
-  authorName?: string;
   createdAt: string;
-  updatedAt?: string;
+  updatedAt: string;
+  questionId: string;
+  authorId: string;
+  authorName?: string;
+  parentAnswerId?: string | null;
+  replies?: Answer[]; // Nested replies for threaded view
 }
 
 export interface CreateAnswerRequest {
   content: string;
   questionId: string;
   userId: string;
+  parentAnswerId?: string | null; // For nested replies
 }

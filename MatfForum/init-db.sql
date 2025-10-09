@@ -51,11 +51,23 @@ CREATE TABLE IF NOT EXISTS "Answers" (
     "Content" TEXT NOT NULL,
     "CreatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
     "UpdatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
-    "QuestionId" UUID NOT NULL,
+    "QuestionId" UUID NOT NULL, -- Always present for easy querying (denormalized)
     "AuthorId" UUID NOT NULL,
+    "ParentAnswerId" UUID NULL, -- For nested replies (null = direct answer to question)
     FOREIGN KEY ("QuestionId") REFERENCES "Questions"("Id") ON DELETE CASCADE,
-    FOREIGN KEY ("AuthorId") REFERENCES "Users"("Id") ON DELETE CASCADE
+    FOREIGN KEY ("AuthorId") REFERENCES "Users"("Id") ON DELETE CASCADE,
+    FOREIGN KEY ("ParentAnswerId") REFERENCES "Answers"("Id") ON DELETE CASCADE,
+    -- Note: QuestionId is always present for easy querying, even in nested replies
+    -- This is denormalized but makes queries much simpler
+    CHECK (
+        ("ParentAnswerId" IS NULL) OR ("ParentAnswerId" IS NOT NULL)
+    ) -- ParentAnswerId can be null (top-level) or not null (nested reply)
 );
+
+-- Create indexes for answers
+CREATE INDEX IF NOT EXISTS "IX_Answers_QuestionId" ON "Answers"("QuestionId");
+CREATE INDEX IF NOT EXISTS "IX_Answers_AuthorId" ON "Answers"("AuthorId");
+CREATE INDEX IF NOT EXISTS "IX_Answers_ParentAnswerId" ON "Answers"("ParentAnswerId");
 
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS IX_Questions_CreatedByUserId ON "Questions"("CreatedByUserId");
