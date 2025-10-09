@@ -19,7 +19,10 @@ const handleInterceptors = (apiInstance: AxiosInstance) => {
     (config) => {
       const token = localStorage.getItem("token");
 
-      if (token) config.headers["Authorization"] = `${token}`;  // saljemo kao Bearer i onda ovde token <- ali moze i ovako samo svejedno je 
+      if (token) {
+        // Token is already stored as "Bearer <token>" format
+        config.headers["Authorization"] = token;
+      }
 
       return config;
     },

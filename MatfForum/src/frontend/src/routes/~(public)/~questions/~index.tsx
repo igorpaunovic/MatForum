@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import QuestionList from '@/components/features/questions/QuestionList'
 import useGetQuestions from '@/hooks/use-get-questions'
 
-export const Route = createFileRoute('/questions/')({
+export const Route = createFileRoute('/(public)/questions/')({
   component: QuestionComponent,
 })
 

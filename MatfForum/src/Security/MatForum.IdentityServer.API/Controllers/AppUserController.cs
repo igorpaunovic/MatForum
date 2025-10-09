@@ -42,5 +42,26 @@ namespace MatForum.IdentityServer.API.Controllers
             var user = await _userManager.FindByNameAsync(username); //FirstOrDefaultAsync(user => user.UserName == username);
             return Ok(_mapper.Map<UserDetailsDto>(user));
         }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet("session")]
+        [ProducesResponseType(typeof(UserDetailsDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<UserDetailsDto>> GetCurrentUser()
+        {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(_mapper.Map<UserDetailsDto>(user));
+        }
     }
 }

@@ -5,7 +5,7 @@ import QuickStartSection from "@/components/sections/QuickStartSection";
 import PopularTopicsSection from "@/components/sections/PopularTopicsSection";
 import CTASection from "@/components/sections/CTASection";
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/(public)/')({
   component: RouteComponent,
 })
 
