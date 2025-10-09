@@ -4,7 +4,8 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "matforum.apigateway": "StartDebugging"
+        "matforum.apigateway": "StartDebugging",
+        "matforum.identityserver.api": "StartDebugging"
       }
     }
   }

@@ -5,35 +5,35 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MatForum.UserManagement.Infrastructure.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserProfileRepository : IUserProfileRepository
 {
     private readonly UserManagementDbContext _context;
 
-    public UserRepository(UserManagementDbContext context)
+    public UserProfileRepository(UserManagementDbContext context)
     {
         _context = context;
     }
 
-    public async Task<User?> GetById(Guid id)
+    public async Task<UserProfile?> GetById(Guid id)
     {
-        return await _context.Users.FindAsync(id);
+        return await _context.UserProfiles.FindAsync(id);
     }
 
-    public async Task<IEnumerable<User>> GetAll()
+    public async Task<IEnumerable<UserProfile>> GetAll()
     {
-        return await _context.Users.ToListAsync();
+        return await _context.UserProfiles.ToListAsync();
     }
 
-    public async Task<User> Create(User user)
+    public async Task<UserProfile> Create(UserProfile user)
     {
-        await _context.Users.AddAsync(user);
+        await _context.UserProfiles.AddAsync(user);
         await _context.SaveChangesAsync();
         return user;
     }
 
-    public async Task<User?> Update(Guid id, User updatedUser)
+    public async Task<UserProfile?> Update(Guid id, UserProfile updatedUser)
     {
-        var user = await _context.Users.FindAsync(id);
+        var user = await _context.UserProfiles.FindAsync(id);
         if (user == null) return null;
         user.FirstName = updatedUser.FirstName;
         user.LastName = updatedUser.LastName;
@@ -47,11 +47,11 @@ public class UserRepository : IUserRepository
 
     public async Task<bool> Delete(Guid id)
     {
-        var user = await _context.Users.FindAsync(id);
+        var user = await _context.UserProfiles.FindAsync(id);
         if (user == null) 
             return false;
      
-        _context.Users.Remove(user);
+        _context.UserProfiles.Remove(user);
         await _context.SaveChangesAsync();
         return true;
     }

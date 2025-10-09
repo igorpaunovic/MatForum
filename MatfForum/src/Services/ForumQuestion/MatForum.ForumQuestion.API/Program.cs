@@ -33,7 +33,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IForumQuestionService, ForumQuestionService>();
 
 // Register the HttpClient for the UserServiceHttpClient
-builder.Services.AddHttpClient<IUserService, UserServiceHttpClient>(client =>
+builder.Services.AddHttpClient<IUserProfileService, UserProfileServiceHttpClient>(client =>
 {
     client.BaseAddress = new Uri("http://user-service");
 });

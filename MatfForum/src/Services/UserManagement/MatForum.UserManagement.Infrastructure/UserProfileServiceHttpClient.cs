@@ -13,16 +13,16 @@ namespace MatForum.UserManagement.Infrastructure
     /// This service acts as an HTTP client for the UserManagement API.
     /// It implements the IUserService interface to provide a clean separation of concerns.
     /// </summary>
-    public class UserServiceHttpClient : IUserService
+    public class UserProfileServiceHttpClient : IUserProfileService
     {
         private readonly HttpClient _httpClient;
 
-        public UserServiceHttpClient(HttpClient httpClient)
+        public UserProfileServiceHttpClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
-        public async Task<User?> GetById(Guid id)
+        public async Task<UserProfile?> GetById(Guid id)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace MatForum.UserManagement.Infrastructure
                 response.EnsureSuccessStatusCode();
 
                 var content = await response.Content.ReadAsStringAsync();
-                var user = JsonSerializer.Deserialize<User>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                var user = JsonSerializer.Deserialize<UserProfile>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 return user;
             }
             catch (HttpRequestException ex)
@@ -41,7 +41,7 @@ namespace MatForum.UserManagement.Infrastructure
             }
         }
 
-        public async Task<IEnumerable<UserDto>> GetAll()
+        public async Task<IEnumerable<UserProfileDto>> GetAll()
         {
             try
             {
@@ -49,22 +49,22 @@ namespace MatForum.UserManagement.Infrastructure
                 response.EnsureSuccessStatusCode();
 
                 var content = await response.Content.ReadAsStringAsync();
-                var users = JsonSerializer.Deserialize<IEnumerable<UserDto>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                return users ?? new List<UserDto>();
+                var users = JsonSerializer.Deserialize<IEnumerable<UserProfileDto>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                return users ?? new List<UserProfileDto>();
             }
             catch (HttpRequestException ex)
             {
                 Console.WriteLine($"Error retrieving all users: {ex.Message}");
-                return new List<UserDto>();
+                return new List<UserProfileDto>();
             }
         }
 
-        public Task<User> Create(MatForum.UserManagement.Application.DTOs.CreateUserDto createUserDto)
+        public Task<UserProfile> Create(MatForum.UserManagement.Application.DTOs.CreateUserProfileDto createUserDto)
         {
             throw new NotImplementedException("This client only supports retrieving user information.");
         }
 
-        public Task<User?> Update(Guid id, MatForum.UserManagement.Application.DTOs.UpdateUserDto updateUserDto)
+        public Task<UserProfile?> Update(Guid id, MatForum.UserManagement.Application.DTOs.UpdateUserProfileDto updateUserDto)
         {
             throw new NotImplementedException("This client only supports retrieving user information.");
         }

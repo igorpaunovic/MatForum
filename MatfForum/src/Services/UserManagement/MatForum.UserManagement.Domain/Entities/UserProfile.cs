@@ -2,7 +2,7 @@ using MatForum.Shared.Domain.Common;
 
 namespace MatForum.UserManagement.Domain.Entities;
 
-public class User : BaseEntity
+public class UserProfile : BaseEntity
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;

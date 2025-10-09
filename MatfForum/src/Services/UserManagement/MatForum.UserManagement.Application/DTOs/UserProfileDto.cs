@@ -1,6 +1,6 @@
 namespace MatForum.UserManagement.Application.DTOs;
 
-public class UserDto
+public class UserProfileDto
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; } = string.Empty;
@@ -12,7 +12,7 @@ public class UserDto
     public DateTime UpdatedAt { get; set; }
 }
 
-public class CreateUserDto
+public class CreateUserProfileDto
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; } = string.Empty;
@@ -22,7 +22,7 @@ public class CreateUserDto
     public DateTime DateOfBirth { get; set; }
 }
 
-public class UpdateUserDto
+public class UpdateUserProfileDto
 {
     public string? FirstName { get; set; }
     public string? LastName { get; set; }

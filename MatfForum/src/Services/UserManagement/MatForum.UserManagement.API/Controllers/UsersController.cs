@@ -6,17 +6,17 @@ namespace MatForum.UserManagement.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UsersController(IUserService userService) : ControllerBase
+public class UsersController(IUserProfileService userService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
+    public async Task<ActionResult<IEnumerable<UserProfileDto>>> GetAll()
     {
         var users = await userService.GetAll();
         return Ok(users);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<UserDto>> GetById(Guid id)
+    public async Task<ActionResult<UserProfileDto>> GetById(Guid id)
     {
         var user = await userService.GetById(id);
         if (user == null)
@@ -24,7 +24,7 @@ public class UsersController(IUserService userService) : ControllerBase
             return NotFound();
         }
 
-        var userDto = new UserDto
+        var userDto = new UserProfileDto
         {
             Id = user.Id,
             FirstName = user.FirstName,
@@ -40,12 +40,12 @@ public class UsersController(IUserService userService) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<UserDto>> Create(CreateUserDto createUserDto)
+    public async Task<ActionResult<UserProfileDto>> Create(CreateUserProfileDto createUserDto)
     {
         try
         {
             var user = await userService.Create(createUserDto);
-            var userDto = new UserDto
+            var userDto = new UserProfileDto
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
@@ -66,7 +66,7 @@ public class UsersController(IUserService userService) : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<ActionResult<UserDto>> Update(Guid id, UpdateUserDto updateUserDto)
+    public async Task<ActionResult<UserProfileDto>> Update(Guid id, UpdateUserProfileDto updateUserDto)
     {
         try
         {
@@ -76,7 +76,7 @@ public class UsersController(IUserService userService) : ControllerBase
                 return NotFound();
             }
 
-            var userDto = new UserDto
+            var userDto = new UserProfileDto
             {
                 Id = user.Id,
                 FirstName = user.FirstName,

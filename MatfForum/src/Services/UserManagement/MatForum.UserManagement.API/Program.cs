@@ -3,6 +3,7 @@ using MatForum.UserManagement.Application.Interfaces;
 using MatForum.UserManagement.Application.Services;
 using MatForum.UserManagement.Infrastructure.Data;
 using MatForum.UserManagement.Infrastructure.Repositories;
+using MatForum.UserManagement.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +17,8 @@ builder.Services.AddDbContext<UserManagementDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register services
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 
 builder.Services.AddControllers();
 

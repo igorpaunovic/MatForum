@@ -82,6 +82,18 @@ services:
       - "5004:80"
     restart: on-failure
 
+  identityserver-service:
+    build:
+      context: .
+      dockerfile: src/Security/MatForum.IdentityServer.API/Dockerfile
+    container_name: identityserver-service
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=matforum;Username=matforum_user;Password=matforum_password
+    ports:
+      - "5005:80"
+    restart: on-failure
 
 volumes:
   postgres_data:

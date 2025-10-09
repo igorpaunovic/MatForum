@@ -4,17 +4,17 @@ using MatForum.UserManagement.Domain.Entities;
 
 namespace MatForum.UserManagement.Application.Services;
 
-public class UserService(IUserRepository userRepository) : IUserService
+public class UserProfileService(IUserProfileRepository userRepository) : IUserProfileService
 {
-    public async Task<User?> GetById(Guid id)
+    public async Task<UserProfile?> GetById(Guid id)
     {
         return await userRepository.GetById(id);
     }
 
-    public async Task<IEnumerable<UserDto>> GetAll()
+    public async Task<IEnumerable<UserProfileDto>> GetAll()
     {
         var users = await userRepository.GetAll();
-        return users.Select(user => new UserDto
+        return users.Select(user => new UserProfileDto
         {
             Id = user.Id,
             FirstName = user.FirstName,
@@ -27,9 +27,9 @@ public class UserService(IUserRepository userRepository) : IUserService
         });
     }
 
-    public async Task<User> Create(CreateUserDto createUserDto)
+    public async Task<UserProfile> Create(CreateUserProfileDto createUserDto)
     {
-        var user = new User
+        var user = new UserProfile
         {
             Id = createUserDto.Id,
             FirstName = createUserDto.FirstName,
@@ -42,7 +42,7 @@ public class UserService(IUserRepository userRepository) : IUserService
         return await userRepository.Create(user);
     }
 
-    public async Task<User?> Update(Guid id, UpdateUserDto updateUserDto)
+    public async Task<UserProfile?> Update(Guid id, UpdateUserProfileDto updateUserDto)
     {
         var existingUser = await userRepository.GetById(id);
         if (existingUser == null)

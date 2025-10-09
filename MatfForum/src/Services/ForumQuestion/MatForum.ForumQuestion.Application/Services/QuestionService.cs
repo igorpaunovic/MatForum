@@ -13,9 +13,9 @@ namespace MatForum.ForumQuestion.Application.Services
     public class ForumQuestionService : IForumQuestionService
     {
         private readonly IQuestionRepository _questionRepository;
-        private readonly IUserService _userService;
+        private readonly IUserProfileService _userService;
 
-        public ForumQuestionService(IQuestionRepository questionRepository, IUserService userService)
+        public ForumQuestionService(IQuestionRepository questionRepository, IUserProfileService userService)
         {
             _questionRepository = questionRepository;
             _userService = userService;

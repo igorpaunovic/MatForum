@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace MatForum.IdentityServer.Domain.Entities
 {
-    public sealed class AppUser : IdentityUser<Guid>
+    public class AppUser : IdentityUser<Guid>
     {
         // IdentityUser genericka klasa za korisnike? // svasta nesto 
         // Id su stringovi 
         // prreslikavanje preko entity framework cora? 
         // kako premapirati? 
+
+        public string FirstName { get; set; }  // dodato 
+        public string LastName { get; set; }  // dodato 
+        public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
+
 }
