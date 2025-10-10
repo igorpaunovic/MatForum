@@ -6,9 +6,10 @@ const UserDetailsSchema = z.object({
   id: z.string(),
   firstName: z.string(),
   lastName: z.string(),
-  email: z.string().email(),
+  email: z.email(),
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const LoginRequestSchema = z.object({
   username: z.string().min(1, "Username is required"),
   password: z.string().min(8, "Password must be at least 8 characters"),
@@ -19,6 +20,7 @@ const AuthResponseSchema = z.object({
   refreshToken: z.string(),
 });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const SignUpRequestSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
@@ -36,7 +38,7 @@ export type SignUpRequest = z.infer<typeof SignUpRequestSchema>;
 
 // Create shared API instances
 const authApi = createApi({ commonPrefix: "authentication" });
-const userApi = createApi({ commonPrefix: "user" });
+const sessionApi = createApi({ commonPrefix: "auth" });
 
 // Auth service functions
 export const authService = {
@@ -53,15 +55,24 @@ export const authService = {
 
   // Get current user session
   getCurrentUser: async (): Promise<UserDetails | null> => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return null; // No token, no need to call API
+    }
+
     try {
-      const response = await userApi.get("session");
+      const response = await sessionApi.get("session");
       return UserDetailsSchema.parse(response.data);
-    } catch (error) {
-      // If 401 or 403, user is not authenticated
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      // Silently handle auth errors - don't log anything for 401/403
       if (error.response?.status === 401 || error.response?.status === 403) {
+        authService.removeToken();
         return null;
       }
-      throw error;
+      // Only log unexpected errors
+      console.error("Unexpected session error:", error);
+      return null;
     }
   },
 

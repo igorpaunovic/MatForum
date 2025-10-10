@@ -35,9 +35,11 @@ export default function HeroSection() {
               Browse Questions
             </Button>
           </Link>
-          <Button variant="outline" className="hover:shadow-md transition-shadow">
-            Ask Question
-          </Button>
+          <Link to="/signup">
+            <Button variant="outline" className="hover:shadow-md transition-shadow">
+              Sign Up
+            </Button>
+          </Link>
         </div>
       </div>
       <div className="grid grid-cols-3 gap-4 mb-12">

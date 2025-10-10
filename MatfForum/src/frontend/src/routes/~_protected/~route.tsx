@@ -1,6 +1,6 @@
 import { AppNav } from '@/components/app-nav'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
-import { meOptions } from '@/shared/api/auth'
+import { meOptions } from '@/api/auth'
 
 export const Route = createFileRoute('/_protected')({
     beforeLoad: async ({ context }) => {

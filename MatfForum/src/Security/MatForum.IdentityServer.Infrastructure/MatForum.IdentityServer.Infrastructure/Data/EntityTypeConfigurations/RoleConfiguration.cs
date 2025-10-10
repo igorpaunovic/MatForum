@@ -9,19 +9,21 @@ using System.Threading.Tasks;
 
 namespace MatForum.IdentityServer.Infrastructure.Data.EntityTypeConfigurations
 {
-    public sealed class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
+    public sealed class RoleConfiguration : IEntityTypeConfiguration<IdentityRole<Guid>>
     {
 
-        public void Configure(EntityTypeBuilder<IdentityRole> builder)
+        public void Configure(EntityTypeBuilder<IdentityRole<Guid>> builder)
         {
             builder.HasData(
-                new IdentityRole
+                new IdentityRole<Guid>
                 {
+                    Id = Guid.NewGuid(),
                     Name = "User",
                     NormalizedName = "USER"
                 },
-                new IdentityRole
+                new IdentityRole<Guid>
                 {
+                    Id = Guid.NewGuid(),
                     Name = "Admin",
                     NormalizedName = "ADMIN"
                 }

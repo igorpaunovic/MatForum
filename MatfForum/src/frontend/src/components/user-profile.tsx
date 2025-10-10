@@ -1,4 +1,4 @@
-import { useMe } from "@/shared/api/auth";
+import { useMe } from "@/api/auth";
 import { useLogout } from "@/routes/~(public)/~_auth/~login/api/login-email";
 import { Button } from "@/components/ui/button";
 

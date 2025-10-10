@@ -109,7 +109,7 @@ export const FormSubmit = React.forwardRef<
 
   return (
     <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting, state.isTouched]}>
-      {([canSubmit, isSubmitting, isTouched]: [boolean, boolean, boolean]) => (
+      {([canSubmit, isSubmitting, isTouched]) => (
         <Button
           ref={ref}
           type="submit"

@@ -15,11 +15,12 @@ import { useAppForm } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
 import { useSignInEmailMutation, zLoginSchema } from "./api/login-email";
+import { ArrowLeft } from "lucide-react";
 
 // Simple labels object for form UI
 const formLabels = {
-  title: "Welcome back",
-  description: "Sign in to your account to continue.",
+  title: "Welcome Back! 👋",
+  description: "Sign in to continue your journey on MatForum.",
   username: "Username",
   password: "Password",
   rememberMe: "Remember me",
@@ -43,6 +44,10 @@ function LoginComponent() {
   const search = Route.useSearch();
   const signInEmailMutation = useSignInEmailMutation();
 
+  const handleBack = () => {
+    navigate({ to: "/" });
+  };
+
   const form = useAppForm({
     validators: {
       onChange: zLoginSchema(),
@@ -64,7 +69,15 @@ function LoginComponent() {
 
   return (
     <div className="w-full">
-      <Card className="mx-auto mt-12 max-w-lg">
+      <div className="mx-auto mt-12 max-w-lg">
+        <button
+          onClick={handleBack}
+          className="mb-4 flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Home
+        </button>
+        <Card>
         <CardHeader>
           <CardTitle>{formLabels.title}</CardTitle>
           <CardDescription>{formLabels.description}</CardDescription>
@@ -155,7 +168,8 @@ function LoginComponent() {
           {formLabels.dontHaveAccount}
           <Link to="/signup">{formLabels.signUp}</Link>
         </CardFooter>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 }

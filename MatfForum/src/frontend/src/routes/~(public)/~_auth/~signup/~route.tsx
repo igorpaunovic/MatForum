@@ -12,11 +12,12 @@ import { useAppForm } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
 import { useSignUpEmailMutation } from "./api/signup";
+import { ArrowLeft } from "lucide-react";
 
 // Simple labels object for signup form UI
 const signupLabels = {
-  title: "Create Account",
-  description: "Sign up to get started with MatForum.",
+  title: "Join MatForum! 🚀",
+  description: "Create your account and start asking questions.",
   firstName: "First Name",
   lastName: "Last Name",
   username: "Username",
@@ -35,6 +36,10 @@ export const Route = createFileRoute("/(public)/_auth/signup")({
 function SignUpComponent() {
   const navigate = Route.useNavigate();
   const signUpEmailMutation = useSignUpEmailMutation();
+
+  const handleBack = () => {
+    navigate({ to: "/" });
+  };
 
   const form = useAppForm({
     defaultValues: {
@@ -56,7 +61,15 @@ function SignUpComponent() {
 
   return (
     <div className="w-full">
-      <Card className="mx-auto mt-12 max-w-lg">
+      <div className="mx-auto mt-12 max-w-lg">
+        <button
+          onClick={handleBack}
+          className="mb-4 flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Home
+        </button>
+        <Card>
         <CardHeader>
           <CardTitle>{signupLabels.title}</CardTitle>
           <CardDescription>{signupLabels.description}</CardDescription>
@@ -163,7 +176,7 @@ function SignUpComponent() {
                     <field.FieldMessage />
                   </field.FieldContainer>
                 )}
-              </form.AppField>
+              </form.AppField> 
 
               <form.AppForm>
                 <form.FormSubmit>{signupLabels.submit}</form.FormSubmit>
@@ -175,7 +188,8 @@ function SignUpComponent() {
           {signupLabels.alreadyHaveAccount}
           <Link to="/login">{signupLabels.login}</Link>
         </CardFooter>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 }

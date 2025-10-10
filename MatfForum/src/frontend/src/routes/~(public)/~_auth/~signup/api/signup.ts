@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { z } from "zod";
 import { authService, type SignUpRequest } from "@/services/auth-service";
-import { meOptions } from "@/shared/api/auth";
+import { meOptions } from "@/api/auth";
 
 // Zod schema for signup request (matches backend)
 const SignUpSchema = z.object({

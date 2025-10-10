@@ -12,6 +12,7 @@ services:
       - user-service
       - question-service
       - voting-service
+      - identityserver-service
   postgres:
     image: postgres:15
     container_name: matforum-postgres

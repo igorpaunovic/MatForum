@@ -4,6 +4,7 @@ import GuidelinesSection from "@/components/sections/GuidelinesSection";
 import QuickStartSection from "@/components/sections/QuickStartSection";
 import PopularTopicsSection from "@/components/sections/PopularTopicsSection";
 import CTASection from "@/components/sections/CTASection";
+import { SimpleUserMenu } from "@/components/simple-user-menu";
 
 export const Route = createFileRoute('/(public)/')({
   component: RouteComponent,
@@ -12,6 +13,11 @@ export const Route = createFileRoute('/(public)/')({
 function RouteComponent() {
   return (
     <>
+      {/* Simple user menu in top-right corner */}
+      <div className="flex justify-end mb-4">
+        <SimpleUserMenu />
+      </div>
+      
       <HeroSection />
       <GuidelinesSection />
       <QuickStartSection />

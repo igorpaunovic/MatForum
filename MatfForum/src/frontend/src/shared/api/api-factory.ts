@@ -8,7 +8,7 @@ const handleInterceptors = (apiInstance: AxiosInstance) => {
     (error) => {
       if (error.response?.data) {
         if (error.response.status === 401 || error.response.status === 403) {
-          console.log('Logout'); // ovde bi trebao user da se logoutuje 
+          // console.log('Logout'); // ovde bi trebao user da se logoutuje 
         }
       }
       return Promise.reject(error);
