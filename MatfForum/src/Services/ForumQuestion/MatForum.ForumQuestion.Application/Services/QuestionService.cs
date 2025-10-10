@@ -89,6 +89,30 @@ namespace MatForum.ForumQuestion.Application.Services
             return dtos;
         }
 
+        public async Task<IEnumerable<QuestionDto>> SearchQuestions(string searchTerm)
+        {
+            var questions = await _questionRepository.SearchQuestions(searchTerm);
+            var dtos = new List<QuestionDto>();
+            foreach (var question in questions)
+            {
+                var user = await _userService.GetByIdAsync(question.CreatedByUserId);
+                dtos.Add(new QuestionDto
+                {
+                    Id = question.Id,
+                    Title = question.Title,
+                    Content = question.Content,
+                    CreatedByUserId = question.CreatedByUserId,
+                    AuthorName = user?.Username ?? "Unknown User",
+                    CreatedAt = question.CreatedAt,
+                    UpdatedAt = question.UpdatedAt,
+                    Views = question.Views,
+                    IsClosed = question.IsClosed,
+                    Tags = question.Tags
+                });
+            }
+            return dtos;
+        }
+
         public async Task<bool> UpdateQuestion(UpdateQuestionCommand command)
         {
             var question = await _questionRepository.GetById(command.Id);
