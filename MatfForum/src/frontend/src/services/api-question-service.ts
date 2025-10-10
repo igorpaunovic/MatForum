@@ -10,8 +10,17 @@ const getQuestions = async () => {
     })
 }
 
+const searchQuestions = async (searchTerm: string) => {
+    return await questionApi.get('/search', {
+        params: { searchTerm }
+    }).then((res) => {
+        return res.data;
+    })
+}
+
 const questionService = {
-    getQuestions
+    getQuestions,
+    searchQuestions
 };
 
 export default questionService;

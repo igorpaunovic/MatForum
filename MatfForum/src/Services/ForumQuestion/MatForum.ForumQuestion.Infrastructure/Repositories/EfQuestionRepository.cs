@@ -136,5 +136,22 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<IEnumerable<Question>> SearchQuestions(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return await GetAllAsync();
+            }
+
+            var lowerSearchTerm = searchTerm.ToLower();
+            
+            return await _context.Questions
+                .Where(q => q.Title.ToLower().Contains(lowerSearchTerm) || 
+                           q.Content.ToLower().Contains(lowerSearchTerm) ||
+                           q.Tags.Any(tag => tag.ToLower().Contains(lowerSearchTerm)))
+                .OrderByDescending(q => q.CreatedAt)
+                .ToListAsync();
+        }
     }
 }

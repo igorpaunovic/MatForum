@@ -61,6 +61,19 @@ namespace MatForum.ForumQuestion.API.Controllers
             return Ok(questions);
         }
 
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<QuestionDto>>> SearchQuestions([FromQuery] string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                var allQuestions = await _questionService.GetAllQuestions();
+                return Ok(allQuestions);
+            }
+
+            var questions = await _questionService.SearchQuestions(searchTerm);
+            return Ok(questions);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateQuestion(Guid id, [FromBody] UpdateQuestionCommand command)
         {
