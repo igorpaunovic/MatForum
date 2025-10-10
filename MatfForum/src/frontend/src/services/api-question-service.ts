@@ -18,9 +18,26 @@ const searchQuestions = async (searchTerm: string) => {
     })
 }
 
+const deleteQuestion = async (questionId: string) => {
+    return await questionApi.delete(`/${questionId}`).then((res) => {
+        return res.data;
+    })
+}
+
+const updateQuestion = async (questionId: string, data: { title: string; content: string; tags: string[]; updatedByUserId: string }) => {
+    return await questionApi.put(`/${questionId}`, {
+        id: questionId,
+        ...data
+    }).then((res) => {
+        return res.data;
+    })
+}
+
 const questionService = {
     getQuestions,
-    searchQuestions
+    searchQuestions,
+    deleteQuestion,
+    updateQuestion
 };
 
 export default questionService;

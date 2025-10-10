@@ -22,9 +22,10 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
             var lowerSearchTerm = searchTerm.ToLower();
             
             return allQuestions.Where(q => 
-                q.Title.ToLower().Contains(lowerSearchTerm) || 
+                !q.IsDeleted &&
+                (q.Title.ToLower().Contains(lowerSearchTerm) || 
                 q.Content.ToLower().Contains(lowerSearchTerm) ||
-                q.Tags.Any(tag => tag.ToLower().Contains(lowerSearchTerm))
+                q.Tags.Any(tag => tag.ToLower().Contains(lowerSearchTerm)))
             ).OrderByDescending(q => q.CreatedAt);
         }
     }

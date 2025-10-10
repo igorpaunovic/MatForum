@@ -53,6 +53,12 @@ public class Question : BaseEntity
         IsClosed = true;
     }
 
+    public void Delete()
+    {
+        base.IsDeleted = true;
+        base.DeletedAt = DateTime.UtcNow;
+    }
+
     public void AddTag(string tag)
     {
         if (!string.IsNullOrWhiteSpace(tag) && !Tags.Contains(tag.ToLowerInvariant()))
