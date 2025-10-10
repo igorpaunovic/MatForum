@@ -18,11 +18,10 @@ export const Route = createFileRoute("/(public)/_auth")({
 
 function AuthLayoutComponent() {
   return (
-    <div className="flex min-h-svh w-full flex-col items-center justify-center">
-      {"Matforum"}
-      <div className="mt-10 flex items-center gap-2 px-4">
+    <div className="dropdown-container flex min-h-svh w-full flex-col items-center justify-center">
+      <div className="main-content">
+        <Outlet />
       </div>
-      <Outlet />
     </div>
   );
 }

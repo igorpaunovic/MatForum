@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { UserMenu } from './user-menu'
+import { SimpleUserMenu } from './simple-user-menu'
 
 export function AppNav() {
   return (
@@ -8,7 +8,7 @@ export function AppNav() {
         <Link to="/" className="[&.active]:font-semibold">Home</Link>
         <Link to="/questions" className="[&.active]:font-semibold">Questions</Link>
       </div>
-      <UserMenu />
+      <SimpleUserMenu />
     </div>
   )
 }

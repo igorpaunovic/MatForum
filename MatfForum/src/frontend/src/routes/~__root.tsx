@@ -33,7 +33,7 @@ import { queryClient } from '@/shared/api/queryClient'
 export const Route = createRootRouteWithContext()({
   component: () => (
     <div className="min-h-screen">
-      <main className="container mx-auto px-4 py-8">
+      <main className="main-content container mx-auto px-4 py-8">
         <Outlet />
       </main>
       <Toaster position="bottom-right" richColors closeButton />

@@ -13,8 +13,8 @@ export const Route = createFileRoute('/(public)/')({
 function RouteComponent() {
   return (
     <>
-      {/* Simple user menu in top-right corner */}
-      <div className="flex justify-end mb-4">
+      {/* Simple user menu in top-right corner with dropdown container */}
+      <div className="dropdown-container flex justify-end mb-4">
         <SimpleUserMenu />
       </div>
       

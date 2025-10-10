@@ -15,9 +15,9 @@ export const Route = createFileRoute('/_protected')({
   
   function ProtectedLayout() {
     return (
-    <div className="min-h-svh flex flex-col">
+    <div className="dropdown-container min-h-svh flex flex-col">
         <AppNav /> 
-        <main className="flex-1"><Outlet /></main>
+        <main className="main-content flex-1"><Outlet /></main>
       </div>
     )
 }

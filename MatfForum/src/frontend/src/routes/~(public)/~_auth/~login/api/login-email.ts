@@ -41,12 +41,22 @@ export const useSignInEmailMutation = () => {
     },
     onSuccess: (data: AuthResponse) => {
       authService.storeToken(data.accessToken);
-      queryClient.removeQueries({ queryKey: meOptions().queryKey });
+      queryClient.invalidateQueries({ queryKey: meOptions().queryKey });
       toast.success("Successfully logged in!");
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Login failed");
+      const errorData = error.response?.data;
+      
+      if (errorData?.message) {
+        toast.error(errorData.message);
+      } else if (error.response?.status === 401) {
+        toast.error("Invalid username or password.");
+      } else if (error.response?.status === 400) {
+        toast.error("Please check your login information.");
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
     },
   });
 };

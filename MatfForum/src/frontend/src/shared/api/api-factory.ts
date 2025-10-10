@@ -8,7 +8,15 @@ const handleInterceptors = (apiInstance: AxiosInstance) => {
     (error) => {
       if (error.response?.data) {
         if (error.response.status === 401 || error.response.status === 403) {
-          // console.log('Logout'); // ovde bi trebao user da se logoutuje 
+          // Suppress console errors for authentication failures
+          // These are handled by the mutation's onError handler
+          if (import.meta.env.DEV) {
+            console.warn(`Authentication failed: ${error.response.status}`, {
+              url: error.config?.url,
+              method: error.config?.method,
+              message: error.response.data?.message || 'Authentication failed'
+            });
+          }
         }
       }
       return Promise.reject(error);
@@ -37,7 +45,7 @@ interface IApiOptions extends AxiosRequestConfig {
 const createApi = ({ commonPrefix, ...rest }: IApiOptions) => {
   const api = axios.create({
     baseURL: import.meta.env.DEV 
-      ? `http://localhost:5000/api/${commonPrefix}/`  // ovo je privremeno ovde treba da stoji adresa API Gateway-a ... 
+      ? `http://localhost:5000/api/${commonPrefix}/`  // API Gateway on port 5000
       : `http://localhost:5000/${commonPrefix}/`, 
     ...rest,
   });
