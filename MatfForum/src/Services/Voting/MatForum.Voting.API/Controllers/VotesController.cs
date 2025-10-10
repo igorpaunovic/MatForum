@@ -152,6 +152,18 @@ namespace MatForum.Voting.API.Controllers
             var votes = await _voteService.GetQuestionVotesAsync(questionId);
             return Ok(votes);
         }
+
+        [HttpGet("summary/answer/{answerId}")]
+        public async Task<ActionResult<QuestionVoteSummaryDto>> GetAnswerVoteSummary(Guid answerId, [FromQuery] Guid? userId = null)
+        {
+            if (answerId == Guid.Empty)
+            {
+                return BadRequest("AnswerId must be a valid GUID.");
+            }
+
+            var summary = await _voteService.GetAnswerVoteSummaryAsync(answerId, userId);
+            return Ok(summary);
+        }
     }
 }
 

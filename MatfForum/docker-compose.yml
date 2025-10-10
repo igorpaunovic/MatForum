@@ -13,6 +13,7 @@ services:
       - question-service
       - voting-service
       - identityserver-service
+      - answer-service
   postgres:
     image: postgres:15
     container_name: matforum-postgres
@@ -81,6 +82,8 @@ services:
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=matforum;Username=matforum_user;Password=matforum_password
     ports:
       - "5004:80"
+    depends_on:
+      - postgres
     restart: on-failure
 
   identityserver-service:

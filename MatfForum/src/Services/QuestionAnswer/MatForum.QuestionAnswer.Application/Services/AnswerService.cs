@@ -16,7 +16,7 @@ public class AnswerService : IAnswerService
         // _questionValidator = questionValidator;
     }
 
-    public async Task<Guid> CreateAnswerAsync(string content, Guid questionId, Guid authorId, CancellationToken cancellationToken)
+    public async Task<Guid> CreateAnswerAsync(string content, Guid questionId, Guid authorId, Guid? parentAnswerId, CancellationToken cancellationToken)
     {
         // // 1. Validate dependencies
         // if (!await _questionValidator.ExistsAsync(questionId, cancellationToken))
@@ -24,8 +24,8 @@ public class AnswerService : IAnswerService
         //     throw new InvalidOperationException($"Question with ID {questionId} not found.");
         // }
 
-        // 2. Create the domain entity
-        var answerEntity = Answer.Create(content, questionId, authorId);
+        // 2. Create the domain entity with optional parent
+        var answerEntity = Answer.Create(content, questionId, authorId, parentAnswerId);
 
         // 3. Persist via the repository
         await _answerRepository.Create(answerEntity); 
@@ -45,30 +45,51 @@ public class AnswerService : IAnswerService
             CreatedAt = answer.CreatedAt,
             UpdatedAt = answer.UpdatedAt, 
             QuestionId = answer.QuestionId,
-            AuthorId = answer.AuthorId
+            AuthorId = answer.AuthorId,
+            ParentAnswerId = answer.ParentAnswerId
         };
     }
 
     public async Task<IEnumerable<AnswerDto>> GetAnswersByQuestionIdAsync(Guid questionId, CancellationToken cancellationToken)
     {
-        var answers = await _answerRepository.GetByQuestionIdAsync(questionId); 
-        return answers.Select(answer => new AnswerDto
+        var allAnswers = await _answerRepository.GetByQuestionIdAsync(questionId);
+        var answersList = allAnswers.ToList();
+        
+        // Build threaded structure - only return top-level answers (without parent)
+        var topLevelAnswers = answersList.Where(a => a.ParentAnswerId == null);
+        
+        return topLevelAnswers.Select(answer => MapToThreadedDto(answer, answersList));
+    }
+
+    private AnswerDto MapToThreadedDto(Answer answer, List<Answer> allAnswers)
+    {
+        var dto = new AnswerDto
         {
             Id = answer.Id,
             Content = answer.Content,
             CreatedAt = answer.CreatedAt,
-            UpdatedAt = answer.UpdatedAt, 
+            UpdatedAt = answer.UpdatedAt,
             QuestionId = answer.QuestionId,
-            AuthorId = answer.AuthorId
-        });
+            AuthorId = answer.AuthorId,
+            ParentAnswerId = answer.ParentAnswerId,
+            Replies = new List<AnswerDto>()
+        };
+
+        // Find all direct replies to this answer
+        var replies = allAnswers.Where(a => a.ParentAnswerId == answer.Id);
+        foreach (var reply in replies)
+        {
+            dto.Replies.Add(MapToThreadedDto(reply, allAnswers));
+        }
+
+        return dto;
     }
 
     public async Task<Guid?> UpdateAnswerAsync(Guid answerId, string content, CancellationToken cancellationToken)
     {
         var answer = await _answerRepository.GetById(answerId);
         if (answer == null) return null;
-        answer.Content = content;
-        answer.UpdatedAt = DateTime.UtcNow; // Set UpdatedAt when answer is updated
+        answer.Update(content);
         await _answerRepository.Update(answerId, answer);
         return answerId;
     }

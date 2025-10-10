@@ -47,6 +47,14 @@ namespace MatForum.ForumQuestion.Infrastructure
             return JsonSerializer.Deserialize<IEnumerable<QuestionDto>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
+        public async Task<IEnumerable<QuestionDto>> SearchQuestions(string searchTerm)
+        {
+            var response = await _httpClient.GetAsync($"api/questions/search?searchTerm={Uri.EscapeDataString(searchTerm)}");
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<IEnumerable<QuestionDto>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+
         public async Task<bool> UpdateQuestion(UpdateQuestionCommand command)
         {
             var jsonContent = new StringContent(JsonSerializer.Serialize(command), System.Text.Encoding.UTF8, "application/json");

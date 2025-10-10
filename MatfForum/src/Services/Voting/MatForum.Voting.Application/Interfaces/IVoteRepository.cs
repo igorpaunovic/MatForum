@@ -9,12 +9,15 @@ namespace MatForum.Voting.Application.Interfaces
     {
         Task<Vote> GetByIdAsync(Guid id);
         Task<Vote> GetByQuestionAndUserAsync(Guid questionId, Guid userId);
+        Task<Vote> GetByAnswerAndUserAsync(Guid answerId, Guid userId);
         Task<IEnumerable<Vote>> GetByQuestionIdAsync(Guid questionId);
+        Task<IEnumerable<Vote>> GetByAnswerIdAsync(Guid answerId);
         Task<IEnumerable<Vote>> GetByUserIdAsync(Guid userId);
         Task AddAsync(Vote vote);
         Task UpdateAsync(Vote vote);
         Task DeleteAsync(Vote vote);
-        Task<bool> ExistsAsync(Guid questionId, Guid userId);
+        Task<bool> ExistsForQuestionAsync(Guid questionId, Guid userId);
+        Task<bool> ExistsForAnswerAsync(Guid answerId, Guid userId);
     }
 }
 

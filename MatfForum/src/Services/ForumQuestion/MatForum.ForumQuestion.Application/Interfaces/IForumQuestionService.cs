@@ -10,6 +10,7 @@ namespace MatForum.ForumQuestion.Application.Interfaces
         Task<QuestionDto> CreateQuestion(CreateQuestionCommand command);
         Task<QuestionDto?> GetQuestionById(Guid id);
         Task<IEnumerable<QuestionDto>> GetAllQuestions();
+        Task<IEnumerable<QuestionDto>> SearchQuestions(string searchTerm);
         Task<bool> UpdateQuestion(UpdateQuestionCommand command);
         Task<bool> DeleteQuestion(Guid id);
     }

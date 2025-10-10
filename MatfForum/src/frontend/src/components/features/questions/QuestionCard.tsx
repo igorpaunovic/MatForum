@@ -1,8 +1,119 @@
-import type { Question } from '@/lib/types'
+import { useState, useEffect } from 'react';
+import type { Question, Answer } from '@/lib/types'
 import TagList from "@/components/common/Taglist.tsx";
 import VotingButtons from "@/components/features/voting/VotingButtons";
+import { Button } from '@/components/ui/button';
+import AnswerForm from '@/components/features/answers/AnswerForm';
+import AnswerList from '@/components/features/answers/AnswerList';
+import answerService from '@/services/api-answer-service';
+import { formatDate } from '@/lib/utils';
+import { Pencil, Trash2 } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 
 const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Question) => {
+  const queryClient = useQueryClient();
+  const [showReplyForm, setShowReplyForm] = useState(false);
+  const [showAnswers, setShowAnswers] = useState(false);
+  const [answers, setAnswers] = useState<Answer[]>([]);
+  const [answerCount, setAnswerCount] = useState<number>(0);
+  const [isLoadingAnswers, setIsLoadingAnswers] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editTitle, setEditTitle] = useState(title);
+  const [editContent, setEditContent] = useState(content);
+  const [editTags, setEditTags] = useState<string[]>(tags || []);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // Load answer count on mount
+  useEffect(() => {
+    const loadAnswerCount = async () => {
+      try {
+        const data = await answerService.getAnswersByQuestionId(id);
+        setAnswerCount(data.length);
+      } catch (error) {
+        console.error('Error loading answer count:', error);
+      }
+    };
+    loadAnswerCount();
+  }, [id]);
+
+  const loadAnswers = async () => {
+    setIsLoadingAnswers(true);
+    try {
+      const data = await answerService.getAnswersByQuestionId(id);
+      setAnswers(data);
+      setAnswerCount(data.length);
+    } catch (error) {
+      console.error('Error loading answers:', error);
+    } finally {
+      setIsLoadingAnswers(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showAnswers) {
+      loadAnswers();
+    }
+  }, [showAnswers, id]);
+
+  const handleAnswerSubmitted = () => {
+    setShowReplyForm(false);
+    loadAnswers();
+    // Update count after new answer
+    setAnswerCount(prev => prev + 1);
+  };
+
+  const toggleAnswers = () => {
+    setShowAnswers(!showAnswers);
+  };
+
+  const handleDelete = async () => {
+    if (isDeleting) return;
+    setIsDeleting(true);
+    
+    try {
+      const questionService = (await import('@/services/api-question-service')).default;
+      await questionService.deleteQuestion(id);
+      setShowDeleteConfirm(false);
+      
+      // Invalidate queries to refresh data smoothly
+      await queryClient.invalidateQueries({ queryKey: ['questionConfig'] });
+      await queryClient.invalidateQueries({ queryKey: ['questions'] });
+    } catch (error) {
+      console.error('Error deleting question:', error);
+      alert('Failed to delete question');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleEdit = async () => {
+    if (isUpdating) return;
+    setIsUpdating(true);
+    
+    try {
+      const questionService = (await import('@/services/api-question-service')).default;
+      // Using first user ID as placeholder - ideally this would come from auth context
+      await questionService.updateQuestion(id, {
+        title: editTitle,
+        content: editContent,
+        tags: editTags,
+        updatedByUserId: '550e8400-e29b-41d4-a716-446655440010'
+      });
+      setShowEditForm(false);
+      
+      // Invalidate queries to refresh data smoothly
+      await queryClient.invalidateQueries({ queryKey: ['questionConfig'] });
+      await queryClient.invalidateQueries({ queryKey: ['questions'] });
+    } catch (error) {
+      console.error('Error updating question:', error);
+      alert('Failed to update question');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
   return (
     <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
       <div className="flex gap-4">
@@ -13,14 +124,134 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Quest
 
         {/* Content Section */}
         <div className="flex-1">
-          <h3 className="font-semibold text-lg mb-2">{title}</h3>
+          <div className="flex justify-between items-start mb-2">
+            <h3 className="font-semibold text-lg">{title}</h3>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowEditForm(!showEditForm)}
+                className="text-blue-600 hover:text-blue-800 p-1 transition-colors"
+                title="Edit question"
+              >
+                <Pencil className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setShowDeleteConfirm(true)}
+                className="text-red-600 hover:text-red-800 p-1 transition-colors"
+                title="Delete question"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
           <p className="text-gray-600 mb-3">{content}</p>
           <div className="flex justify-between items-center text-sm text-gray-500">
             <span>By {authorName}</span>
-            <span>{createdAt}</span>
+            <span>{formatDate(createdAt)}</span>
           </div>
           {tags && (
             <TagList tags={tags} />
+          )}
+
+          {/* Action Buttons */}
+          <div className="flex gap-2 mt-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowReplyForm(!showReplyForm)}
+            >
+              {showReplyForm ? 'Cancel' : 'Answer Question'}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleAnswers}
+            >
+              {showAnswers ? 'Hide Answers' : `Show Answers (${answerCount})`}
+            </Button>
+          </div>
+
+          {/* Edit Form */}
+          {showEditForm && (
+            <div className="mt-4 border rounded-lg p-4 bg-blue-50">
+              <h4 className="font-semibold mb-3">Edit Question</h4>
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Title</label>
+                  <input
+                    type="text"
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Content</label>
+                  <textarea
+                    value={editContent}
+                    onChange={(e) => setEditContent(e.target.value)}
+                    rows={4}
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Tags (comma separated)</label>
+                  <input
+                    type="text"
+                    value={editTags.join(', ')}
+                    onChange={(e) => setEditTags(e.target.value.split(',').map(t => t.trim()).filter(t => t))}
+                    className="w-full border rounded px-3 py-2"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Button onClick={handleEdit} size="sm" disabled={isUpdating}>
+                    {isUpdating ? 'Saving...' : 'Save Changes'}
+                  </Button>
+                  <Button onClick={() => setShowEditForm(false)} variant="outline" size="sm" disabled={isUpdating}>
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Reply Form */}
+          {showReplyForm && (
+            <AnswerForm
+              questionId={id}
+              onAnswerSubmitted={handleAnswerSubmitted}
+              onCancel={() => setShowReplyForm(false)}
+            />
+          )}
+
+          {/* Delete Confirmation Modal */}
+          {showDeleteConfirm && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+                <h3 className="text-lg font-semibold mb-3">Delete Question?</h3>
+                <p className="text-gray-600 mb-6">
+                  Are you sure you want to delete this question? This action cannot be undone.
+                </p>
+                <div className="flex gap-3 justify-end">
+                  <Button onClick={() => setShowDeleteConfirm(false)} variant="outline" disabled={isDeleting}>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleDelete} variant="destructive" disabled={isDeleting}>
+                    {isDeleting ? 'Deleting...' : 'Delete'}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Answers List */}
+          {showAnswers && (
+            <div className="mt-4">
+              {isLoadingAnswers ? (
+                <div className="text-center py-4 text-gray-500">Loading answers...</div>
+              ) : (
+                <AnswerList answers={answers} onReplySubmitted={loadAnswers} />
+              )}
+            </div>
           )}
         </div>
       </div>
