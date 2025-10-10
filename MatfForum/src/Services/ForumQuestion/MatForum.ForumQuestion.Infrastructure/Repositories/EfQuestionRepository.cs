@@ -22,12 +22,14 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
         public async Task<Question> GetByIdAsync(Guid id)
         {
             return await _context.Questions
+                .Where(q => !q.IsDeleted)
                 .FirstOrDefaultAsync(q => q.Id == id);
         }
 
         public async Task<IEnumerable<Question>> GetAllAsync()
         {
             return await _context.Questions
+                .Where(q => !q.IsDeleted)
                 .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }
@@ -59,7 +61,7 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
         public async Task<IEnumerable<Question>> GetByUserIdAsync(Guid userId)
         {
             return await _context.Questions
-                .Where(q => q.CreatedByUserId == userId)
+                .Where(q => !q.IsDeleted && q.CreatedByUserId == userId)
                 .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }
@@ -67,7 +69,7 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
         public async Task<IEnumerable<Question>> GetByTagAsync(string tag)
         {
             return await _context.Questions
-                .Where(q => q.Tags.Contains(tag.ToLowerInvariant()))
+                .Where(q => !q.IsDeleted && q.Tags.Contains(tag.ToLowerInvariant()))
                 .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }
@@ -75,7 +77,7 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
         public async Task<IEnumerable<Question>> GetClosedQuestionsAsync()
         {
             return await _context.Questions
-                .Where(q => q.IsClosed)
+                .Where(q => !q.IsDeleted && q.IsClosed)
                 .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }
@@ -83,7 +85,7 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
         public async Task<IEnumerable<Question>> GetOpenQuestionsAsync()
         {
             return await _context.Questions
-                .Where(q => !q.IsClosed)
+                .Where(q => !q.IsDeleted && !q.IsClosed)
                 .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }
@@ -92,12 +94,14 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
         public async Task<Question?> GetById(Guid id)
         {
             return await _context.Questions
+                .Where(q => !q.IsDeleted)
                 .FirstOrDefaultAsync(q => q.Id == id);
         }
 
         public async Task<IEnumerable<Question>> GetAll()
         {
             return await _context.Questions
+                .Where(q => !q.IsDeleted)
                 .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }
@@ -132,7 +136,8 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
             if (question == null)
                 return false;
 
-            _context.Questions.Remove(question);
+            // Soft delete
+            question.Delete();
             await _context.SaveChangesAsync();
             return true;
         }
@@ -147,9 +152,10 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
             var lowerSearchTerm = searchTerm.ToLower();
             
             return await _context.Questions
-                .Where(q => q.Title.ToLower().Contains(lowerSearchTerm) || 
-                           q.Content.ToLower().Contains(lowerSearchTerm) ||
-                           q.Tags.Any(tag => tag.ToLower().Contains(lowerSearchTerm)))
+                .Where(q => !q.IsDeleted && 
+                           (q.Title.ToLower().Contains(lowerSearchTerm) || 
+                            q.Content.ToLower().Contains(lowerSearchTerm) ||
+                            q.Tags.Any(tag => tag.ToLower().Contains(lowerSearchTerm))))
                 .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }

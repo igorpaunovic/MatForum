@@ -2,10 +2,12 @@ import { useState } from 'react';
 import type { Answer } from '@/lib/types';
 import { formatDate } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import { ChevronUp, ChevronDown, Pencil, Trash2 } from 'lucide-react';
 import AnswerForm from './AnswerForm';
 import { useAnswerVote, useAnswerVoteSummary, useRemoveAnswerVote } from '@/hooks/use-voting';
 import { VOTE_TYPE_UPVOTE, VOTE_TYPE_DOWNVOTE } from '@/services/api-voting-service';
+import { useQueryClient } from '@tanstack/react-query';
+import answerService from '@/services/api-answer-service';
 
 interface AnswerItemProps {
   answer: Answer;
@@ -14,8 +16,14 @@ interface AnswerItemProps {
 }
 
 const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) => {
+  const queryClient = useQueryClient();
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(true);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [editContent, setEditContent] = useState(answer.content);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   
   // Voting hooks
   const { data: voteSummary } = useAnswerVoteSummary(answer.id);
@@ -43,6 +51,46 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
       return;
     }
     voteMutation.mutate(VOTE_TYPE_DOWNVOTE);
+  };
+
+  const handleEdit = async () => {
+    if (isUpdating) return;
+    setIsUpdating(true);
+    
+    try {
+      await answerService.updateAnswer(answer.id, editContent);
+      setShowEditForm(false);
+      
+      // Invalidate queries to refresh answers smoothly
+      if (onReplySubmitted) {
+        onReplySubmitted();
+      }
+    } catch (error) {
+      console.error('Error updating answer:', error);
+      alert('Failed to update answer');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (isDeleting) return;
+    setIsDeleting(true);
+    
+    try {
+      await answerService.deleteAnswer(answer.id);
+      setShowDeleteConfirm(false);
+      
+      // Trigger refresh of answers
+      if (onReplySubmitted) {
+        onReplySubmitted();
+      }
+    } catch (error) {
+      console.error('Error deleting answer:', error);
+      alert('Failed to delete answer');
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const replyCount = answer.replies?.length || 0;
@@ -112,8 +160,59 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
 
           {/* Content Section */}
           <div className="flex-1">
-            {/* Answer content */}
-            <p className="text-gray-800 mb-2">{answer.content}</p>
+            <div className="flex justify-between items-start mb-2">
+              {/* Answer content */}
+              <div className="flex-1">
+                {showEditForm ? (
+                  <div className="mb-2">
+                    <textarea
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                      rows={3}
+                      className="w-full border rounded px-3 py-2 text-sm"
+                    />
+                    <div className="flex gap-2 mt-2">
+                      <Button onClick={handleEdit} size="sm" disabled={isUpdating}>
+                        {isUpdating ? 'Saving...' : 'Save'}
+                      </Button>
+                      <Button 
+                        onClick={() => {
+                          setShowEditForm(false);
+                          setEditContent(answer.content);
+                        }} 
+                        variant="outline" 
+                        size="sm"
+                        disabled={isUpdating}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-gray-800">{answer.content}</p>
+                )}
+              </div>
+              
+              {/* Edit/Delete icons */}
+              {!showEditForm && (
+                <div className="flex gap-1 ml-2">
+                  <button
+                    onClick={() => setShowEditForm(true)}
+                    className="text-blue-600 hover:text-blue-800 p-1 transition-colors"
+                    title="Edit answer"
+                  >
+                    <Pencil className="w-3 h-3" />
+                  </button>
+                  <button
+                    onClick={() => setShowDeleteConfirm(true)}
+                    className="text-red-600 hover:text-red-800 p-1 transition-colors"
+                    title="Delete answer"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </button>
+                </div>
+              )}
+            </div>
             
             {/* Author and date */}
             <div className="flex items-center gap-3 text-sm text-gray-500 mb-2">
@@ -157,6 +256,34 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
                   onAnswerSubmitted={handleReplySubmitted}
                   onCancel={() => setShowReplyForm(false)}
                 />
+              </div>
+            )}
+
+            {/* Delete Confirmation Modal */}
+            {showDeleteConfirm && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+                  <h3 className="text-lg font-semibold mb-3">Delete Answer?</h3>
+                  <p className="text-gray-600 mb-6">
+                    Are you sure you want to delete this answer? This action cannot be undone.
+                  </p>
+                  <div className="flex gap-3 justify-end">
+                    <Button 
+                      onClick={() => setShowDeleteConfirm(false)} 
+                      variant="outline"
+                      disabled={isDeleting}
+                    >
+                      Cancel
+                    </Button>
+                    <Button 
+                      onClick={handleDelete} 
+                      variant="destructive"
+                      disabled={isDeleting}
+                    >
+                      {isDeleting ? 'Deleting...' : 'Delete'}
+                    </Button>
+                  </div>
+                </div>
               </div>
             )}
           </div>
