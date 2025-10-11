@@ -8,12 +8,14 @@ import AnswerList from '@/components/features/answers/AnswerList';
 import answerService from '@/services/api-answer-service';
 import { formatDate } from '@/lib/utils';
 
-const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Question) => {
+const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, tags, isClosed }: Question) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showAnswers, setShowAnswers] = useState(false);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [answerCount, setAnswerCount] = useState<number>(0);
   const [isLoadingAnswers, setIsLoadingAnswers] = useState(false);
+
+  const isEdited = updatedAt && createdAt && new Date(updatedAt).getTime() !== new Date(createdAt).getTime();
 
   // Load answer count on mount
   useEffect(() => {
@@ -68,25 +70,50 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Quest
 
         {/* Content Section */}
         <div className="flex-1">
-          <h3 className="font-semibold text-lg mb-2">{title}</h3>
-          <p className="text-gray-600 mb-3">{content}</p>
-          <div className="flex justify-between items-center text-sm text-gray-500">
-            <span>By {authorName}</span>
-            <span>{formatDate(createdAt)}</span>
+          <div className="flex items-center gap-2 mb-2">
+            <h3 className="font-semibold text-lg">{title}</h3>
+            {isClosed && (
+              <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs px-2 py-0.5 rounded-full" title="This question is closed">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                </svg>
+                Closed
+              </span>
+            )}
           </div>
+
+          <p className="text-gray-600 mb-3">{content}</p>
+
+          <div className="flex flex-wrap justify-between items-center text-sm text-gray-500">
+            <span>By {authorName}</span>
+            <div className="flex items-center gap-2">
+              {isEdited && (
+                <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs px-2 py-0.5 rounded-full" title={`Edited on ${formatDate(updatedAt)}`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                  </svg>
+                  Edited
+                 </span>
+              )}
+              <span>{formatDate(createdAt)}</span>
+            </div>
+          </div>
+
           {tags && (
             <TagList tags={tags} />
           )}
 
           {/* Action Buttons */}
           <div className="flex gap-2 mt-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowReplyForm(!showReplyForm)}
-            >
-              {showReplyForm ? 'Cancel' : 'Answer Question'}
-            </Button>
+            {!isClosed && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowReplyForm(!showReplyForm)}
+              >
+                {showReplyForm ? 'Cancel' : 'Answer Question'}
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="sm"
@@ -97,7 +124,7 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Quest
           </div>
 
           {/* Reply Form */}
-          {showReplyForm && (
+          {showReplyForm && !isClosed && (
             <AnswerForm
               questionId={id}
               onAnswerSubmitted={handleAnswerSubmitted}

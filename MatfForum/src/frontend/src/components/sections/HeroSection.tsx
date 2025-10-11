@@ -31,13 +31,15 @@ export default function HeroSection() {
 
         <div className="flex gap-4 justify-center mt-8">
           <Link to="/questions">
-            <Button className="hover:shadow-md transition-shadow">
+            <Button variant='outline' className="hover:shadow-md transition-shadow">
               Browse Questions
             </Button>
           </Link>
-          <Button variant="outline" className="hover:shadow-md transition-shadow">
-            Ask Question
-          </Button>
+          <Link to="/questions/ask">
+            <Button variant="outline" className="hover:shadow-md transition-shadow">
+              Ask Question
+            </Button>
+          </Link>
         </div>
       </div>
       <div className="grid grid-cols-3 gap-4 mb-12">

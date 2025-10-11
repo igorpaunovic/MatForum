@@ -4,8 +4,17 @@ export interface Question {
   content: string;
   authorName: string;
   createdAt: string;
-  tags?: string[];
-  votes?: number;
+  updatedAt: string;
+  tags: string[];
+  votes: number;
+  isClosed: boolean;
+}
+
+export interface CreateQuestionDTO {
+  title: string;
+  content: string;
+  createdByUserId: string;
+  tags: string[];
 }
 
 export interface VoteSummary {
