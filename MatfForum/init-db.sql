@@ -17,7 +17,9 @@ CREATE TABLE IF NOT EXISTS "Users" (
     "Username" VARCHAR(100) NOT NULL,
     "DateOfBirth" DATE NOT NULL,
     "CreatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
-    "UpdatedAt" TIMESTAMP NOT NULL DEFAULT NOW()
+    "UpdatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
+    "IsDeleted" BOOLEAN DEFAULT FALSE,
+    "DeletedAt" TIMESTAMP NULL
 );
 
 -- Create Questions table
@@ -30,7 +32,9 @@ CREATE TABLE IF NOT EXISTS "Questions" (
     "UpdatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
     "Views" INTEGER NOT NULL DEFAULT 0,
     "IsClosed" BOOLEAN NOT NULL DEFAULT FALSE,
-    "Tags" TEXT[]
+    "Tags" TEXT[],
+    "IsDeleted" BOOLEAN DEFAULT FALSE,
+    "DeletedAt" TIMESTAMP NULL
 );
 
 -- Create Answers table (must be before Votes because Votes references Answers)
@@ -42,6 +46,8 @@ CREATE TABLE IF NOT EXISTS "Answers" (
     "QuestionId" UUID NOT NULL, -- Always present for easy querying (denormalized)
     "AuthorId" UUID NOT NULL,
     "ParentAnswerId" UUID NULL, -- For nested replies (null = direct answer to question)
+    "IsDeleted" BOOLEAN DEFAULT FALSE,
+    "DeletedAt" TIMESTAMP NULL,
     FOREIGN KEY ("QuestionId") REFERENCES "Questions"("Id") ON DELETE CASCADE,
     FOREIGN KEY ("AuthorId") REFERENCES "Users"("Id") ON DELETE CASCADE,
     FOREIGN KEY ("ParentAnswerId") REFERENCES "Answers"("Id") ON DELETE CASCADE,
@@ -62,6 +68,8 @@ CREATE TABLE IF NOT EXISTS "Votes" (
     "VoteType" INTEGER NOT NULL, -- -1 for downvote, 0 for neutral, 1 for upvote
     "CreatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
     "UpdatedAt" TIMESTAMP NOT NULL DEFAULT NOW(),
+    "IsDeleted" BOOLEAN DEFAULT FALSE,
+    "DeletedAt" TIMESTAMP NULL,
     CHECK (
         ("QuestionId" IS NOT NULL AND "AnswerId" IS NULL) OR 
         ("QuestionId" IS NULL AND "AnswerId" IS NOT NULL)

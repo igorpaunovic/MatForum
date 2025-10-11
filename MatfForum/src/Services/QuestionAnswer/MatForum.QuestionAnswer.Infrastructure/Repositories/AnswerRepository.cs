@@ -17,12 +17,16 @@ public class AnswerRepository : IAnswerRepository
 
     public async Task<Answer?> GetById(Guid id)
     {
-        return await _context.Answers.FindAsync(id);
+        return await _context.Answers
+            .Where(a => !a.IsDeleted)
+            .FirstOrDefaultAsync(a => a.Id == id);
     }
 
     public async Task<IEnumerable<Answer>> GetAll()
     {
-        return await _context.Answers.ToListAsync();
+        return await _context.Answers
+            .Where(a => !a.IsDeleted)
+            .ToListAsync();
     }
 
     public async Task<Answer> Create(Answer entity)
@@ -47,7 +51,8 @@ public class AnswerRepository : IAnswerRepository
         var answer = await _context.Answers.FindAsync(id);
         if (answer == null) return false;
 
-        _context.Answers.Remove(answer);
+        // Soft delete
+        answer.Delete();
         await _context.SaveChangesAsync();
         return true;
     }
@@ -55,7 +60,7 @@ public class AnswerRepository : IAnswerRepository
     public async Task<IEnumerable<Answer>> GetByQuestionIdAsync(Guid questionId)
     {
         return await _context.Answers
-            .Where(a => a.QuestionId == questionId)
+            .Where(a => !a.IsDeleted && a.QuestionId == questionId)
             .ToListAsync();
     }
 }

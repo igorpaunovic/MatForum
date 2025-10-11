@@ -89,8 +89,7 @@ public class AnswerService : IAnswerService
     {
         var answer = await _answerRepository.GetById(answerId);
         if (answer == null) return null;
-        answer.Content = content;
-        answer.UpdatedAt = DateTime.UtcNow; // Set UpdatedAt when answer is updated
+        answer.Update(content);
         await _answerRepository.Update(answerId, answer);
         return answerId;
     }

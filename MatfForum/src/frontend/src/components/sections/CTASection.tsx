@@ -12,9 +12,11 @@ export default function CTASection() {
             Explore Questions
           </Button>
         </Link>
-        <Button variant="outline" className="hover:shadow-md transition-shadow">
-          Sign Up
-        </Button>
+        <Link to="/signup">
+          <Button variant="outline" className="hover:shadow-md transition-shadow">
+            Sign Up
+          </Button>
+        </Link>
       </div>
     </div>
   )

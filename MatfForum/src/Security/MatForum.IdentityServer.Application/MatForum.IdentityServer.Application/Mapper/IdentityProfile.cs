@@ -1,0 +1,15 @@
+﻿using MatForum.IdentityServer.Application.DTOs;
+using AutoMapper;
+using MatForum.IdentityServer.Domain.Entities;
+
+namespace MatForum.IdentityServer.Application.Mapper
+{
+    public class IdentityProfile : Profile
+    {
+        public IdentityProfile()
+        {
+            CreateMap<AppUser, NewUserDto>().ReverseMap();
+            CreateMap<AppUser, UserDetailsDto>().ReverseMap();
+        }
+    }
+}

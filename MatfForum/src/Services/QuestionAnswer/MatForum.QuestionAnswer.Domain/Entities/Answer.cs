@@ -34,4 +34,21 @@ public class Answer : BaseEntity
             UpdatedAt = DateTime.UtcNow
         };
     }
+
+    public void Update(string content)
+    {
+        if (string.IsNullOrWhiteSpace(content))
+        {
+            throw new ArgumentException("Answer content cannot be empty.", nameof(content));
+        }
+        
+        Content = content;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void Delete()
+    {
+        IsDeleted = true;
+        DeletedAt = DateTime.UtcNow;
+    }
 }

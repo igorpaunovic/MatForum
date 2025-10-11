@@ -2,3 +2,4 @@ services:
   matforum.apigateway:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+
