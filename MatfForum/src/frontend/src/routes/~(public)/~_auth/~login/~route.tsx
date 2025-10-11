@@ -69,6 +69,7 @@ function LoginComponent() {
             void navigate({ to: search.redirect ?? "/" });
           },
         });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         // Error is already handled by the mutation's onError handler
         // This prevents unhandled promise rejection

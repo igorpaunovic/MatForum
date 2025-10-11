@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MatForum.UserManagement.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(UserManagementDbContext))]
-    [Migration("20251008231253_Ensure_UserProfiles2")]
-    partial class Ensure_UserProfiles2
+    [Migration("20251011135119_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,9 @@ namespace MatForum.UserManagement.Infrastructure.Data.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -45,6 +48,9 @@ namespace MatForum.UserManagement.Infrastructure.Data.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -60,7 +66,7 @@ namespace MatForum.UserManagement.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("user_profiles", (string)null);
+                    b.ToTable("UserProfiles", (string)null);
                 });
 #pragma warning restore 612, 618
         }

@@ -25,7 +25,7 @@ services:
       - "15432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      # - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     restart: on-failure
 
   user-service:

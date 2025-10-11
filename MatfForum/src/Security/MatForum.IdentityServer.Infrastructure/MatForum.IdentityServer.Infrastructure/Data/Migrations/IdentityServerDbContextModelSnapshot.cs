@@ -147,13 +147,13 @@ namespace MatForum.IdentityServer.Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4820dcc9-5dc6-455f-aa5e-63bc93edf98c"),
+                            Id = new Guid("4246fa7e-2950-4024-9cef-4824b9f072c2"),
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = new Guid("099a1206-a6f5-4960-9056-f649673cea61"),
+                            Id = new Guid("0065aa25-0ddd-469c-b161-bfb674de7802"),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

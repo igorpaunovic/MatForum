@@ -17,7 +17,7 @@ public class UserManagementDbContext : DbContext
 
         b.Entity<UserProfile>(e =>
         {
-            e.ToTable("user_profiles");   // here
+            e.ToTable("UserProfiles");   // here
             e.HasKey(x => x.Id);
             e.Property(x => x.Email).HasMaxLength(256);
             e.Property(x => x.Username).HasMaxLength(64);
