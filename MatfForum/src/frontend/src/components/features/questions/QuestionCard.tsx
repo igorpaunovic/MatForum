@@ -10,7 +10,7 @@ import { formatDate } from '@/lib/utils';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 
-const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Question) => {
+const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, tags, isClosed }: Question) => {
   const queryClient = useQueryClient();
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showAnswers, setShowAnswers] = useState(false);
@@ -24,6 +24,8 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Quest
   const [editTags, setEditTags] = useState<string[]>(tags || []);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+
+  const isEdited = updatedAt && createdAt && new Date(updatedAt).getTime() !== new Date(createdAt).getTime();
 
   // Load answer count on mount
   useEffect(() => {
@@ -71,12 +73,12 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Quest
   const handleDelete = async () => {
     if (isDeleting) return;
     setIsDeleting(true);
-    
+
     try {
       const questionService = (await import('@/services/api-question-service')).default;
       await questionService.deleteQuestion(id);
       setShowDeleteConfirm(false);
-      
+
       // Invalidate queries to refresh data smoothly
       await queryClient.invalidateQueries({ queryKey: ['questionConfig'] });
       await queryClient.invalidateQueries({ queryKey: ['questions'] });
@@ -91,7 +93,7 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Quest
   const handleEdit = async () => {
     if (isUpdating) return;
     setIsUpdating(true);
-    
+
     try {
       const questionService = (await import('@/services/api-question-service')).default;
       // Using first user ID as placeholder - ideally this would come from auth context
@@ -102,7 +104,7 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Quest
         updatedByUserId: '550e8400-e29b-41d4-a716-446655440010'
       });
       setShowEditForm(false);
-      
+
       // Invalidate queries to refresh data smoothly
       await queryClient.invalidateQueries({ queryKey: ['questionConfig'] });
       await queryClient.invalidateQueries({ queryKey: ['questions'] });
@@ -125,15 +127,26 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Quest
         {/* Content Section */}
         <div className="flex-1">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="font-semibold text-lg">{title}</h3>
+            <h3 className="font-semibold text-lg">
+              {title}
+              {isClosed && (
+              <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs px-2 py-0.5 rounded-full" title="This question is closed">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                </svg>
+                Closed
+              </span>
+            )}</h3>
             <div className="flex gap-2">
-              <button
-                onClick={() => setShowEditForm(!showEditForm)}
-                className="text-blue-600 hover:text-blue-800 p-1 transition-colors"
-                title="Edit question"
-              >
-                <Pencil className="w-4 h-4" />
-              </button>
+              {!isClosed && (
+                <button
+                  onClick={() => setShowEditForm(!showEditForm)}
+                  className="text-blue-600 hover:text-blue-800 p-1 transition-colors"
+                  title="Edit question"
+                >
+                  <Pencil className="w-4 h-4" />
+                </button>
+              )}
               <button
                 onClick={() => setShowDeleteConfirm(true)}
                 className="text-red-600 hover:text-red-800 p-1 transition-colors"
@@ -144,9 +157,19 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Quest
             </div>
           </div>
           <p className="text-gray-600 mb-3">{content}</p>
-          <div className="flex justify-between items-center text-sm text-gray-500">
+          <div className="flex flex-wrap justify-between items-center text-sm text-gray-500">
             <span>By {authorName}</span>
-            <span>{formatDate(createdAt)}</span>
+            <div className="flex items-center gap-2">
+              {isEdited && (
+                <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs px-2 py-0.5 rounded-full" title={`Edited on ${formatDate(updatedAt)}`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                  </svg>
+                  Edited
+                 </span>
+              )}
+              <span>{formatDate(createdAt)}</span>
+            </div>
           </div>
           {tags && (
             <TagList tags={tags} />
@@ -154,13 +177,15 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Quest
 
           {/* Action Buttons */}
           <div className="flex gap-2 mt-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowReplyForm(!showReplyForm)}
-            >
-              {showReplyForm ? 'Cancel' : 'Answer Question'}
-            </Button>
+            {!isClosed && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowReplyForm(!showReplyForm)}
+              >
+                {showReplyForm ? 'Cancel' : 'Answer Question'}
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="sm"
@@ -215,7 +240,7 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, tags }: Quest
           )}
 
           {/* Reply Form */}
-          {showReplyForm && (
+          {showReplyForm && !isClosed && (
             <AnswerForm
               questionId={id}
               onAnswerSubmitted={handleAnswerSubmitted}

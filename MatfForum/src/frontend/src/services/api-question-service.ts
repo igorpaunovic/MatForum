@@ -1,10 +1,11 @@
 import createApi from "@/shared/api/api-factory";
+import type { CreateQuestionDTO, Question } from "@/lib/types.ts";
 
 const questionApi = createApi({ commonPrefix: "questions" });
 
 // ovde treba umesto res.data treba da bude zod schema 
 // QuestionsResponseSchema.parse(res.data), za sad je ovako samo zbog testiranja 
-const getQuestions = async () => {
+const getQuestions = async (): Promise<Question[]> => {
     return await questionApi.get('').then( (res) => {
         return res.data;
     })
@@ -33,9 +34,16 @@ const updateQuestion = async (questionId: string, data: { title: string; content
     })
 }
 
+const createQuestion = async (question: CreateQuestionDTO): Promise<Question> => {
+    return await questionApi.post('', question).then( (res) => {
+        return res.data;
+    })
+}
+
 const questionService = {
     getQuestions,
     searchQuestions,
+    createQuestion,
     deleteQuestion,
     updateQuestion
 };

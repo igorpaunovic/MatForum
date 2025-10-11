@@ -8,7 +8,7 @@ export default function CTASection() {
       <p className="text-gray-600 mb-6">Join our community of students and professionals.</p>
       <div className="flex gap-4 justify-center">
         <Link to="/questions">
-          <Button className="hover:shadow-md transition-shadow">
+          <Button variant="outline" className="hover:shadow-md transition-shadow">
             Explore Questions
           </Button>
         </Link>

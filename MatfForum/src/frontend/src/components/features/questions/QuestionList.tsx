@@ -1,14 +1,6 @@
 import QuestionCard from './QuestionCard';
+import type { Question } from '@/lib/types'
 
-interface Question {
-  id: string;
-  title: string;
-  content: string;
-  authorName: string;
-  createdAt: string;
-  tags?: string[];
-  votes?: number;
-}
 
 interface QuestionListProps {
   questions: Question[];

@@ -15,6 +15,7 @@ import { Route as ProtectedRouteRouteImport } from './routes/~_protected/~route'
 import { Route as ProtectedProfileRouteRouteImport } from './routes/~_protected/~profile/~route'
 import { Route as publicAuthRouteRouteImport } from './routes/~(public)/~_auth/~route'
 import { Route as publicIndexRouteRouteImport } from './routes/~(public)/~index/~route'
+import { Route as publicQuestionsAskRouteImport } from './routes/~(public)/~questions/~ask'
 import { Route as publicAuthSignupRouteRouteImport } from './routes/~(public)/~_auth/~signup/~route'
 import { Route as publicAuthLoginRouteRouteImport } from './routes/~(public)/~_auth/~login/~route'
 import { Route as publicQuestionsIndexRouteImport } from './routes/~(public)/~questions/~index'
@@ -43,6 +44,11 @@ const publicIndexRouteRoute = publicIndexRouteRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const publicQuestionsAskRoute = publicQuestionsAskRouteImport.update({
+  id: '/questions/ask',
+  path: '/questions/ask',
+  getParentRoute: () => publicRoute,
+} as any)
 const publicAuthSignupRouteRoute = publicAuthSignupRouteRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/questions': typeof publicQuestionsIndexRoute
   '/login': typeof publicAuthLoginRouteRoute
   '/signup': typeof publicAuthSignupRouteRoute
+  '/questions/ask': typeof publicQuestionsAskRoute
 }
 export interface FileRoutesByTo {
   '/': typeof publicAuthRouteRouteWithChildren
@@ -72,6 +79,7 @@ export interface FileRoutesByTo {
   '/questions': typeof publicQuestionsIndexRoute
   '/login': typeof publicAuthLoginRouteRoute
   '/signup': typeof publicAuthSignupRouteRoute
+  '/questions/ask': typeof publicQuestionsAskRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -83,12 +91,19 @@ export interface FileRoutesById {
   '/(public)/questions/': typeof publicQuestionsIndexRoute
   '/(public)/_auth/login': typeof publicAuthLoginRouteRoute
   '/(public)/_auth/signup': typeof publicAuthSignupRouteRoute
+  '/(public)/questions/ask': typeof publicQuestionsAskRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/profile' | '/questions' | '/login' | '/signup'
+  fullPaths:
+    | '/'
+    | '/profile'
+    | '/questions'
+    | '/login'
+    | '/signup'
+    | '/questions/ask'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile' | '/questions' | '/login' | '/signup'
+  to: '/' | '/profile' | '/questions' | '/login' | '/signup' | '/questions/ask'
   id:
     | '__root__'
     | '/_protected'
@@ -99,6 +114,7 @@ export interface FileRouteTypes {
     | '/(public)/questions/'
     | '/(public)/_auth/login'
     | '/(public)/_auth/signup'
+    | '/(public)/questions/ask'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -143,6 +159,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof publicIndexRouteRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/(public)/questions/ask': {
+      id: '/(public)/questions/ask'
+      path: '/questions/ask'
+      fullPath: '/questions/ask'
+      preLoaderRoute: typeof publicQuestionsAskRouteImport
+      parentRoute: typeof publicRoute
     }
     '/(public)/_auth/signup': {
       id: '/(public)/_auth/signup'
@@ -197,11 +220,13 @@ const publicAuthRouteRouteWithChildren = publicAuthRouteRoute._addFileChildren(
 interface publicRouteChildren {
   publicAuthRouteRoute: typeof publicAuthRouteRouteWithChildren
   publicQuestionsIndexRoute: typeof publicQuestionsIndexRoute
+  publicQuestionsAskRoute: typeof publicQuestionsAskRoute
 }
 
 const publicRouteChildren: publicRouteChildren = {
   publicAuthRouteRoute: publicAuthRouteRouteWithChildren,
   publicQuestionsIndexRoute: publicQuestionsIndexRoute,
+  publicQuestionsAskRoute: publicQuestionsAskRoute,
 }
 
 const publicRouteWithChildren =

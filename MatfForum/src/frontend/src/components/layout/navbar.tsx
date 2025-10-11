@@ -2,6 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { Input } from "@/components/ui/input.tsx";
 import { useState, useEffect, useRef } from "react";
 import { useSearchQuestions } from "@/hooks/use-search-questions";
+import { SimpleUserMenu } from "@/components/simple-user-menu.tsx";
 
 const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -108,6 +109,7 @@ const Navbar = () => {
         <div className="flex gap-4">
           <Link to="/" className="[&.active]:font-bold">Home</Link>
           <Link to="/questions" className="[&.active]:font-bold">Questions</Link>
+          <SimpleUserMenu />
         </div>
       </div>
     </nav>

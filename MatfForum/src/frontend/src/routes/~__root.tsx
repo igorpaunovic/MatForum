@@ -29,10 +29,12 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
 import type { router } from '@/app/router'
 import { queryClient } from '@/shared/api/queryClient'
+import Navbar from "@/components/layout/navbar.tsx";
 
 export const Route = createRootRouteWithContext()({
   component: () => (
     <div className="min-h-screen">
+      <Navbar />
       <main className="main-content container mx-auto px-4 py-8">
         <Outlet />
       </main>
