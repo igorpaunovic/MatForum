@@ -118,5 +118,12 @@ namespace MatForum.ForumQuestion.API.Controllers
             var exists = await _questionService.GetQuestionById(id) != null;
             return exists ? Ok() : NotFound();
         }
+
+        [HttpGet("{id}/similar")]
+        public async Task<ActionResult<IEnumerable<QuestionDto>>> GetSimilarQuestions(Guid id, [FromQuery] int count = 3)
+        {
+            var similarQuestions = await _questionService.GetSimilarQuestions(id, count);
+            return Ok(similarQuestions);
+        }
     }
 }

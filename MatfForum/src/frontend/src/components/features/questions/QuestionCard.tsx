@@ -9,6 +9,7 @@ import answerService from '@/services/api-answer-service';
 import { formatDate } from '@/lib/utils';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
+import { Link } from '@tanstack/react-router';
 
 const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, tags, isClosed }: Question) => {
   const queryClient = useQueryClient();
@@ -128,9 +129,15 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, ta
         <div className="flex-1">
           <div className="flex justify-between items-start mb-2">
             <h3 className="font-semibold text-lg">
-              {title}
+              <Link 
+                to="/questions/$questionId" 
+                params={{ questionId: id }}
+                className="text-blue-600 hover:text-blue-800 hover:underline"
+              >
+                {title}
+              </Link>
               {isClosed && (
-              <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs px-2 py-0.5 rounded-full" title="This question is closed">
+              <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs px-2 py-0.5 rounded-full ml-2" title="This question is closed">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                 </svg>

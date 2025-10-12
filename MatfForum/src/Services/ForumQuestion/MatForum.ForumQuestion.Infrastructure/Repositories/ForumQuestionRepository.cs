@@ -28,5 +28,32 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
                 q.Tags.Any(tag => tag.ToLower().Contains(lowerSearchTerm)))
             ).OrderByDescending(q => q.CreatedAt);
         }
+
+        public async Task<IEnumerable<Question>> GetSimilarQuestions(Guid questionId, int count = 3)
+        {
+            var targetQuestion = await GetById(questionId);
+            if (targetQuestion == null || !targetQuestion.Tags.Any())
+            {
+                return Enumerable.Empty<Question>();
+            }
+
+            var allQuestions = await GetAll();
+            
+            // Calculate similarity score based on tag overlap
+            var similarQuestions = allQuestions
+                .Where(q => !q.IsDeleted && q.Id != questionId && q.Tags.Any())
+                .Select(q => new
+                {
+                    Question = q,
+                    Score = q.Tags.Intersect(targetQuestion.Tags, StringComparer.OrdinalIgnoreCase).Count()
+                })
+                .Where(x => x.Score > 0)
+                .OrderByDescending(x => x.Score)
+                .ThenByDescending(x => x.Question.Views)
+                .Take(count)
+                .Select(x => x.Question);
+
+            return similarQuestions;
+        }
     }
 }

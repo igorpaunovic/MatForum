@@ -37,7 +37,7 @@ const Navbar = () => {
   const handleQuestionClick = (questionId: string) => {
     setShowResults(false);
     setSearchTerm("");
-    navigate({ to: `/questions`, search: { questionId } });
+    navigate({ to: `/questions/$questionId`, params: { questionId } });
   };
 
   const handleSearchEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
