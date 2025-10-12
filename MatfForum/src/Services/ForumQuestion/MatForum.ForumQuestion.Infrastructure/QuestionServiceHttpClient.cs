@@ -75,5 +75,21 @@ namespace MatForum.ForumQuestion.Infrastructure
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<IEnumerable<QuestionDto>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
+
+        public async Task<int> GetCount()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("api/questions/count");
+                response.EnsureSuccessStatusCode();
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<int>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error retrieving question count: {ex.Message}");
+                return 0;
+            }
+        }
     }
 }

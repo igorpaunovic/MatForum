@@ -100,4 +100,9 @@ public class AnswerService : IAnswerService
         if (answer == null) return false;
         return await _answerRepository.Delete(answerId);
     }
+
+    public async Task<int> GetCountAsync(CancellationToken cancellationToken)
+    {
+        return await _answerRepository.GetCount();
+    }
 }

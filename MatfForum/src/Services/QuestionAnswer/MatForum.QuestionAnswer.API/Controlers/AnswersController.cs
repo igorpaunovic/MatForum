@@ -85,6 +85,13 @@ public class AnswersController : ControllerBase
             return BadRequest(new { Message = "Delete failed." });
         return NoContent();
     }
+
+    [HttpGet("count")]
+    public async Task<IActionResult> GetCount(CancellationToken cancellationToken)
+    {
+        var count = await _answerService.GetCountAsync(cancellationToken);
+        return Ok(count);
+    }
 }
 
 public class CreateAnswerRequest

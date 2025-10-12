@@ -125,5 +125,12 @@ namespace MatForum.ForumQuestion.API.Controllers
             var similarQuestions = await _questionService.GetSimilarQuestions(id, count);
             return Ok(similarQuestions);
         }
+
+        [HttpGet("count")]
+        public async Task<ActionResult<int>> GetCount()
+        {
+            var count = await _questionService.GetCount();
+            return Ok(count);
+        }
     }
 }

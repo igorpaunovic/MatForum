@@ -63,4 +63,11 @@ public class AnswerRepository : IAnswerRepository
             .Where(a => !a.IsDeleted && a.QuestionId == questionId)
             .ToListAsync();
     }
+
+    public async Task<int> GetCount()
+    {
+        return await _context.Answers
+            .Where(a => !a.IsDeleted)
+            .CountAsync();
+    }
 }

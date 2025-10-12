@@ -10,4 +10,5 @@ public interface IUserProfileService
     Task<UserProfile> Create(CreateUserProfileDto createUserDto);
     Task<UserProfile?> Update(Guid id, UpdateUserProfileDto updateUserDto);
     Task<bool> Delete(Guid id);
+    Task<int> GetCount();
 } 

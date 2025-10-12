@@ -65,4 +65,9 @@ public class UserProfileService(IUserProfileRepository userRepository) : IUserPr
         await userRepository.Delete(id);
         return true;
     }
+
+    public async Task<int> GetCount()
+    {
+        return await userRepository.GetCount();
+    }
 } 

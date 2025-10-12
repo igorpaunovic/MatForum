@@ -114,4 +114,11 @@ public class UsersController(IUserProfileService userService) : ControllerBase
         var exists = await userService.GetById(id) != null;
         return exists ? Ok() : NotFound();
     }
+
+    [HttpGet("count")]
+    public async Task<ActionResult<int>> GetCount()
+    {
+        var count = await userService.GetCount();
+        return Ok(count);
+    }
 }

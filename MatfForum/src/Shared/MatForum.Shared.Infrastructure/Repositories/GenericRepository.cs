@@ -77,4 +77,9 @@ public abstract class GenericRepository<T> : IGenericRepository<T> where T : Bas
         }
         return await Task.FromResult(false);
     }
+
+    public virtual async Task<int> GetCount()
+    {
+        return await Task.FromResult(_entities.Count);
+    }
 }
