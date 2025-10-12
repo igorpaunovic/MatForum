@@ -13,9 +13,9 @@ const SimilarQuestions = ({ questions }: SimilarQuestionsProps) => {
   }
 
   return (
-    <Card className="mt-6">
+    <Card className="mt-6 bg-white dark:bg-[#1A1A1B] border-gray-200 dark:border-[#343536]">
       <CardHeader>
-        <CardTitle className="text-lg">Similar Questions</CardTitle>
+        <CardTitle className="text-lg dark:text-[#D7DADC]">Similar Questions</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -24,15 +24,15 @@ const SimilarQuestions = ({ questions }: SimilarQuestionsProps) => {
               key={question.id}
               to="/questions/$questionId"
               params={{ questionId: question.id }}
-              className="block p-4 border rounded-lg hover:shadow-md transition-shadow hover:border-blue-500"
+              className="block p-4 border border-gray-200 dark:border-[#343536] rounded-lg hover:shadow-md transition-shadow hover:border-blue-500 dark:hover:border-blue-400 bg-white dark:bg-[#1A1A1B]"
             >
-              <h4 className="font-semibold text-blue-600 hover:text-blue-800 mb-2">
+              <h4 className="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 mb-2">
                 {question.title}
               </h4>
-              <p className="text-sm text-gray-600 line-clamp-2 mb-2">
+              <p className="text-sm text-gray-600 dark:text-[#818384] line-clamp-2 mb-2">
                 {question.content}
               </p>
-              <div className="flex items-center justify-between text-xs text-gray-500">
+              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-[#818384]">
                 <span>By {question.authorName}</span>
                 <span>{question.views} views</span>
               </div>

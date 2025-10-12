@@ -110,8 +110,8 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
       <div
         className={`border-l-4 pl-4 py-3 rounded-r ${
           depth === 0 
-            ? 'border-blue-500 bg-gray-50' 
-            : 'border-gray-300 bg-white'
+            ? 'border-blue-500 dark:border-blue-400 bg-gray-50 dark:bg-[#1A1A1B]' 
+            : 'border-gray-300 dark:border-[#343536] bg-white dark:bg-[#1A1A1B]'
         }`}
       >
         <div className="flex gap-3">
@@ -122,8 +122,8 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
               disabled={isVoting}
               className={`p-0.5 rounded transition-colors ${
                 isUpvoted
-                  ? "text-green-600 bg-green-50 hover:bg-green-100"
-                  : "hover:bg-gray-100 text-gray-600"
+                  ? "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30"
+                  : "hover:bg-gray-100 dark:hover:bg-[#272729] text-gray-600 dark:text-[#818384]"
               } disabled:opacity-50`}
               title={isUpvoted ? "Remove upvote" : "Upvote"}
             >
@@ -133,10 +133,10 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
             <span 
               className={`text-xs font-medium ${
                 netScore > 0 
-                  ? "text-green-600" 
+                  ? "text-green-600 dark:text-green-400" 
                   : netScore < 0 
-                  ? "text-red-600" 
-                  : "text-gray-600"
+                  ? "text-red-600 dark:text-red-400" 
+                  : "text-gray-600 dark:text-[#818384]"
               }`}
             >
               {netScore > 0 ? `+${netScore}` : netScore}
@@ -147,8 +147,8 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
               disabled={isVoting}
               className={`p-0.5 rounded transition-colors ${
                 isDownvoted
-                  ? "text-red-600 bg-red-50 hover:bg-red-100"
-                  : "hover:bg-gray-100 text-gray-600"
+                  ? "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30"
+                  : "hover:bg-gray-100 dark:hover:bg-[#272729] text-gray-600 dark:text-[#818384]"
               } disabled:opacity-50`}
               title={isDownvoted ? "Remove downvote" : "Downvote"}
             >
@@ -167,7 +167,7 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
                       value={editContent}
                       onChange={(e) => setEditContent(e.target.value)}
                       rows={3}
-                      className="w-full border rounded px-3 py-2 text-sm"
+                      className="w-full border border-gray-300 dark:border-[#343536] rounded px-3 py-2 text-sm bg-white dark:bg-[#1A1A1B] dark:text-[#D7DADC]"
                     />
                     <div className="flex gap-2 mt-2">
                       <Button onClick={handleEdit} size="sm" disabled={isUpdating}>
@@ -187,7 +187,7 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-gray-800">{answer.content}</p>
+                  <p className="text-gray-800 dark:text-[#D7DADC]">{answer.content}</p>
                 )}
               </div>
               
@@ -213,7 +213,7 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
             </div>
             
             {/* Author and date */}
-            <div className="flex items-center gap-3 text-sm text-gray-500 mb-2">
+            <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-[#818384] mb-2">
               <span>{answer.authorName || 'Anonymous'}</span>
               <span>•</span>
               <span>{formatDate(answer.createdAt)}</span>
@@ -260,9 +260,9 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
             {/* Delete Confirmation Modal */}
             {showDeleteConfirm && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-                  <h3 className="text-lg font-semibold mb-3">Delete Answer?</h3>
-                  <p className="text-gray-600 mb-6">
+                <div className="bg-white dark:bg-[#1A1A1B] rounded-lg p-6 max-w-md w-full mx-4 border border-gray-200 dark:border-[#343536]">
+                  <h3 className="text-lg font-semibold mb-3 dark:text-[#D7DADC]">Delete Answer?</h3>
+                  <p className="text-gray-600 dark:text-[#818384] mb-6">
                     Are you sure you want to delete this answer? This action cannot be undone.
                   </p>
                   <div className="flex gap-3 justify-end">
