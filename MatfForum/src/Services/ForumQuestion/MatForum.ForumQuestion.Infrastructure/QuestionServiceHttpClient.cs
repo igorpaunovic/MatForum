@@ -91,5 +91,21 @@ namespace MatForum.ForumQuestion.Infrastructure
                 return 0;
             }
         }
+
+        public async Task<IEnumerable<QuestionDto>> GetQuestionsByUserId(Guid userId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/questions/by-user/{userId}");
+                response.EnsureSuccessStatusCode();
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<IEnumerable<QuestionDto>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<QuestionDto>();
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error retrieving questions by user: {ex.Message}");
+                return new List<QuestionDto>();
+            }
+        }
     }
 }

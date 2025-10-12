@@ -105,4 +105,22 @@ public class AnswerService : IAnswerService
     {
         return await _answerRepository.GetCount();
     }
+
+    public async Task<IEnumerable<AnswerDto>> GetAnswersByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        var allAnswers = await _answerRepository.GetAll();
+        var userAnswers = allAnswers.Where(a => a.AuthorId == userId);
+        
+        return userAnswers.Select(answer => new AnswerDto
+        {
+            Id = answer.Id,
+            Content = answer.Content,
+            CreatedAt = answer.CreatedAt,
+            UpdatedAt = answer.UpdatedAt,
+            QuestionId = answer.QuestionId,
+            AuthorId = answer.AuthorId,
+            ParentAnswerId = answer.ParentAnswerId,
+            Replies = new List<AnswerDto>()
+        });
+    }
 }
