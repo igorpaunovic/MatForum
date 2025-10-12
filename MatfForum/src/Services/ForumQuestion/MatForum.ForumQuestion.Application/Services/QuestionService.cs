@@ -155,5 +155,10 @@ namespace MatForum.ForumQuestion.Application.Services
             }
             return dtos;
         }
+
+        public async Task<int> GetCount()
+        {
+            return await _questionRepository.GetCount();
+        }
     }
 }

@@ -55,5 +55,10 @@ public class UserProfileRepository : IUserProfileRepository
         await _context.SaveChangesAsync();
         return true;
     }
+
+    public async Task<int> GetCount()
+    {
+        return await _context.UserProfiles.CountAsync();
+    }
 }
 

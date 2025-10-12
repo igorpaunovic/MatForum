@@ -14,5 +14,6 @@ namespace MatForum.ForumQuestion.Application.Interfaces
         Task<IEnumerable<QuestionDto>> GetSimilarQuestions(Guid questionId, int count = 3);
         Task<bool> UpdateQuestion(UpdateQuestionCommand command);
         Task<bool> DeleteQuestion(Guid id);
+        Task<int> GetCount();
     }
 }

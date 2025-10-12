@@ -73,5 +73,23 @@ namespace MatForum.UserManagement.Infrastructure
         {
             throw new NotImplementedException("This client only supports retrieving user information.");
         }
+
+        public async Task<int> GetCount()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("api/users/count");
+                response.EnsureSuccessStatusCode();
+
+                var content = await response.Content.ReadAsStringAsync();
+                var count = JsonSerializer.Deserialize<int>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                return count;
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error retrieving user count: {ex.Message}");
+                return 0;
+            }
+        }
     }
 }

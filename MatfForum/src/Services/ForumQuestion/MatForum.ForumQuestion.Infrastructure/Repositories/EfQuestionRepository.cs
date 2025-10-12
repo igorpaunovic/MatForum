@@ -187,5 +187,12 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
 
             return similarQuestions;
         }
+
+        public async Task<int> GetCount()
+        {
+            return await _context.Questions
+                .Where(q => !q.IsDeleted)
+                .CountAsync();
+        }
     }
 }
