@@ -67,5 +67,13 @@ namespace MatForum.ForumQuestion.Infrastructure
             var response = await _httpClient.DeleteAsync($"api/questions/{id}");
             return response.IsSuccessStatusCode;
         }
+
+        public async Task<IEnumerable<QuestionDto>> GetSimilarQuestions(Guid questionId, int count = 3)
+        {
+            var response = await _httpClient.GetAsync($"api/questions/{questionId}/similar?count={count}");
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<IEnumerable<QuestionDto>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
     }
 }

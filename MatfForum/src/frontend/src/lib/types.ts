@@ -7,6 +7,7 @@ export interface Question {
   updatedAt: string;
   tags: string[];
   votes: number;
+  views: number;
   isClosed: boolean;
 }
 

@@ -6,7 +6,6 @@ import { ChevronUp, ChevronDown, Pencil, Trash2 } from 'lucide-react';
 import AnswerForm from './AnswerForm';
 import { useAnswerVote, useAnswerVoteSummary, useRemoveAnswerVote } from '@/hooks/use-voting';
 import { VOTE_TYPE_UPVOTE, VOTE_TYPE_DOWNVOTE } from '@/services/api-voting-service';
-import { useQueryClient } from '@tanstack/react-query';
 import answerService from '@/services/api-answer-service';
 
 interface AnswerItemProps {
@@ -16,7 +15,6 @@ interface AnswerItemProps {
 }
 
 const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) => {
-  const queryClient = useQueryClient();
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(true);
   const [showEditForm, setShowEditForm] = useState(false);
