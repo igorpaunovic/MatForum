@@ -145,5 +145,33 @@ namespace MatForum.ForumQuestion.API.Controllers
             var exists = await _questionService.GetQuestionById(id) != null;
             return exists ? Ok() : NotFound();
         }
+
+        [HttpGet("{id}/similar")]
+        public async Task<ActionResult<IEnumerable<QuestionDto>>> GetSimilarQuestions(Guid id, [FromQuery] int count = 3)
+        {
+            var similarQuestions = await _questionService.GetSimilarQuestions(id, count);
+            return Ok(similarQuestions);
+        }
+
+        [HttpGet("count")]
+        public async Task<ActionResult<int>> GetCount()
+        {
+            var count = await _questionService.GetCount();
+            return Ok(count);
+        }
+
+        [HttpGet("by-user/{userId}")]
+        public async Task<ActionResult<IEnumerable<QuestionDto>>> GetQuestionsByUserId(Guid userId)
+        {
+            var questions = await _questionService.GetQuestionsByUserId(userId);
+            return Ok(questions);
+        }
+
+        [HttpGet("count-by-user/{userId}")]
+        public async Task<ActionResult<int>> GetCountByUserId(Guid userId)
+        {
+            var questions = await _questionService.GetQuestionsByUserId(userId);
+            return Ok(questions.Count());
+        }
     }
 }

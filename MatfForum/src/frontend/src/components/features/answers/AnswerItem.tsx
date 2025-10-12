@@ -123,8 +123,8 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
       <div
         className={`border-l-4 pl-4 py-3 rounded-r ${
           depth === 0 
-            ? 'border-blue-500 bg-gray-50' 
-            : 'border-gray-300 bg-white'
+            ? 'border-blue-500 dark:border-blue-400 bg-gray-50 dark:bg-[#1A1A1B]' 
+            : 'border-gray-300 dark:border-[#343536] bg-white dark:bg-[#1A1A1B]'
         }`}
       >
         <div className="flex gap-3">
@@ -202,7 +202,7 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
                       value={editContent}
                       onChange={(e) => setEditContent(e.target.value)}
                       rows={3}
-                      className="w-full border rounded px-3 py-2 text-sm"
+                      className="w-full border border-gray-300 dark:border-[#343536] rounded px-3 py-2 text-sm bg-white dark:bg-[#1A1A1B] dark:text-[#D7DADC]"
                     />
                     <div className="flex gap-2 mt-2">
                       <Button onClick={handleEdit} size="sm" disabled={isUpdating}>
@@ -222,7 +222,7 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-gray-800">{answer.content}</p>
+                  <p className="text-gray-800 dark:text-[#D7DADC]">{answer.content}</p>
                 )}
               </div>
               
@@ -294,7 +294,7 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
             </div>
             
             {/* Author and date */}
-            <div className="flex items-center gap-3 text-sm text-gray-500 mb-2">
+            <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-[#818384] mb-2">
               <span>{answer.authorName || 'Anonymous'}</span>
               <span>•</span>
               <span>{formatDate(answer.createdAt)}</span>

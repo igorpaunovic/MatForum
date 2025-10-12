@@ -10,4 +10,7 @@ public interface IUserProfileService
     Task<UserProfile> Create(CreateUserProfileDto createUserDto);
     Task<UserProfile?> Update(Guid id, UpdateUserProfileDto updateUserDto);
     Task<bool> Delete(Guid id);
+    Task<int> GetCount();
+    Task<IEnumerable<TopContributorDto>> GetTopContributors(int count = 10);
+    Task<ContributorProfileDto?> GetContributorProfile(Guid userId);
 } 

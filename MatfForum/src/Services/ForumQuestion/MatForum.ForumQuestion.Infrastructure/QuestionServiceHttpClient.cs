@@ -67,5 +67,45 @@ namespace MatForum.ForumQuestion.Infrastructure
             var response = await _httpClient.DeleteAsync($"api/questions/{id}");
             return response.IsSuccessStatusCode;
         }
+
+        public async Task<IEnumerable<QuestionDto>> GetSimilarQuestions(Guid questionId, int count = 3)
+        {
+            var response = await _httpClient.GetAsync($"api/questions/{questionId}/similar?count={count}");
+            response.EnsureSuccessStatusCode();
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<IEnumerable<QuestionDto>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+
+        public async Task<int> GetCount()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("api/questions/count");
+                response.EnsureSuccessStatusCode();
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<int>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error retrieving question count: {ex.Message}");
+                return 0;
+            }
+        }
+
+        public async Task<IEnumerable<QuestionDto>> GetQuestionsByUserId(Guid userId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/questions/by-user/{userId}");
+                response.EnsureSuccessStatusCode();
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<IEnumerable<QuestionDto>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new List<QuestionDto>();
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error retrieving questions by user: {ex.Message}");
+                return new List<QuestionDto>();
+            }
+        }
     }
 }

@@ -159,5 +159,40 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
                 .OrderByDescending(q => q.CreatedAt)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Question>> GetSimilarQuestions(Guid questionId, int count = 3)
+        {
+            var targetQuestion = await GetById(questionId);
+            if (targetQuestion == null || !targetQuestion.Tags.Any())
+            {
+                return Enumerable.Empty<Question>();
+            }
+
+            var allQuestions = await _context.Questions
+                .Where(q => !q.IsDeleted && q.Id != questionId && q.Tags.Any())
+                .ToListAsync();
+            
+            // Calculate similarity score based on tag overlap
+            var similarQuestions = allQuestions
+                .Select(q => new
+                {
+                    Question = q,
+                    Score = q.Tags.Intersect(targetQuestion.Tags, StringComparer.OrdinalIgnoreCase).Count()
+                })
+                .Where(x => x.Score > 0)
+                .OrderByDescending(x => x.Score)
+                .ThenByDescending(x => x.Question.Views)
+                .Take(count)
+                .Select(x => x.Question);
+
+            return similarQuestions;
+        }
+
+        public async Task<int> GetCount()
+        {
+            return await _context.Questions
+                .Where(q => !q.IsDeleted)
+                .CountAsync();
+        }
     }
 }

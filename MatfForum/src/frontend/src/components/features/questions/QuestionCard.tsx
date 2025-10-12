@@ -10,8 +10,9 @@ import { formatDate } from '@/lib/utils';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMe } from '@/api/auth';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Link } from '@tanstack/react-router';
 
 const QuestionCard = ({ id, title, content, authorName, createdByUserId, createdAt, updatedAt, tags, isClosed }: Question) => {
   const queryClient = useQueryClient();
@@ -129,7 +130,7 @@ const QuestionCard = ({ id, title, content, authorName, createdByUserId, created
   };
 
   return (
-    <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+    <div className="border border-gray-200 dark:border-[#343536] rounded-lg p-4 hover:shadow-md transition-shadow bg-white dark:bg-[#1A1A1B]">
       <div className="flex gap-4">
         {/* Voting Section */}
         <div className="flex-shrink-0">
@@ -140,9 +141,15 @@ const QuestionCard = ({ id, title, content, authorName, createdByUserId, created
         <div className="flex-1">
           <div className="flex justify-between items-start mb-2">
             <h3 className="font-semibold text-lg">
-              {title}
+              <Link 
+                to="/questions/$questionId" 
+                params={{ questionId: id }}
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline"
+              >
+                {title}
+              </Link>
               {isClosed && (
-              <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs px-2 py-0.5 rounded-full" title="This question is closed">
+              <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs px-2 py-0.5 rounded-full ml-2" title="This question is closed">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                 </svg>
@@ -216,8 +223,8 @@ const QuestionCard = ({ id, title, content, authorName, createdByUserId, created
               </div>
             </TooltipProvider>
           </div>
-          <p className="text-gray-600 mb-3">{content}</p>
-          <div className="flex flex-wrap justify-between items-center text-sm text-gray-500">
+          <p className="text-gray-600 dark:text-[#D7DADC] mb-3">{content}</p>
+          <div className="flex flex-wrap justify-between items-center text-sm text-gray-500 dark:text-[#818384]">
             <span>By {authorName}</span>
             <div className="flex items-center gap-2">
               {isEdited && (
@@ -247,23 +254,19 @@ const QuestionCard = ({ id, title, content, authorName, createdByUserId, created
                   {showReplyForm ? 'Cancel' : 'Answer Question'}
                 </Button>
               ) : (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        disabled
-                        className="text-gray-400 cursor-not-allowed"
-                      >
-                        Answer Question
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Login to answer</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled
+                    className="text-gray-500 dark:text-[#818384] cursor-not-allowed border-gray-300 dark:border-[#343536]"
+                  >
+                    Answer Question
+                  </Button>
+                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                    Login required
+                  </p>
+                </div>
               )
             )}
             <Button
@@ -277,34 +280,34 @@ const QuestionCard = ({ id, title, content, authorName, createdByUserId, created
 
           {/* Edit Form */}
           {showEditForm && (
-            <div className="mt-4 border rounded-lg p-4 bg-blue-50">
-              <h4 className="font-semibold mb-3">Edit Question</h4>
+            <div className="mt-4 border border-gray-200 dark:border-[#343536] rounded-lg p-4 bg-blue-50 dark:bg-[#272729]">
+              <h4 className="font-semibold mb-3 dark:text-[#D7DADC]">Edit Question</h4>
               <div className="space-y-3">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Title</label>
+                  <label className="block text-sm font-medium mb-1 dark:text-[#D7DADC]">Title</label>
                   <input
                     type="text"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full border border-gray-300 dark:border-[#343536] rounded px-3 py-2 bg-white dark:bg-[#1A1A1B] dark:text-[#D7DADC]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Content</label>
+                  <label className="block text-sm font-medium mb-1 dark:text-[#D7DADC]">Content</label>
                   <textarea
                     value={editContent}
                     onChange={(e) => setEditContent(e.target.value)}
                     rows={4}
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full border border-gray-300 dark:border-[#343536] rounded px-3 py-2 bg-white dark:bg-[#1A1A1B] dark:text-[#D7DADC]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Tags (comma separated)</label>
+                  <label className="block text-sm font-medium mb-1 dark:text-[#D7DADC]">Tags (comma separated)</label>
                   <input
                     type="text"
                     value={editTags.join(', ')}
                     onChange={(e) => setEditTags(e.target.value.split(',').map(t => t.trim()).filter(t => t))}
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full border border-gray-300 dark:border-[#343536] rounded px-3 py-2 bg-white dark:bg-[#1A1A1B] dark:text-[#D7DADC]"
                   />
                 </div>
                 <div className="flex gap-2">
@@ -333,7 +336,7 @@ const QuestionCard = ({ id, title, content, authorName, createdByUserId, created
           {showAnswers && (
             <div className="mt-4">
               {isLoadingAnswers ? (
-                <div className="text-center py-4 text-gray-500">Loading answers...</div>
+                <div className="text-center py-4 text-gray-500 dark:text-[#818384]">Loading answers...</div>
               ) : (
                 <AnswerList answers={answers} onReplySubmitted={loadAnswers} />
               )}

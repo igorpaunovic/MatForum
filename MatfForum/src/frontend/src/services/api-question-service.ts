@@ -40,12 +40,28 @@ const createQuestion = async (question: CreateQuestionDTO): Promise<Question> =>
     })
 }
 
+const getQuestionById = async (questionId: string): Promise<Question> => {
+    return await questionApi.get(`/${questionId}`).then((res) => {
+        return res.data;
+    })
+}
+
+const getSimilarQuestions = async (questionId: string, count: number = 3): Promise<Question[]> => {
+    return await questionApi.get(`/${questionId}/similar`, {
+        params: { count }
+    }).then((res) => {
+        return res.data;
+    })
+}
+
 const questionService = {
     getQuestions,
     searchQuestions,
     createQuestion,
     deleteQuestion,
-    updateQuestion
+    updateQuestion,
+    getQuestionById,
+    getSimilarQuestions
 };
 
 export default questionService;

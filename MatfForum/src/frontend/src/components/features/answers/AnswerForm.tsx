@@ -56,9 +56,9 @@ const AnswerForm = ({ questionId, parentAnswerId, onAnswerSubmitted, onCancel }:
   const isReply = !!parentAnswerId;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 mt-4 p-4 border rounded-lg bg-gray-50">
+    <form onSubmit={handleSubmit} className="space-y-4 mt-4 p-4 border border-gray-200 dark:border-[#343536] rounded-lg bg-gray-50 dark:bg-[#272729]">
       <div className="space-y-2">
-        <Label htmlFor="answer-content">
+        <Label htmlFor="answer-content" className="dark:text-[#D7DADC]">
           {isReply ? 'Your Reply' : 'Your Answer'}
         </Label>
         <textarea
@@ -66,7 +66,7 @@ const AnswerForm = ({ questionId, parentAnswerId, onAnswerSubmitted, onCancel }:
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder={isReply ? "Write your reply here..." : "Write your answer here..."}
-          className="w-full min-h-[120px] px-3 py-2 rounded-md border border-input bg-white text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:opacity-50"
+          className="w-full min-h-[120px] px-3 py-2 rounded-md border border-input dark:border-[#343536] bg-white dark:bg-[#1A1A1B] text-sm dark:text-[#D7DADC] shadow-xs outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:opacity-50"
           disabled={isSubmitting}
         />
       </div>

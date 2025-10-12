@@ -3,6 +3,7 @@ using MatForum.UserManagement.Application.Interfaces;
 using MatForum.UserManagement.Application.Services;
 using MatForum.UserManagement.Infrastructure.Data;
 using MatForum.UserManagement.Infrastructure.Repositories;
+using MatForum.UserManagement.Infrastructure.Clients;
 using MatForum.UserManagement.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,8 +17,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<UserManagementDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// No JWT validation needed - API Gateway handles authentication
-// Services trust internal requests from the gateway
+// Register HttpClients for other microservices
+builder.Services.AddHttpClient<IQuestionServiceClient, QuestionServiceHttpClient>(client =>
+{
+    client.BaseAddress = new Uri("http://question-service");
+});
+
+builder.Services.AddHttpClient<IAnswerServiceClient, AnswerServiceHttpClient>(client =>
+{
+    client.BaseAddress = new Uri("http://answer-service");
+});
 
 // Register services
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();

@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useTypewriter} from "@/hooks/useTypewriter";
 import { useSlideIn} from "@/hooks/useSlideIn";
+import { useEffect, useState } from "react";
+import statisticsService, { type Statistics } from "@/services/api-statistics-service";
 
 export default function HeroSection() {
   const headerVisible = useSlideIn(200)
@@ -10,6 +12,29 @@ export default function HeroSection() {
     30,
     1000
   )
+  
+  const [statistics, setStatistics] = useState<Statistics>({
+    questionsCount: 0,
+    answersCount: 0,
+    membersCount: 0
+  })
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchStatistics = async () => {
+      try {
+        setIsLoading(true)
+        const stats = await statisticsService.getAllStatistics()
+        setStatistics(stats)
+      } catch (error) {
+        console.error("Failed to fetch statistics:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchStatistics()
+  }, [])
 
   return (
     <>
@@ -49,17 +74,25 @@ export default function HeroSection() {
       </div>
       <div className="grid grid-cols-3 gap-4 mb-12">
         <div className="text-center p-4 border rounded hover:shadow-md transition-shadow">
-          <div className="text-2xl font-bold text-blue-600">1,234</div>
+          <div className="text-2xl font-bold text-blue-600">
+            {isLoading ? "..." : statistics.questionsCount.toLocaleString()}
+          </div>
           <div className="text-sm text-gray-600">Questions</div>
         </div>
         <div className="text-center p-4 border rounded hover:shadow-md transition-shadow">
-          <div className="text-2xl font-bold text-green-600">5,678</div>
+          <div className="text-2xl font-bold text-green-600">
+            {isLoading ? "..." : statistics.answersCount.toLocaleString()}
+          </div>
           <div className="text-sm text-gray-600">Answers</div>
         </div>
-        <div className="text-center p-4 border rounded hover:shadow-md transition-shadow">
-          <div className="text-2xl font-bold text-red-600">890</div>
-          <div className="text-sm text-gray-600">Members</div>
-        </div>
+        <Link to="/members">
+          <div className="text-center p-4 border rounded hover:shadow-md transition-shadow cursor-pointer hover:border-blue-500">
+            <div className="text-2xl font-bold text-red-600">
+              {isLoading ? "..." : statistics.membersCount.toLocaleString()}
+            </div>
+            <div className="text-sm text-gray-600">Members</div>
+          </div>
+        </Link>
       </div>
     </>
   )

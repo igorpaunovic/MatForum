@@ -16,9 +16,12 @@ import { Route as ProtectedProfileRouteRouteImport } from './routes/~_protected/
 import { Route as ProtectedAskRouteRouteImport } from './routes/~_protected/~ask/~route'
 import { Route as publicAuthRouteRouteImport } from './routes/~(public)/~_auth/~route'
 import { Route as publicIndexRouteRouteImport } from './routes/~(public)/~index/~route'
+import { Route as publicQuestionsQuestionIdRouteImport } from './routes/~(public)/~questions/~$questionId'
+import { Route as publicMembersUserIdRouteImport } from './routes/~(public)/~members/~$userId'
 import { Route as publicAuthSignupRouteRouteImport } from './routes/~(public)/~_auth/~signup/~route'
 import { Route as publicAuthLoginRouteRouteImport } from './routes/~(public)/~_auth/~login/~route'
 import { Route as publicQuestionsIndexRouteImport } from './routes/~(public)/~questions/~index'
+import { Route as publicMembersIndexRouteImport } from './routes/~(public)/~members/~index'
 
 const publicRouteImport = createFileRoute('/(public)')()
 
@@ -49,6 +52,17 @@ const publicIndexRouteRoute = publicIndexRouteRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const publicQuestionsQuestionIdRoute =
+  publicQuestionsQuestionIdRouteImport.update({
+    id: '/questions/$questionId',
+    path: '/questions/$questionId',
+    getParentRoute: () => publicRoute,
+  } as any)
+const publicMembersUserIdRoute = publicMembersUserIdRouteImport.update({
+  id: '/members/$userId',
+  path: '/members/$userId',
+  getParentRoute: () => publicRoute,
+} as any)
 const publicAuthSignupRouteRoute = publicAuthSignupRouteRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -64,22 +78,33 @@ const publicQuestionsIndexRoute = publicQuestionsIndexRouteImport.update({
   path: '/questions/',
   getParentRoute: () => publicRoute,
 } as any)
+const publicMembersIndexRoute = publicMembersIndexRouteImport.update({
+  id: '/members/',
+  path: '/members/',
+  getParentRoute: () => publicRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof publicAuthRouteRouteWithChildren
   '/ask': typeof ProtectedAskRouteRoute
   '/profile': typeof ProtectedProfileRouteRoute
+  '/members': typeof publicMembersIndexRoute
   '/questions': typeof publicQuestionsIndexRoute
   '/login': typeof publicAuthLoginRouteRoute
   '/signup': typeof publicAuthSignupRouteRoute
+  '/members/$userId': typeof publicMembersUserIdRoute
+  '/questions/$questionId': typeof publicQuestionsQuestionIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof publicAuthRouteRouteWithChildren
   '/ask': typeof ProtectedAskRouteRoute
   '/profile': typeof ProtectedProfileRouteRoute
+  '/members': typeof publicMembersIndexRoute
   '/questions': typeof publicQuestionsIndexRoute
   '/login': typeof publicAuthLoginRouteRoute
   '/signup': typeof publicAuthSignupRouteRoute
+  '/members/$userId': typeof publicMembersUserIdRoute
+  '/questions/$questionId': typeof publicQuestionsQuestionIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,15 +114,36 @@ export interface FileRoutesById {
   '/(public)/_auth': typeof publicAuthRouteRouteWithChildren
   '/_protected/ask': typeof ProtectedAskRouteRoute
   '/_protected/profile': typeof ProtectedProfileRouteRoute
+  '/(public)/members/': typeof publicMembersIndexRoute
   '/(public)/questions/': typeof publicQuestionsIndexRoute
   '/(public)/_auth/login': typeof publicAuthLoginRouteRoute
   '/(public)/_auth/signup': typeof publicAuthSignupRouteRoute
+  '/(public)/members/$userId': typeof publicMembersUserIdRoute
+  '/(public)/questions/$questionId': typeof publicQuestionsQuestionIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ask' | '/profile' | '/questions' | '/login' | '/signup'
+  fullPaths:
+    | '/'
+    | '/ask'
+    | '/profile'
+    | '/members'
+    | '/questions'
+    | '/login'
+    | '/signup'
+    | '/members/$userId'
+    | '/questions/$questionId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ask' | '/profile' | '/questions' | '/login' | '/signup'
+  to:
+    | '/'
+    | '/ask'
+    | '/profile'
+    | '/members'
+    | '/questions'
+    | '/login'
+    | '/signup'
+    | '/members/$userId'
+    | '/questions/$questionId'
   id:
     | '__root__'
     | '/_protected'
@@ -106,9 +152,12 @@ export interface FileRouteTypes {
     | '/(public)/_auth'
     | '/_protected/ask'
     | '/_protected/profile'
+    | '/(public)/members/'
     | '/(public)/questions/'
     | '/(public)/_auth/login'
     | '/(public)/_auth/signup'
+    | '/(public)/members/$userId'
+    | '/(public)/questions/$questionId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -161,6 +210,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicIndexRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(public)/questions/$questionId': {
+      id: '/(public)/questions/$questionId'
+      path: '/questions/$questionId'
+      fullPath: '/questions/$questionId'
+      preLoaderRoute: typeof publicQuestionsQuestionIdRouteImport
+      parentRoute: typeof publicRoute
+    }
+    '/(public)/members/$userId': {
+      id: '/(public)/members/$userId'
+      path: '/members/$userId'
+      fullPath: '/members/$userId'
+      preLoaderRoute: typeof publicMembersUserIdRouteImport
+      parentRoute: typeof publicRoute
+    }
     '/(public)/_auth/signup': {
       id: '/(public)/_auth/signup'
       path: '/signup'
@@ -180,6 +243,13 @@ declare module '@tanstack/react-router' {
       path: '/questions'
       fullPath: '/questions'
       preLoaderRoute: typeof publicQuestionsIndexRouteImport
+      parentRoute: typeof publicRoute
+    }
+    '/(public)/members/': {
+      id: '/(public)/members/'
+      path: '/members'
+      fullPath: '/members'
+      preLoaderRoute: typeof publicMembersIndexRouteImport
       parentRoute: typeof publicRoute
     }
   }
@@ -215,12 +285,18 @@ const publicAuthRouteRouteWithChildren = publicAuthRouteRoute._addFileChildren(
 
 interface publicRouteChildren {
   publicAuthRouteRoute: typeof publicAuthRouteRouteWithChildren
+  publicMembersIndexRoute: typeof publicMembersIndexRoute
   publicQuestionsIndexRoute: typeof publicQuestionsIndexRoute
+  publicMembersUserIdRoute: typeof publicMembersUserIdRoute
+  publicQuestionsQuestionIdRoute: typeof publicQuestionsQuestionIdRoute
 }
 
 const publicRouteChildren: publicRouteChildren = {
   publicAuthRouteRoute: publicAuthRouteRouteWithChildren,
+  publicMembersIndexRoute: publicMembersIndexRoute,
   publicQuestionsIndexRoute: publicQuestionsIndexRoute,
+  publicMembersUserIdRoute: publicMembersUserIdRoute,
+  publicQuestionsQuestionIdRoute: publicQuestionsQuestionIdRoute,
 }
 
 const publicRouteWithChildren =

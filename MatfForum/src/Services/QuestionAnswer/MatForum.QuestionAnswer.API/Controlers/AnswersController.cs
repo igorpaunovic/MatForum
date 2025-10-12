@@ -88,6 +88,27 @@ public class AnswersController : ControllerBase
             return BadRequest(new { Message = "Delete failed." });
         return NoContent();
     }
+
+    [HttpGet("count")]
+    public async Task<IActionResult> GetCount(CancellationToken cancellationToken)
+    {
+        var count = await _answerService.GetCountAsync(cancellationToken);
+        return Ok(count);
+    }
+
+    [HttpGet("by-user/{userId}")]
+    public async Task<IActionResult> GetAnswersByUserId(Guid userId, CancellationToken cancellationToken)
+    {
+        var answers = await _answerService.GetAnswersByUserIdAsync(userId, cancellationToken);
+        return Ok(answers);
+    }
+
+    [HttpGet("count-by-user/{userId}")]
+    public async Task<IActionResult> GetCountByUserId(Guid userId, CancellationToken cancellationToken)
+    {
+        var answers = await _answerService.GetAnswersByUserIdAsync(userId, cancellationToken);
+        return Ok(answers.Count());
+    }
 }
 
 public class CreateAnswerRequest

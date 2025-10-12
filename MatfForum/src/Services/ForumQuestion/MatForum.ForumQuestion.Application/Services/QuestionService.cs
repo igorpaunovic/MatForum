@@ -131,5 +131,59 @@ namespace MatForum.ForumQuestion.Application.Services
             await _questionRepository.Delete(id);
             return true;
         }
+
+        public async Task<IEnumerable<QuestionDto>> GetSimilarQuestions(Guid questionId, int count = 3)
+        {
+            var questions = await _questionRepository.GetSimilarQuestions(questionId, count);
+            var dtos = new List<QuestionDto>();
+            foreach (var question in questions)
+            {
+                var user = await _userService.GetByIdAsync(question.CreatedByUserId);
+                dtos.Add(new QuestionDto
+                {
+                    Id = question.Id,
+                    Title = question.Title,
+                    Content = question.Content,
+                    CreatedByUserId = question.CreatedByUserId,
+                    AuthorName = user?.Username ?? "Unknown User",
+                    CreatedAt = question.CreatedAt,
+                    UpdatedAt = question.UpdatedAt,
+                    Views = question.Views,
+                    IsClosed = question.IsClosed,
+                    Tags = question.Tags
+                });
+            }
+            return dtos;
+        }
+
+        public async Task<int> GetCount()
+        {
+            return await _questionRepository.GetCount();
+        }
+
+        public async Task<IEnumerable<QuestionDto>> GetQuestionsByUserId(Guid userId)
+        {
+            var allQuestions = await _questionRepository.GetAll();
+            var userQuestions = allQuestions.Where(q => q.CreatedByUserId == userId);
+            var dtos = new List<QuestionDto>();
+            foreach (var question in userQuestions)
+            {
+                var user = await _userService.GetByIdAsync(question.CreatedByUserId);
+                dtos.Add(new QuestionDto
+                {
+                    Id = question.Id,
+                    Title = question.Title,
+                    Content = question.Content,
+                    CreatedByUserId = question.CreatedByUserId,
+                    AuthorName = user?.Username ?? "Unknown User",
+                    CreatedAt = question.CreatedAt,
+                    UpdatedAt = question.UpdatedAt,
+                    Views = question.Views,
+                    IsClosed = question.IsClosed,
+                    Tags = question.Tags
+                });
+            }
+            return dtos;
+        }
     }
 }
