@@ -17,9 +17,11 @@ import { Route as publicAuthRouteRouteImport } from './routes/~(public)/~_auth/~
 import { Route as publicIndexRouteRouteImport } from './routes/~(public)/~index/~route'
 import { Route as publicQuestionsAskRouteImport } from './routes/~(public)/~questions/~ask'
 import { Route as publicQuestionsQuestionIdRouteImport } from './routes/~(public)/~questions/~$questionId'
+import { Route as publicMembersUserIdRouteImport } from './routes/~(public)/~members/~$userId'
 import { Route as publicAuthSignupRouteRouteImport } from './routes/~(public)/~_auth/~signup/~route'
 import { Route as publicAuthLoginRouteRouteImport } from './routes/~(public)/~_auth/~login/~route'
 import { Route as publicQuestionsIndexRouteImport } from './routes/~(public)/~questions/~index'
+import { Route as publicMembersIndexRouteImport } from './routes/~(public)/~members/~index'
 
 const publicRouteImport = createFileRoute('/(public)')()
 
@@ -56,6 +58,11 @@ const publicQuestionsQuestionIdRoute =
     path: '/questions/$questionId',
     getParentRoute: () => publicRoute,
   } as any)
+const publicMembersUserIdRoute = publicMembersUserIdRouteImport.update({
+  id: '/members/$userId',
+  path: '/members/$userId',
+  getParentRoute: () => publicRoute,
+} as any)
 const publicAuthSignupRouteRoute = publicAuthSignupRouteRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -71,22 +78,31 @@ const publicQuestionsIndexRoute = publicQuestionsIndexRouteImport.update({
   path: '/questions/',
   getParentRoute: () => publicRoute,
 } as any)
+const publicMembersIndexRoute = publicMembersIndexRouteImport.update({
+  id: '/members/',
+  path: '/members/',
+  getParentRoute: () => publicRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof publicAuthRouteRouteWithChildren
   '/profile': typeof ProtectedProfileRouteRoute
+  '/members': typeof publicMembersIndexRoute
   '/questions': typeof publicQuestionsIndexRoute
   '/login': typeof publicAuthLoginRouteRoute
   '/signup': typeof publicAuthSignupRouteRoute
+  '/members/$userId': typeof publicMembersUserIdRoute
   '/questions/$questionId': typeof publicQuestionsQuestionIdRoute
   '/questions/ask': typeof publicQuestionsAskRoute
 }
 export interface FileRoutesByTo {
   '/': typeof publicAuthRouteRouteWithChildren
   '/profile': typeof ProtectedProfileRouteRoute
+  '/members': typeof publicMembersIndexRoute
   '/questions': typeof publicQuestionsIndexRoute
   '/login': typeof publicAuthLoginRouteRoute
   '/signup': typeof publicAuthSignupRouteRoute
+  '/members/$userId': typeof publicMembersUserIdRoute
   '/questions/$questionId': typeof publicQuestionsQuestionIdRoute
   '/questions/ask': typeof publicQuestionsAskRoute
 }
@@ -97,9 +113,11 @@ export interface FileRoutesById {
   '/(public)': typeof publicRouteWithChildren
   '/(public)/_auth': typeof publicAuthRouteRouteWithChildren
   '/_protected/profile': typeof ProtectedProfileRouteRoute
+  '/(public)/members/': typeof publicMembersIndexRoute
   '/(public)/questions/': typeof publicQuestionsIndexRoute
   '/(public)/_auth/login': typeof publicAuthLoginRouteRoute
   '/(public)/_auth/signup': typeof publicAuthSignupRouteRoute
+  '/(public)/members/$userId': typeof publicMembersUserIdRoute
   '/(public)/questions/$questionId': typeof publicQuestionsQuestionIdRoute
   '/(public)/questions/ask': typeof publicQuestionsAskRoute
 }
@@ -108,18 +126,22 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/profile'
+    | '/members'
     | '/questions'
     | '/login'
     | '/signup'
+    | '/members/$userId'
     | '/questions/$questionId'
     | '/questions/ask'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/profile'
+    | '/members'
     | '/questions'
     | '/login'
     | '/signup'
+    | '/members/$userId'
     | '/questions/$questionId'
     | '/questions/ask'
   id:
@@ -129,9 +151,11 @@ export interface FileRouteTypes {
     | '/(public)'
     | '/(public)/_auth'
     | '/_protected/profile'
+    | '/(public)/members/'
     | '/(public)/questions/'
     | '/(public)/_auth/login'
     | '/(public)/_auth/signup'
+    | '/(public)/members/$userId'
     | '/(public)/questions/$questionId'
     | '/(public)/questions/ask'
   fileRoutesById: FileRoutesById
@@ -193,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicQuestionsQuestionIdRouteImport
       parentRoute: typeof publicRoute
     }
+    '/(public)/members/$userId': {
+      id: '/(public)/members/$userId'
+      path: '/members/$userId'
+      fullPath: '/members/$userId'
+      preLoaderRoute: typeof publicMembersUserIdRouteImport
+      parentRoute: typeof publicRoute
+    }
     '/(public)/_auth/signup': {
       id: '/(public)/_auth/signup'
       path: '/signup'
@@ -212,6 +243,13 @@ declare module '@tanstack/react-router' {
       path: '/questions'
       fullPath: '/questions'
       preLoaderRoute: typeof publicQuestionsIndexRouteImport
+      parentRoute: typeof publicRoute
+    }
+    '/(public)/members/': {
+      id: '/(public)/members/'
+      path: '/members'
+      fullPath: '/members'
+      preLoaderRoute: typeof publicMembersIndexRouteImport
       parentRoute: typeof publicRoute
     }
   }
@@ -245,14 +283,18 @@ const publicAuthRouteRouteWithChildren = publicAuthRouteRoute._addFileChildren(
 
 interface publicRouteChildren {
   publicAuthRouteRoute: typeof publicAuthRouteRouteWithChildren
+  publicMembersIndexRoute: typeof publicMembersIndexRoute
   publicQuestionsIndexRoute: typeof publicQuestionsIndexRoute
+  publicMembersUserIdRoute: typeof publicMembersUserIdRoute
   publicQuestionsQuestionIdRoute: typeof publicQuestionsQuestionIdRoute
   publicQuestionsAskRoute: typeof publicQuestionsAskRoute
 }
 
 const publicRouteChildren: publicRouteChildren = {
   publicAuthRouteRoute: publicAuthRouteRouteWithChildren,
+  publicMembersIndexRoute: publicMembersIndexRoute,
   publicQuestionsIndexRoute: publicQuestionsIndexRoute,
+  publicMembersUserIdRoute: publicMembersUserIdRoute,
   publicQuestionsQuestionIdRoute: publicQuestionsQuestionIdRoute,
   publicQuestionsAskRoute: publicQuestionsAskRoute,
 }

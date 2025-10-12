@@ -110,6 +110,7 @@ const Navbar = () => {
         <div className="flex gap-3 items-center flex-shrink-0">
           <Link to="/" className="[&.active]:font-bold text-gray-700 dark:text-[#D7DADC] hover:text-gray-900 dark:hover:text-white whitespace-nowrap">Home</Link>
           <Link to="/questions" className="[&.active]:font-bold text-gray-700 dark:text-[#D7DADC] hover:text-gray-900 dark:hover:text-white whitespace-nowrap">Questions</Link>
+          <Link to="/members" className="[&.active]:font-bold text-gray-700 dark:text-[#D7DADC] hover:text-gray-900 dark:hover:text-white whitespace-nowrap">Members</Link>
           <ThemeToggle />
           <SimpleUserMenu />
         </div>

@@ -9,4 +9,5 @@ public interface IAnswerService
     Task<Guid?> UpdateAnswerAsync(Guid answerId, string newContent, CancellationToken cancellationToken);
     Task<bool> DeleteAnswerAsync(Guid answerId, CancellationToken cancellationToken);
     Task<int> GetCountAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<AnswerDto>> GetAnswersByUserIdAsync(Guid userId, CancellationToken cancellationToken);
 }

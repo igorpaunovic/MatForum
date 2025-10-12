@@ -121,4 +121,22 @@ public class UsersController(IUserProfileService userService) : ControllerBase
         var count = await userService.GetCount();
         return Ok(count);
     }
+
+    [HttpGet("top-contributors")]
+    public async Task<ActionResult<IEnumerable<TopContributorDto>>> GetTopContributors([FromQuery] int count = 10)
+    {
+        var contributors = await userService.GetTopContributors(count);
+        return Ok(contributors);
+    }
+
+    [HttpGet("{id}/contributor-profile")]
+    public async Task<ActionResult<ContributorProfileDto>> GetContributorProfile(Guid id)
+    {
+        var profile = await userService.GetContributorProfile(id);
+        if (profile == null)
+        {
+            return NotFound();
+        }
+        return Ok(profile);
+    }
 }

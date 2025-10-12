@@ -132,5 +132,19 @@ namespace MatForum.ForumQuestion.API.Controllers
             var count = await _questionService.GetCount();
             return Ok(count);
         }
+
+        [HttpGet("by-user/{userId}")]
+        public async Task<ActionResult<IEnumerable<QuestionDto>>> GetQuestionsByUserId(Guid userId)
+        {
+            var questions = await _questionService.GetQuestionsByUserId(userId);
+            return Ok(questions);
+        }
+
+        [HttpGet("count-by-user/{userId}")]
+        public async Task<ActionResult<int>> GetCountByUserId(Guid userId)
+        {
+            var questions = await _questionService.GetQuestionsByUserId(userId);
+            return Ok(questions.Count());
+        }
     }
 }

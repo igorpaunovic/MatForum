@@ -91,5 +91,41 @@ namespace MatForum.UserManagement.Infrastructure
                 return 0;
             }
         }
+
+        public async Task<IEnumerable<Application.DTOs.TopContributorDto>> GetTopContributors(int count = 10)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/users/top-contributors?count={count}");
+                response.EnsureSuccessStatusCode();
+
+                var content = await response.Content.ReadAsStringAsync();
+                var contributors = JsonSerializer.Deserialize<IEnumerable<Application.DTOs.TopContributorDto>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                return contributors ?? new List<Application.DTOs.TopContributorDto>();
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error retrieving top contributors: {ex.Message}");
+                return new List<Application.DTOs.TopContributorDto>();
+            }
+        }
+
+        public async Task<Application.DTOs.ContributorProfileDto?> GetContributorProfile(Guid userId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/users/{userId}/contributor-profile");
+                response.EnsureSuccessStatusCode();
+
+                var content = await response.Content.ReadAsStringAsync();
+                var profile = JsonSerializer.Deserialize<Application.DTOs.ContributorProfileDto>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                return profile;
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error retrieving contributor profile: {ex.Message}");
+                return null;
+            }
+        }
     }
 }

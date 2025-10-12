@@ -85,12 +85,14 @@ export default function HeroSection() {
           </div>
           <div className="text-sm text-gray-600">Answers</div>
         </div>
-        <div className="text-center p-4 border rounded hover:shadow-md transition-shadow">
-          <div className="text-2xl font-bold text-red-600">
-            {isLoading ? "..." : statistics.membersCount.toLocaleString()}
+        <Link to="/members">
+          <div className="text-center p-4 border rounded hover:shadow-md transition-shadow cursor-pointer hover:border-blue-500">
+            <div className="text-2xl font-bold text-red-600">
+              {isLoading ? "..." : statistics.membersCount.toLocaleString()}
+            </div>
+            <div className="text-sm text-gray-600">Members</div>
           </div>
-          <div className="text-sm text-gray-600">Members</div>
-        </div>
+        </Link>
       </div>
     </>
   )

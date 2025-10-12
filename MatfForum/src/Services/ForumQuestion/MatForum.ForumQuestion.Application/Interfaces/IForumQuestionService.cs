@@ -15,5 +15,6 @@ namespace MatForum.ForumQuestion.Application.Interfaces
         Task<bool> UpdateQuestion(UpdateQuestionCommand command);
         Task<bool> DeleteQuestion(Guid id);
         Task<int> GetCount();
+        Task<IEnumerable<QuestionDto>> GetQuestionsByUserId(Guid userId);
     }
 }
