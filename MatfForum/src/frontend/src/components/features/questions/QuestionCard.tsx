@@ -118,7 +118,7 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, ta
   };
 
   return (
-    <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+    <div className="border border-gray-200 dark:border-[#343536] rounded-lg p-4 hover:shadow-md transition-shadow bg-white dark:bg-[#1A1A1B]">
       <div className="flex gap-4">
         {/* Voting Section */}
         <div className="flex-shrink-0">
@@ -132,7 +132,7 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, ta
               <Link 
                 to="/questions/$questionId" 
                 params={{ questionId: id }}
-                className="text-blue-600 hover:text-blue-800 hover:underline"
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline"
               >
                 {title}
               </Link>
@@ -163,8 +163,8 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, ta
               </button>
             </div>
           </div>
-          <p className="text-gray-600 mb-3">{content}</p>
-          <div className="flex flex-wrap justify-between items-center text-sm text-gray-500">
+          <p className="text-gray-600 dark:text-[#D7DADC] mb-3">{content}</p>
+          <div className="flex flex-wrap justify-between items-center text-sm text-gray-500 dark:text-[#818384]">
             <span>By {authorName}</span>
             <div className="flex items-center gap-2">
               {isEdited && (
@@ -204,34 +204,34 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, ta
 
           {/* Edit Form */}
           {showEditForm && (
-            <div className="mt-4 border rounded-lg p-4 bg-blue-50">
-              <h4 className="font-semibold mb-3">Edit Question</h4>
+            <div className="mt-4 border border-gray-200 dark:border-[#343536] rounded-lg p-4 bg-blue-50 dark:bg-[#272729]">
+              <h4 className="font-semibold mb-3 dark:text-[#D7DADC]">Edit Question</h4>
               <div className="space-y-3">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Title</label>
+                  <label className="block text-sm font-medium mb-1 dark:text-[#D7DADC]">Title</label>
                   <input
                     type="text"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full border border-gray-300 dark:border-[#343536] rounded px-3 py-2 bg-white dark:bg-[#1A1A1B] dark:text-[#D7DADC]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Content</label>
+                  <label className="block text-sm font-medium mb-1 dark:text-[#D7DADC]">Content</label>
                   <textarea
                     value={editContent}
                     onChange={(e) => setEditContent(e.target.value)}
                     rows={4}
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full border border-gray-300 dark:border-[#343536] rounded px-3 py-2 bg-white dark:bg-[#1A1A1B] dark:text-[#D7DADC]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Tags (comma separated)</label>
+                  <label className="block text-sm font-medium mb-1 dark:text-[#D7DADC]">Tags (comma separated)</label>
                   <input
                     type="text"
                     value={editTags.join(', ')}
                     onChange={(e) => setEditTags(e.target.value.split(',').map(t => t.trim()).filter(t => t))}
-                    className="w-full border rounded px-3 py-2"
+                    className="w-full border border-gray-300 dark:border-[#343536] rounded px-3 py-2 bg-white dark:bg-[#1A1A1B] dark:text-[#D7DADC]"
                   />
                 </div>
                 <div className="flex gap-2">
@@ -258,9 +258,9 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, ta
           {/* Delete Confirmation Modal */}
           {showDeleteConfirm && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-                <h3 className="text-lg font-semibold mb-3">Delete Question?</h3>
-                <p className="text-gray-600 mb-6">
+              <div className="bg-white dark:bg-[#1A1A1B] rounded-lg p-6 max-w-md w-full mx-4 border border-gray-200 dark:border-[#343536]">
+                <h3 className="text-lg font-semibold mb-3 dark:text-[#D7DADC]">Delete Question?</h3>
+                <p className="text-gray-600 dark:text-[#818384] mb-6">
                   Are you sure you want to delete this question? This action cannot be undone.
                 </p>
                 <div className="flex gap-3 justify-end">
@@ -279,7 +279,7 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, ta
           {showAnswers && (
             <div className="mt-4">
               {isLoadingAnswers ? (
-                <div className="text-center py-4 text-gray-500">Loading answers...</div>
+                <div className="text-center py-4 text-gray-500 dark:text-[#818384]">Loading answers...</div>
               ) : (
                 <AnswerList answers={answers} onReplySubmitted={loadAnswers} />
               )}

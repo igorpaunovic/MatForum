@@ -128,7 +128,7 @@ const QuestionDetail = ({ question }: QuestionDetailProps) => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content */}
         <div className="lg:col-span-2">
-          <div className="bg-white border rounded-lg p-6 shadow-sm mb-6">
+          <div className="bg-white dark:bg-[#1A1A1B] border border-gray-200 dark:border-[#343536] rounded-lg p-6 shadow-sm mb-6">
             <div className="flex gap-6">
               {/* Voting Section */}
               <div className="flex-shrink-0">
@@ -138,7 +138,7 @@ const QuestionDetail = ({ question }: QuestionDetailProps) => {
               {/* Content Section */}
               <div className="flex-1">
                 <div className="flex justify-between items-start mb-4">
-                  <h1 className="text-3xl font-bold">
+                  <h1 className="text-3xl font-bold dark:text-[#D7DADC]">
                     {question.title}
                     {question.isClosed && (
                       <span className="inline-flex items-center bg-gray-100 text-gray-800 text-sm px-3 py-1 rounded-full ml-3" title="This question is closed">
@@ -170,14 +170,14 @@ const QuestionDetail = ({ question }: QuestionDetailProps) => {
                 </div>
 
                 <div className="prose max-w-none mb-4">
-                  <p className="text-gray-700 text-lg">{question.content}</p>
+                  <p className="text-gray-700 dark:text-[#D7DADC] text-lg">{question.content}</p>
                 </div>
 
                 {question.tags && question.tags.length > 0 && (
                   <TagList tags={question.tags} />
                 )}
 
-                <div className="flex flex-wrap justify-between items-center text-sm text-gray-500 mt-4 pt-4 border-t">
+                <div className="flex flex-wrap justify-between items-center text-sm text-gray-500 dark:text-[#818384] mt-4 pt-4 border-t border-gray-200 dark:border-[#343536]">
                   <div className="flex items-center gap-4">
                     <span className="font-medium">Asked by {question.authorName}</span>
                     {isEdited && (
@@ -197,34 +197,34 @@ const QuestionDetail = ({ question }: QuestionDetailProps) => {
 
                 {/* Edit Form */}
                 {showEditForm && (
-                  <div className="mt-6 border rounded-lg p-4 bg-blue-50">
-                    <h4 className="font-semibold mb-3">Edit Question</h4>
+                  <div className="mt-6 border border-gray-200 dark:border-[#343536] rounded-lg p-4 bg-blue-50 dark:bg-[#272729]">
+                    <h4 className="font-semibold mb-3 dark:text-[#D7DADC]">Edit Question</h4>
                     <div className="space-y-3">
                       <div>
-                        <label className="block text-sm font-medium mb-1">Title</label>
+                        <label className="block text-sm font-medium mb-1 dark:text-[#D7DADC]">Title</label>
                         <input
                           type="text"
                           value={editTitle}
                           onChange={(e) => setEditTitle(e.target.value)}
-                          className="w-full border rounded px-3 py-2"
+                          className="w-full border border-gray-300 dark:border-[#343536] rounded px-3 py-2 bg-white dark:bg-[#1A1A1B] dark:text-[#D7DADC]"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium mb-1">Content</label>
+                        <label className="block text-sm font-medium mb-1 dark:text-[#D7DADC]">Content</label>
                         <textarea
                           value={editContent}
                           onChange={(e) => setEditContent(e.target.value)}
                           rows={6}
-                          className="w-full border rounded px-3 py-2"
+                          className="w-full border border-gray-300 dark:border-[#343536] rounded px-3 py-2 bg-white dark:bg-[#1A1A1B] dark:text-[#D7DADC]"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium mb-1">Tags (comma separated)</label>
+                        <label className="block text-sm font-medium mb-1 dark:text-[#D7DADC]">Tags (comma separated)</label>
                         <input
                           type="text"
                           value={editTags.join(', ')}
                           onChange={(e) => setEditTags(e.target.value.split(',').map(t => t.trim()).filter(t => t))}
-                          className="w-full border rounded px-3 py-2"
+                          className="w-full border border-gray-300 dark:border-[#343536] rounded px-3 py-2 bg-white dark:bg-[#1A1A1B] dark:text-[#D7DADC]"
                         />
                       </div>
                       <div className="flex gap-2">
@@ -266,9 +266,9 @@ const QuestionDetail = ({ question }: QuestionDetailProps) => {
                 {/* Delete Confirmation Modal */}
                 {showDeleteConfirm && (
                   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-                      <h3 className="text-lg font-semibold mb-3">Delete Question?</h3>
-                      <p className="text-gray-600 mb-6">
+                    <div className="bg-white dark:bg-[#1A1A1B] rounded-lg p-6 max-w-md w-full mx-4 border border-gray-200 dark:border-[#343536]">
+                      <h3 className="text-lg font-semibold mb-3 dark:text-[#D7DADC]">Delete Question?</h3>
+                      <p className="text-gray-600 dark:text-[#818384] mb-6">
                         Are you sure you want to delete this question? This action cannot be undone.
                       </p>
                       <div className="flex gap-3 justify-end">
@@ -287,15 +287,15 @@ const QuestionDetail = ({ question }: QuestionDetailProps) => {
           </div>
 
           {/* Answers Section */}
-          <div className="bg-white border rounded-lg p-6 shadow-sm">
-            <h2 className="text-2xl font-bold mb-6">
+          <div className="bg-white dark:bg-[#1A1A1B] border border-gray-200 dark:border-[#343536] rounded-lg p-6 shadow-sm">
+            <h2 className="text-2xl font-bold mb-6 dark:text-[#D7DADC]">
               {answers.length} {answers.length === 1 ? 'Answer' : 'Answers'}
             </h2>
 
             {isLoadingAnswers ? (
-              <div className="text-center py-8 text-gray-500">Loading answers...</div>
+              <div className="text-center py-8 text-gray-500 dark:text-[#818384]">Loading answers...</div>
             ) : answers.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-gray-500 dark:text-[#818384]">
                 No answers yet. Be the first to answer!
               </div>
             ) : (

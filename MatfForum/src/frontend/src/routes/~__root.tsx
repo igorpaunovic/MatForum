@@ -33,7 +33,7 @@ import Navbar from "@/components/layout/navbar.tsx";
 
 export const Route = createRootRouteWithContext()({
   component: () => (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background text-foreground">
       <Navbar />
       <main className="main-content container mx-auto px-4 py-8">
         <Outlet />

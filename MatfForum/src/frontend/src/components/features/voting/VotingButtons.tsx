@@ -63,8 +63,8 @@ const VotingButtons = ({ questionId }: VotingButtonsProps) => {
         disabled={isLoading}
         className={`p-1 rounded transition-colors ${
           isUpvoted
-            ? "text-green-600 bg-green-50 hover:bg-green-100"
-            : "hover:bg-gray-100 text-gray-600"
+            ? "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30"
+            : "hover:bg-gray-100 dark:hover:bg-[#272729] text-gray-600 dark:text-[#818384]"
         } disabled:opacity-50 cursor-pointer`}
         title={isUpvoted ? "Remove upvote" : "Upvote"}
       >
@@ -74,10 +74,10 @@ const VotingButtons = ({ questionId }: VotingButtonsProps) => {
       <span 
         className={`text-sm font-medium ${
           netScore > 0 
-            ? "text-green-600" 
+            ? "text-green-600 dark:text-green-400" 
             : netScore < 0 
-            ? "text-red-600" 
-            : "text-gray-600"
+            ? "text-red-600 dark:text-red-400" 
+            : "text-gray-600 dark:text-[#818384]"
         }`}
       >
         {netScore > 0 ? `+${netScore}` : netScore}
@@ -88,8 +88,8 @@ const VotingButtons = ({ questionId }: VotingButtonsProps) => {
         disabled={isLoading}
         className={`p-1 rounded transition-colors ${
           isDownvoted
-            ? "text-red-600 bg-red-50 hover:bg-red-100"
-            : "hover:bg-gray-100 text-gray-600"
+            ? "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30"
+            : "hover:bg-gray-100 dark:hover:bg-[#272729] text-gray-600 dark:text-[#818384]"
         } disabled:opacity-50 cursor-pointer`}
         title={isDownvoted ? "Remove downvote" : "Downvote"}
       >
