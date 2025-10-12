@@ -1,15 +1,21 @@
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { useVote, useVoteSummary, useRemoveVote } from "@/hooks/use-voting";
 import { VOTE_TYPE_UPVOTE, VOTE_TYPE_DOWNVOTE } from "@/services/api-voting-service";
+import { useMe } from "@/api/auth";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface VotingButtonsProps {
   questionId: string;
+  user?: { id: string } | null; // Pass user as prop instead of calling useMe
 }
 
-const VotingButtons = ({ questionId }: VotingButtonsProps) => {
+const VotingButtons = ({ questionId, user }: VotingButtonsProps) => {
   const { data: voteSummary, isPending } = useVoteSummary(questionId);
   const voteMutation = useVote(questionId);
   const removeVoteMutation = useRemoveVote(questionId);
+  
+  const isAuthenticated = !!user;
 
   if (isPending || !voteSummary) {
     return (
@@ -32,6 +38,8 @@ const VotingButtons = ({ questionId }: VotingButtonsProps) => {
   }
 
   const handleUpvote = () => {
+    if (!isAuthenticated) return;
+    
     // Ako je već upvote, ukloni glas
     if (voteSummary.userVote === VOTE_TYPE_UPVOTE) {
       removeVoteMutation.mutate();
@@ -42,6 +50,8 @@ const VotingButtons = ({ questionId }: VotingButtonsProps) => {
   };
 
   const handleDownvote = () => {
+    if (!isAuthenticated) return;
+    
     // Ako je već downvote, ukloni glas
     if (voteSummary.userVote === VOTE_TYPE_DOWNVOTE) {
       removeVoteMutation.mutate();
@@ -57,45 +67,67 @@ const VotingButtons = ({ questionId }: VotingButtonsProps) => {
   const isLoading = voteMutation.isPending || removeVoteMutation.isPending;
 
   return (
-    <div className="flex flex-col items-center gap-1">
-      <button
-        onClick={handleUpvote}
-        disabled={isLoading}
-        className={`p-1 rounded transition-colors ${
-          isUpvoted
-            ? "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30"
-            : "hover:bg-gray-100 dark:hover:bg-[#272729] text-gray-600 dark:text-[#818384]"
-        } disabled:opacity-50 cursor-pointer`}
-        title={isUpvoted ? "Remove upvote" : "Upvote"}
-      >
-        <ChevronUp className="w-5 h-5" />
-      </button>
-      
-      <span 
-        className={`text-sm font-medium ${
-          netScore > 0 
-            ? "text-green-600 dark:text-green-400" 
-            : netScore < 0 
-            ? "text-red-600 dark:text-red-400" 
-            : "text-gray-600 dark:text-[#818384]"
-        }`}
-      >
-        {netScore > 0 ? `+${netScore}` : netScore}
-      </span>
-      
-      <button
-        onClick={handleDownvote}
-        disabled={isLoading}
-        className={`p-1 rounded transition-colors ${
-          isDownvoted
-            ? "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30"
-            : "hover:bg-gray-100 dark:hover:bg-[#272729] text-gray-600 dark:text-[#818384]"
-        } disabled:opacity-50 cursor-pointer`}
-        title={isDownvoted ? "Remove downvote" : "Downvote"}
-      >
-        <ChevronDown className="w-5 h-5" />
-      </button>
-    </div>
+    <TooltipProvider>
+      <div className="flex flex-col items-center gap-1">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleUpvote}
+              disabled={isLoading || !isAuthenticated}
+              className={`p-1 h-auto transition-colors ${
+                isUpvoted
+                  ? "text-green-600 bg-green-50 hover:bg-green-100"
+                  : isAuthenticated
+                  ? "hover:bg-gray-100 text-gray-600"
+                  : "text-gray-400 cursor-not-allowed"
+              } disabled:opacity-50`}
+            >
+              <ChevronUp className="w-5 h-5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{isAuthenticated ? (isUpvoted ? "Remove upvote" : "Upvote") : "Login to vote"}</p>
+          </TooltipContent>
+        </Tooltip>
+        
+        <span 
+          className={`text-sm font-medium ${
+            netScore > 0 
+              ? "text-green-600" 
+              : netScore < 0 
+              ? "text-red-600" 
+              : "text-gray-600"
+          }`}
+        >
+          {netScore > 0 ? `+${netScore}` : netScore}
+        </span>
+        
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleDownvote}
+              disabled={isLoading || !isAuthenticated}
+              className={`p-1 h-auto transition-colors ${
+                isDownvoted
+                  ? "text-red-600 bg-red-50 hover:bg-red-100"
+                  : isAuthenticated
+                  ? "hover:bg-gray-100 text-gray-600"
+                  : "text-gray-400 cursor-not-allowed"
+              } disabled:opacity-50`}
+            >
+              <ChevronDown className="w-5 h-5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{isAuthenticated ? (isDownvoted ? "Remove downvote" : "Downvote") : "Login to vote"}</p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
+    </TooltipProvider>
   );
 };
 

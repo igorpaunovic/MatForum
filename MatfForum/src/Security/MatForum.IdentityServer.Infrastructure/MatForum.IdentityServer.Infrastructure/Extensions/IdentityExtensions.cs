@@ -84,6 +84,7 @@ namespace MatForum.IdentityServer.Infrastructure.Extensions
                 options.AddPolicy("CorsPolicy", builder =>
                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             });
+
             return services;
         }
     }

@@ -14,15 +14,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useAppForm } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 import { useSignInEmailMutation, zLoginSchema } from "./api/login-email";
-import { ChevronDown, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
 // Simple labels object for form UI
@@ -79,54 +73,6 @@ function LoginComponent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center shadow-md">
-                    <span className="text-white font-bold text-sm">M</span>
-                  </div>
-                  <span className="ml-2 text-xl font-bold text-gray-800">MatForum</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center space-x-6">
-              <Link to="/" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-                Home
-              </Link>
-              <Link to="/questions" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-                Questions
-              </Link>
-              {/* Dropdown Menu */}
-              <div className="dropdown-container">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center gap-1 font-medium">
-                      <span className="text-sm">More</span>
-                      <ChevronDown className="h-3 w-3" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuItem asChild>
-                      <Link to="/signup" className="flex cursor-pointer items-center">
-                        <span>Sign up</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/questions" className="flex cursor-pointer items-center">
-                        <span>Browse Questions</span>
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div className="flex min-h-screen">
         {/* Left Side - Benefits */}
@@ -194,6 +140,16 @@ function LoginComponent() {
                 <span className="text-white font-bold text-2xl">M</span>
               </div>
               <h1 className="text-3xl font-bold text-gray-800">MatForum</h1>
+            </div>
+
+            {/* Back to Home Link */}
+            <div className="mb-4">
+              <Link to="/" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Home
+              </Link>
             </div>
 
             <Card className="border-0 shadow-2xl bg-white/90 backdrop-blur-sm">

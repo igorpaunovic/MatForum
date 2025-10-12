@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import answerService from '@/services/api-answer-service';
 import type { CreateAnswerRequest } from '@/lib/types';
+import { useMe } from '@/api/auth';
 
 interface AnswerFormProps {
   questionId: string;
@@ -15,6 +16,7 @@ const AnswerForm = ({ questionId, parentAnswerId, onAnswerSubmitted, onCancel }:
   const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { data: user } = useMe(); // ovo je hit ka bekndu na /api/auth/session i on radi, mozda ovo da prosledi kao prop umesto sto ovde pozivam  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,17 +26,21 @@ const AnswerForm = ({ questionId, parentAnswerId, onAnswerSubmitted, onCancel }:
       return;
     }
 
+    if (!user?.id) {
+      setError('You must be logged in to submit an answer');
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
 
     try {
-      // Using hardcoded userId for now - will be from auth context later
       const request: CreateAnswerRequest = {
         content: content.trim(),
         questionId,
-        userId: '550e8400-e29b-41d4-a716-446655440011', // Placeholder userId
-        parentAnswerId: parentAnswerId || null
-      };
+        userId: user.id, // ✅ Use correct field name for backend
+        parentAnswerId: parentAnswerId || undefined
+      };    
 
       await answerService.createAnswer(request);
       setContent('');

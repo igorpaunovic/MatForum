@@ -39,9 +39,11 @@ export const useSignInEmailMutation = () => {
       };
       return await authService.login(loginRequest);
     },
-    onSuccess: (data: AuthResponse) => {
+    onSuccess: async (data: AuthResponse) => {
       authService.storeToken(data.accessToken);
-      queryClient.invalidateQueries({ queryKey: meOptions().queryKey });
+      // Wait for the query to be invalidated and refetched before navigating
+      await queryClient.invalidateQueries({ queryKey: meOptions().queryKey });
+      await queryClient.refetchQueries({ queryKey: meOptions().queryKey });
       toast.success("Successfully logged in!");
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -74,8 +76,9 @@ export const useLogout = () => {
     mutationKey: ["auth", "logout"],
     mutationFn: logout,
     onSuccess: () => {
-      // Clear all queries after logout
-      queryClient.clear();
+      // Remove queries entirely instead of setting to null
+      queryClient.removeQueries({ queryKey: ['auth', 'me'] });
+      queryClient.removeQueries({ queryKey: ['userProfile'] });
       toast.success("Successfully logged out!");
     },
   });

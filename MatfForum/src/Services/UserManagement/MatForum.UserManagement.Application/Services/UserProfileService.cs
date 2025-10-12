@@ -50,6 +50,7 @@ public class UserProfileService : IUserProfileService
             LastName = createUserDto.LastName,
             Email = createUserDto.Email,
             Username = createUserDto.Username,
+            PhoneNumber = createUserDto.PhoneNumber,
             DateOfBirth = createUserDto.DateOfBirth
         };
 

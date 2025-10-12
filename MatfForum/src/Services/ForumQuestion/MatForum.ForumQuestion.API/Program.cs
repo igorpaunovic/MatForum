@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +27,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// No authentication needed - services trust internal requests from API Gateway
+// Network security ensures only API Gateway can reach services
 
 builder.Services.AddScoped<IForumQuestionService, ForumQuestionService>();
 
@@ -59,12 +61,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();   
 
 // CORS before auth
 // app.UseCors(CorsPolicy);
 
-app.UseAuthorization();
+// No authentication middleware needed - API Gateway handles it
 
 app.MapControllers();
 

@@ -2,6 +2,8 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useContributorProfile } from '@/hooks/use-contributor-profile'
 import { Award, MessageSquare, HelpCircle, ArrowLeft, Eye, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
+import Navbar from '@/components/layout/navbar'
 
 export const Route = createFileRoute('/(public)/members/$userId')({
   component: ContributorProfilePage,
@@ -13,12 +15,57 @@ function ContributorProfilePage() {
 
   if (isPending) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-[#818384]">Loading profile...</p>
+      <>
+        <Navbar />
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="mb-6">
+            <Skeleton className="h-6 w-32" />
+          </div>
+
+          {/* Profile Header Skeleton */}
+          <div className="bg-white dark:bg-[#1A1A1B] border border-gray-200 dark:border-[#343536] rounded-lg p-8 mb-6">
+            <div className="flex items-start gap-6">
+              <Skeleton className="w-24 h-24 rounded-full flex-shrink-0" />
+              <div className="flex-1">
+                <Skeleton className="h-8 w-48 mb-2" />
+                <Skeleton className="h-5 w-64 mb-4" />
+                <Skeleton className="h-4 w-40" />
+              </div>
+            </div>
+
+            {/* Stats Grid Skeleton */}
+            <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-200 dark:border-[#343536]">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="text-center p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                  <Skeleton className="h-8 w-8 mx-auto mb-2" />
+                  <Skeleton className="h-6 w-16 mx-auto mb-1" />
+                  <Skeleton className="h-4 w-20 mx-auto" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Questions Skeleton */}
+          <div className="bg-white dark:bg-[#1A1A1B] border border-gray-200 dark:border-[#343536] rounded-lg p-6">
+            <Skeleton className="h-6 w-32 mb-6" />
+            <div className="space-y-4">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="border border-gray-200 dark:border-[#343536] rounded-lg p-4">
+                  <div className="space-y-3">
+                    <Skeleton className="h-5 w-3/4" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-2/3" />
+                    <div className="flex gap-2">
+                      <Skeleton className="h-6 w-16" />
+                      <Skeleton className="h-6 w-20" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
@@ -34,7 +81,9 @@ function ContributorProfilePage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <>
+      <Navbar />
+      <div className="max-w-6xl mx-auto px-4 py-8">
       {/* Back Button */}
       <Link to="/members" className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline mb-6">
         <ArrowLeft className="w-4 h-4 mr-2" />
@@ -153,6 +202,7 @@ function ContributorProfilePage() {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </>
   )
 }

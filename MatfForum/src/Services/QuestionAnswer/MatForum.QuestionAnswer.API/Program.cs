@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +26,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// No JWT validation needed - API Gateway handles authentication
+// Services trust internal requests from the gateway
 
 // Register application services and repositories
 builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
@@ -64,8 +66,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 // app.UseCors(CorsPolicy); // Uncomment if CORS is needed
-app.UseAuthorization();
+
+// No authentication middleware needed - API Gateway handles it
 app.MapControllers();
 app.Run();

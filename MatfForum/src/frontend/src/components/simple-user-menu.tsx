@@ -1,6 +1,7 @@
 import { User, LogOut, ChevronDown } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,14 +10,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useUserProfile } from "@/hooks/use-user-profile";
 import { useMe } from "@/api/auth";
 import { useLogout } from "@/routes/~(public)/~_auth/~login/api/login-email";
 import { toast } from "sonner";
 
 export const SimpleUserMenu = () => {
-  const { data: user, isLoading } = useMe();
+  const { data: userProfile, isLoading: isProfileLoading } = useUserProfile();
+  const { data: authUser, isLoading: isAuthLoading } = useMe();
   const logoutMutation = useLogout();
   const navigate = useNavigate();
+
+  // Use UserProfile if available, otherwise fallback to authUser
+  const user = userProfile || authUser;
+  
+  // Show loading skeleton only when loading and no user data
+  const showLoading = (isProfileLoading || isAuthLoading) && !user;
 
   const handleSignOut = async () => {
     try {
@@ -29,8 +38,8 @@ export const SimpleUserMenu = () => {
 
   return (
     <div className="flex items-center gap-3 min-w-0 h-full">
-      {isLoading ? (
-        <div className="text-sm text-gray-500">Loading...</div>
+      {showLoading ? (
+        <Skeleton className="h-8 w-24" />
       ) : user ? (
         <>
           <div className="flex items-center gap-2 text-sm text-gray-600 h-full">
@@ -45,10 +54,17 @@ export const SimpleUserMenu = () => {
                 <ChevronDown className="h-3 w-3" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48" sideOffset={5}>
+            <DropdownMenuContent align="end" className="w-56" sideOffset={5}>
               <DropdownMenuLabel>
                 <div className="font-medium">{user.firstName} {user.lastName}</div>
-                <div className="text-xs text-gray-500 font-normal">{user.email}</div>
+                {userProfile ? (
+                  <>
+                    <div className="text-xs text-gray-500 font-normal">@{userProfile.username}</div>
+                    <div className="text-xs text-gray-500 font-normal">{userProfile.email}</div>
+                  </>
+                ) : (
+                  <div className="text-xs text-gray-500 font-normal">{user.email}</div>
+                )}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>

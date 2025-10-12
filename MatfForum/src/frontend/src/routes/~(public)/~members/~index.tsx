@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useTopContributors } from '@/hooks/use-top-contributors'
 import { Award, MessageSquare, HelpCircle, User } from 'lucide-react'
+import Navbar from '@/components/layout/navbar'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export const Route = createFileRoute('/(public)/members/')({
   component: MembersPage,
@@ -11,12 +13,44 @@ function MembersPage() {
 
   if (isPending) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-[#818384]">Loading contributors...</p>
+      <>
+        <Navbar />
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="mb-8">
+            <Skeleton className="h-8 w-48 mb-2" />
+            <Skeleton className="h-4 w-96" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="border border-gray-200 dark:border-[#343536] rounded-lg p-6 bg-white dark:bg-[#1A1A1B]">
+                <div className="flex items-center mb-4">
+                  <Skeleton className="w-16 h-16 rounded-full mr-4" />
+                  <div className="flex-1">
+                    <Skeleton className="h-5 w-24 mb-2" />
+                    <Skeleton className="h-4 w-32" />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex items-center">
+                    <Skeleton className="w-4 h-4 mr-2" />
+                    <Skeleton className="h-4 w-16" />
+                  </div>
+                  <div className="flex items-center">
+                    <Skeleton className="w-4 h-4 mr-2" />
+                    <Skeleton className="h-4 w-20" />
+                  </div>
+                  <div className="flex items-center">
+                    <Skeleton className="w-4 h-4 mr-2" />
+                    <Skeleton className="h-4 w-14" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
@@ -29,7 +63,9 @@ function MembersPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <>
+      <Navbar />
+      <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-[#D7DADC]">Top Contributors</h1>
         <p className="text-gray-600 dark:text-[#818384]">
@@ -39,7 +75,8 @@ function MembersPage() {
 
       {contributors && contributors.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {contributors.map((contributor, index) => (
+          {/* treba da postoji index  */}
+          {contributors.map((contributor) => (
             <Link
               key={contributor.id}
               to="/members/$userId"
@@ -47,8 +84,8 @@ function MembersPage() {
               className="group"
             >
               <div className="border border-gray-200 dark:border-[#343536] rounded-lg p-6 hover:shadow-lg transition-all bg-white dark:bg-[#1A1A1B] hover:border-blue-500 dark:hover:border-blue-500">
-                {/* Rank Badge */}
-                {index < 3 && (
+                {/* Rank Badge ovo sam izbacio */}
+                {/* {index < 3 && (
                   <div className="absolute top-4 right-4">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${
                       index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-gray-400' : 'bg-orange-600'
@@ -56,7 +93,7 @@ function MembersPage() {
                       {index + 1}
                     </div>
                   </div>
-                )}
+                )} */}
 
                 {/* Avatar */}
                 <div className="flex items-center mb-4">
@@ -122,7 +159,8 @@ function MembersPage() {
           <p className="text-gray-600 dark:text-[#818384]">No contributors found</p>
         </div>
       )}
-    </div>
+      </div>
+    </>
   )
 }
 

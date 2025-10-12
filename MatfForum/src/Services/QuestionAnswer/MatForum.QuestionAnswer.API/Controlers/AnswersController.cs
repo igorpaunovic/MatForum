@@ -22,6 +22,7 @@ public class AnswersController : ControllerBase
     }
 
     [HttpPost]
+    // No [Authorize] needed - API Gateway handles authentication
     public async Task<IActionResult> CreateAnswer([FromBody] CreateAnswerRequest request, CancellationToken cancellationToken)
     {
         var questionExists = await _questionValidator.ExistsAsync(request.QuestionId, cancellationToken);
@@ -60,6 +61,7 @@ public class AnswersController : ControllerBase
     }
 
     [HttpPut("{answerId}")]
+    // No [Authorize] needed - API Gateway handles authentication
     public async Task<IActionResult> UpdateAnswer(Guid answerId, [FromBody] UpdateAnswerRequest request, CancellationToken cancellationToken)
     {
         var answer = await _answerService.GetAnswerByIdAsync(answerId, cancellationToken);
@@ -74,6 +76,7 @@ public class AnswersController : ControllerBase
     }
 
     [HttpDelete("{answerId}")]
+    // No [Authorize] needed - API Gateway handles authentication
     public async Task<IActionResult> DeleteAnswer(Guid answerId, CancellationToken cancellationToken)
     {
         var answer = await _answerService.GetAnswerByIdAsync(answerId, cancellationToken);

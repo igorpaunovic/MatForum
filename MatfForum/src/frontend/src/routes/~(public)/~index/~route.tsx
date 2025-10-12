@@ -4,6 +4,7 @@ import GuidelinesSection from "@/components/sections/GuidelinesSection";
 import QuickStartSection from "@/components/sections/QuickStartSection";
 import PopularTopicsSection from "@/components/sections/PopularTopicsSection";
 import CTASection from "@/components/sections/CTASection";
+import Navbar from '@/components/layout/navbar';
 
 export const Route = createFileRoute('/(public)/')({
   component: RouteComponent,
@@ -12,6 +13,7 @@ export const Route = createFileRoute('/(public)/')({
 function RouteComponent() {
   return (
     <>
+      <Navbar />
       <HeroSection />
       <GuidelinesSection />
       <QuickStartSection />

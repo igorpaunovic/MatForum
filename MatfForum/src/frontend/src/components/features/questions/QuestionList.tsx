@@ -1,7 +1,6 @@
 import QuestionCard from './QuestionCard';
 import type { Question } from '@/lib/types'
 
-
 interface QuestionListProps {
   questions: Question[];
 }

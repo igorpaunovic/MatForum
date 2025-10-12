@@ -22,10 +22,7 @@ const SignUpSchema = z.object({
     .min(8, "Password must be at least 8 characters")
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, "Password must contain at least one lowercase letter, one uppercase letter, and one number"),
   email: z.string().email("Invalid email address"),
-  phoneNumber: z.string().min(1, "Phone number is required").regex(
-    /^[\+]?[1-9][\d]{0,15}$/,
-    "Please enter a valid phone number"
-  ),
+  phoneNumber: z.string(),
 });
 
 export const zSignUpSchema = () => SignUpSchema;

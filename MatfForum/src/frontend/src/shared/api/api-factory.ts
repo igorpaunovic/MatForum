@@ -45,8 +45,8 @@ interface IApiOptions extends AxiosRequestConfig {
 const createApi = ({ commonPrefix, ...rest }: IApiOptions) => {
   const api = axios.create({
     baseURL: import.meta.env.DEV 
-      ? `http://localhost:5000/api/${commonPrefix}/`  // API Gateway on port 5000
-      : `http://localhost:5000/${commonPrefix}/`, 
+      ? `http://localhost:5000/api/${commonPrefix}`  // API Gateway on port 5000 - removed trailing slash
+      : `http://localhost:5000/${commonPrefix}`, 
     ...rest,
   });
 

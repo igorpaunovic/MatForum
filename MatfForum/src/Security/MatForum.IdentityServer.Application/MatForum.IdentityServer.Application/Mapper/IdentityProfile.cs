@@ -9,7 +9,10 @@ namespace MatForum.IdentityServer.Application.Mapper
         public IdentityProfile()
         {
             CreateMap<AppUser, NewUserDto>().ReverseMap();
-            CreateMap<AppUser, UserDetailsDto>().ReverseMap();
+            CreateMap<AppUser, UserDetailsDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                .ReverseMap()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.Parse(src.Id)));
         }
     }
 }

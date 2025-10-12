@@ -1,12 +1,12 @@
-// src/routes/~questions/~new.tsx
+// src/routes/~_protected/~ask.tsx
 import { createFileRoute } from "@tanstack/react-router";
-import QuestionForm from '@/components/features/questions/CreateQuestionForm'
+import QuestionForm from '@/routes/~_protected/~ask/components/CreateQuestionForm'
 
-export const Route = createFileRoute('/(public)/questions/ask')({
-  component: NewQuestionComponent,
+export const Route = createFileRoute("/_protected/ask")({
+  component: AskQuestionComponent,
 })
 
-function NewQuestionComponent() {
+function AskQuestionComponent() {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="flex items-center justify-between mb-6">

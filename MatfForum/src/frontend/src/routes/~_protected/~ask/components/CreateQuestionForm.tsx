@@ -5,9 +5,11 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useCreateQuestion } from '@/hooks/use-create-question.ts'
+import { useMe } from '@/api/auth'
 
 const QuestionForm = () => {
   const navigate = useNavigate()
+  const { data: user } = useMe()
   const [formData, setFormData] = useState({
     title: '',
     content: '',
@@ -23,6 +25,11 @@ const QuestionForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
+    if (!user?.id) {
+      alert('You must be logged in to create questions')
+      return
+    }
+
     // Convert tags string to array
     const tags = formData.tags
       .split(',')
@@ -30,7 +37,7 @@ const QuestionForm = () => {
       .filter(tag => tag)
 
     createQuestion({
-      createdByUserId: "550e8400-e29b-41d4-a716-446655440010",
+      createdByUserId: user.id, // ✅ Use actual authenticated user ID
       title: formData.title,
       content: formData.content,
       tags: tags

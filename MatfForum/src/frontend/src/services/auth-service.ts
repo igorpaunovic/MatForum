@@ -27,7 +27,7 @@ const SignUpRequestSchema = z.object({
   username: z.string().min(1, "Username is required"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   email: z.string().email("Invalid email address"),
-  phoneNumber: z.string().optional(),
+  phoneNumber: z.string(),
 });
 
 // Export types
@@ -67,7 +67,7 @@ export const authService = {
     } catch (error: any) {
       // Silently handle auth errors - don't log anything for 401/403
       if (error.response?.status === 401 || error.response?.status === 403) {
-        authService.removeToken();
+        console.log("Frontend Debug - Session API returned 401/403, but NOT removing token for debugging");
         return null;
       }
       // Only log unexpected errors

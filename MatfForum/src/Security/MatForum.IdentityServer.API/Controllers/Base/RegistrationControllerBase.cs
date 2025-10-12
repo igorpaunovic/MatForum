@@ -23,17 +23,23 @@ namespace MatForum.IdentityServer.API.Controllers.Base
 
         protected async Task<IActionResult> RegisterNewUserWithRoles(NewUserDto newUser, IEnumerable<string> roles)
         {
+            var (result, user) = await RegisterNewUserWithRolesInternal(newUser, roles);
+            return result;
+        }
+
+        protected async Task<(IActionResult Result, AppUser? User)> RegisterNewUserWithRolesInternal(NewUserDto newUser, IEnumerable<string> roles)
+        {
             var user = _mapper.Map<AppUser>(newUser);
 
-            var result = await _userManager.CreateAsync(user, newUser.Password);
-            if (!result.Succeeded)
+            var createResult = await _userManager.CreateAsync(user, newUser.Password);
+            if (!createResult.Succeeded)
             {
-                foreach (var error in result.Errors)
+                foreach (var error in createResult.Errors)
                 {
                     ModelState.TryAddModelError(error.Code, error.Description);
                 }
 
-                return BadRequest(ModelState);
+                return (BadRequest(ModelState), null);
             }
 
             _logger.LogInformation("Successfully registered user: {NewUser}.", user.UserName);
@@ -52,7 +58,7 @@ namespace MatForum.IdentityServer.API.Controllers.Base
                 }
             }
 
-            return StatusCode(StatusCodes.Status201Created);
+            return (StatusCode(StatusCodes.Status201Created), user);
         }
     }
 }

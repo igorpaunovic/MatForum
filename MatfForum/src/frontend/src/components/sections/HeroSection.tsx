@@ -60,7 +60,7 @@ export default function HeroSection() {
               Browse Questions
             </Button>
           </Link>
-          <Link to="/questions/ask">
+          <Link to="/ask">
             <Button variant="outline" className="hover:shadow-md transition-shadow">
               Ask Question
             </Button>

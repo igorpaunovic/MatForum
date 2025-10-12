@@ -12,6 +12,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import SimilarQuestions from './SimilarQuestions';
 import { useSimilarQuestions } from '@/hooks/use-question-details';
+import { useMe } from '@/api/auth';
 
 interface QuestionDetailProps {
   question: Question;
@@ -19,6 +20,7 @@ interface QuestionDetailProps {
 
 const QuestionDetail = ({ question }: QuestionDetailProps) => {
   const queryClient = useQueryClient();
+  const { data: user } = useMe();
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [isLoadingAnswers, setIsLoadingAnswers] = useState(true);
@@ -32,6 +34,10 @@ const QuestionDetail = ({ question }: QuestionDetailProps) => {
 
   // Fetch similar questions
   const { data: similarQuestions } = useSimilarQuestions(question.id);
+  
+  // Auth check
+  const isAuthenticated = !!user;
+  const isOwner = isAuthenticated && user?.id && question.createdByUserId && user.id === question.createdByUserId;
 
   const isEdited = question.updatedAt && question.createdAt && 
     new Date(question.updatedAt).getTime() !== new Date(question.createdAt).getTime();
@@ -118,9 +124,12 @@ const QuestionDetail = ({ question }: QuestionDetailProps) => {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="mb-4">
-        <Link to="/questions" className="inline-flex items-center text-blue-600 hover:text-blue-800">
-          <ArrowLeft className="w-4 h-4 mr-1" />
+      <div className="mb-4 mt-2">
+        <Link 
+          to="/questions" 
+          className="inline-flex items-center text-gray-600 dark:text-[#818384] hover:text-gray-900 dark:hover:text-[#D7DADC] transition-colors duration-200 group"
+        >
+          <ArrowLeft className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform duration-200" />
           Back to Questions
         </Link>
       </div>
@@ -132,7 +141,7 @@ const QuestionDetail = ({ question }: QuestionDetailProps) => {
             <div className="flex gap-6">
               {/* Voting Section */}
               <div className="flex-shrink-0">
-                <VotingButtons questionId={question.id} />
+                <VotingButtons questionId={question.id} user={user} />
               </div>
 
               {/* Content Section */}
@@ -149,24 +158,28 @@ const QuestionDetail = ({ question }: QuestionDetailProps) => {
                       </span>
                     )}
                   </h1>
-                  <div className="flex gap-2">
-                    {!question.isClosed && (
-                      <button
-                        onClick={() => setShowEditForm(!showEditForm)}
-                        className="text-blue-600 hover:text-blue-800 p-2 transition-colors"
-                        title="Edit question"
+                  {isOwner && (
+                    <div className="flex gap-2">
+                      {!question.isClosed && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setShowEditForm(!showEditForm)}
+                          className="text-blue-600 hover:text-blue-800"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </Button>
+                      )}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowDeleteConfirm(true)}
+                        className="text-red-600 hover:text-red-800"
                       >
-                        <Pencil className="w-5 h-5" />
-                      </button>
-                    )}
-                    <button
-                      onClick={() => setShowDeleteConfirm(true)}
-                      className="text-red-600 hover:text-red-800 p-2 transition-colors"
-                      title="Delete question"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                  </div>
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  )}
                 </div>
 
                 <div className="prose max-w-none mb-4">
@@ -243,12 +256,18 @@ const QuestionDetail = ({ question }: QuestionDetailProps) => {
                 {!question.isClosed && (
                   <div className="mt-6">
                     <Button
-                      variant="default"
+                      variant="outline"
                       onClick={() => setShowReplyForm(!showReplyForm)}
-                      className="w-full sm:w-auto"
+                      className={`w-full sm:w-auto ${!isAuthenticated ? 'text-gray-500 dark:text-[#818384] cursor-not-allowed border-gray-300 dark:border-[#343536]' : ''}`}
+                      disabled={!isAuthenticated}
                     >
                       {showReplyForm ? 'Cancel' : 'Write an Answer'}
                     </Button>
+                    {!isAuthenticated && (
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                        Login required
+                      </p>
+                    )}
                   </div>
                 )}
 

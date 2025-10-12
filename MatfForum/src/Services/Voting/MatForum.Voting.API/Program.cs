@@ -16,6 +16,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// No JWT validation needed - API Gateway handles authentication
+// Services trust internal requests from the gateway
+
 // Add Entity Framework
 builder.Services.AddDbContext<VotingDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -40,9 +43,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
-app.UseAuthorization();
+// No authentication middleware needed - API Gateway handles it
 
 app.MapControllers();
 

@@ -1,78 +1,70 @@
+using MatForum.UserManagement.Application.DTOs;
 using MatForum.UserManagement.Application.Interfaces;
 using MatForum.UserManagement.Domain.Entities;
-using MatForum.UserManagement.Application.DTOs;
+using Microsoft.Extensions.Logging;
+using System.Net.Http.Json;
 using System.Text.Json;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System;
-using System.Collections.Generic;
 
-namespace MatForum.UserManagement.Infrastructure
+namespace MatForum.UserManagement.Infrastructure.Clients
 {
-    /// <summary>
-    /// This service acts as an HTTP client for the UserManagement API.
-    /// It implements the IUserService interface to provide a clean separation of concerns.
-    /// </summary>
     public class UserProfileServiceHttpClient : IUserProfileService
     {
         private readonly HttpClient _httpClient;
+        private readonly ILogger<UserProfileServiceHttpClient> _logger;
 
-        public UserProfileServiceHttpClient(HttpClient httpClient)
+        public UserProfileServiceHttpClient(HttpClient httpClient, ILogger<UserProfileServiceHttpClient> logger)
         {
             _httpClient = httpClient;
+            _logger = logger;
         }
 
         public async Task<UserProfile?> GetById(Guid id)
         {
-            try
+            var response = await _httpClient.GetAsync($"/api/users/{id}");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync($"api/users/{id}");
-                response.EnsureSuccessStatusCode();
-
-                var content = await response.Content.ReadAsStringAsync();
-                var user = JsonSerializer.Deserialize<UserProfile>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                return user;
-            }
-            catch (HttpRequestException ex)
-            {
-                // Log the exception or handle it as needed
-                Console.WriteLine($"Error retrieving user by ID: {ex.Message}");
+                _logger.LogWarning("Failed to get user {UserId}. Status: {StatusCode}", id, response.StatusCode);
                 return null;
             }
+            return await response.Content.ReadFromJsonAsync<UserProfile>();
         }
 
         public async Task<IEnumerable<UserProfileDto>> GetAll()
         {
-            try
+            var response = await _httpClient.GetAsync("/api/users");
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await _httpClient.GetAsync("api/users");
-                response.EnsureSuccessStatusCode();
-
-                var content = await response.Content.ReadAsStringAsync();
-                var users = JsonSerializer.Deserialize<IEnumerable<UserProfileDto>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                return users ?? new List<UserProfileDto>();
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"Error retrieving all users: {ex.Message}");
+                _logger.LogWarning("Failed to get all users. Status: {StatusCode}", response.StatusCode);
                 return new List<UserProfileDto>();
             }
+            return await response.Content.ReadFromJsonAsync<IEnumerable<UserProfileDto>>() ?? new List<UserProfileDto>();
         }
 
-        public Task<UserProfile> Create(MatForum.UserManagement.Application.DTOs.CreateUserProfileDto createUserDto)
+        public async Task<UserProfile> Create(CreateUserProfileDto createUserDto)
         {
-            throw new NotImplementedException("This client only supports retrieving user information.");
+            var response = await _httpClient.PostAsJsonAsync("/api/users", createUserDto);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<UserProfile>()
+                ?? throw new InvalidOperationException("Failed to create user profile");
         }
 
-        public Task<UserProfile?> Update(Guid id, MatForum.UserManagement.Application.DTOs.UpdateUserProfileDto updateUserDto)
+        public async Task<UserProfile?> Update(Guid id, UpdateUserProfileDto updateUserDto)
         {
-            throw new NotImplementedException("This client only supports retrieving user information.");
+            var response = await _httpClient.PatchAsJsonAsync($"/api/users/{id}", updateUserDto);
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogWarning("Failed to update user {UserId}. Status: {StatusCode}", id, response.StatusCode);
+                return null;
+            }
+            return await response.Content.ReadFromJsonAsync<UserProfile>();
         }
 
-        public Task<bool> Delete(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
-            throw new NotImplementedException("This client only supports retrieving user information.");
+            var response = await _httpClient.DeleteAsync($"/api/users/{id}");
+            return response.IsSuccessStatusCode;
         }
+
 
         public async Task<int> GetCount()
         {
