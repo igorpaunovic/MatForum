@@ -16,6 +16,7 @@ import { Route as ProtectedProfileRouteRouteImport } from './routes/~_protected/
 import { Route as publicAuthRouteRouteImport } from './routes/~(public)/~_auth/~route'
 import { Route as publicIndexRouteRouteImport } from './routes/~(public)/~index/~route'
 import { Route as publicQuestionsAskRouteImport } from './routes/~(public)/~questions/~ask'
+import { Route as publicQuestionsQuestionIdRouteImport } from './routes/~(public)/~questions/~$questionId'
 import { Route as publicAuthSignupRouteRouteImport } from './routes/~(public)/~_auth/~signup/~route'
 import { Route as publicAuthLoginRouteRouteImport } from './routes/~(public)/~_auth/~login/~route'
 import { Route as publicQuestionsIndexRouteImport } from './routes/~(public)/~questions/~index'
@@ -49,6 +50,12 @@ const publicQuestionsAskRoute = publicQuestionsAskRouteImport.update({
   path: '/questions/ask',
   getParentRoute: () => publicRoute,
 } as any)
+const publicQuestionsQuestionIdRoute =
+  publicQuestionsQuestionIdRouteImport.update({
+    id: '/questions/$questionId',
+    path: '/questions/$questionId',
+    getParentRoute: () => publicRoute,
+  } as any)
 const publicAuthSignupRouteRoute = publicAuthSignupRouteRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -71,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/questions': typeof publicQuestionsIndexRoute
   '/login': typeof publicAuthLoginRouteRoute
   '/signup': typeof publicAuthSignupRouteRoute
+  '/questions/$questionId': typeof publicQuestionsQuestionIdRoute
   '/questions/ask': typeof publicQuestionsAskRoute
 }
 export interface FileRoutesByTo {
@@ -79,6 +87,7 @@ export interface FileRoutesByTo {
   '/questions': typeof publicQuestionsIndexRoute
   '/login': typeof publicAuthLoginRouteRoute
   '/signup': typeof publicAuthSignupRouteRoute
+  '/questions/$questionId': typeof publicQuestionsQuestionIdRoute
   '/questions/ask': typeof publicQuestionsAskRoute
 }
 export interface FileRoutesById {
@@ -91,6 +100,7 @@ export interface FileRoutesById {
   '/(public)/questions/': typeof publicQuestionsIndexRoute
   '/(public)/_auth/login': typeof publicAuthLoginRouteRoute
   '/(public)/_auth/signup': typeof publicAuthSignupRouteRoute
+  '/(public)/questions/$questionId': typeof publicQuestionsQuestionIdRoute
   '/(public)/questions/ask': typeof publicQuestionsAskRoute
 }
 export interface FileRouteTypes {
@@ -101,9 +111,17 @@ export interface FileRouteTypes {
     | '/questions'
     | '/login'
     | '/signup'
+    | '/questions/$questionId'
     | '/questions/ask'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile' | '/questions' | '/login' | '/signup' | '/questions/ask'
+  to:
+    | '/'
+    | '/profile'
+    | '/questions'
+    | '/login'
+    | '/signup'
+    | '/questions/$questionId'
+    | '/questions/ask'
   id:
     | '__root__'
     | '/_protected'
@@ -114,6 +132,7 @@ export interface FileRouteTypes {
     | '/(public)/questions/'
     | '/(public)/_auth/login'
     | '/(public)/_auth/signup'
+    | '/(public)/questions/$questionId'
     | '/(public)/questions/ask'
   fileRoutesById: FileRoutesById
 }
@@ -165,6 +184,13 @@ declare module '@tanstack/react-router' {
       path: '/questions/ask'
       fullPath: '/questions/ask'
       preLoaderRoute: typeof publicQuestionsAskRouteImport
+      parentRoute: typeof publicRoute
+    }
+    '/(public)/questions/$questionId': {
+      id: '/(public)/questions/$questionId'
+      path: '/questions/$questionId'
+      fullPath: '/questions/$questionId'
+      preLoaderRoute: typeof publicQuestionsQuestionIdRouteImport
       parentRoute: typeof publicRoute
     }
     '/(public)/_auth/signup': {
@@ -220,12 +246,14 @@ const publicAuthRouteRouteWithChildren = publicAuthRouteRoute._addFileChildren(
 interface publicRouteChildren {
   publicAuthRouteRoute: typeof publicAuthRouteRouteWithChildren
   publicQuestionsIndexRoute: typeof publicQuestionsIndexRoute
+  publicQuestionsQuestionIdRoute: typeof publicQuestionsQuestionIdRoute
   publicQuestionsAskRoute: typeof publicQuestionsAskRoute
 }
 
 const publicRouteChildren: publicRouteChildren = {
   publicAuthRouteRoute: publicAuthRouteRouteWithChildren,
   publicQuestionsIndexRoute: publicQuestionsIndexRoute,
+  publicQuestionsQuestionIdRoute: publicQuestionsQuestionIdRoute,
   publicQuestionsAskRoute: publicQuestionsAskRoute,
 }
 
