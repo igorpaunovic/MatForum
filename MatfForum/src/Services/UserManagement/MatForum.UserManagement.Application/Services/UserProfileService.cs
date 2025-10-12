@@ -36,6 +36,7 @@ public class UserProfileService(IUserProfileRepository userRepository) : IUserPr
             LastName = createUserDto.LastName,
             Email = createUserDto.Email,
             Username = createUserDto.Username,
+            PhoneNumber = createUserDto.PhoneNumber,
             DateOfBirth = createUserDto.DateOfBirth
         };
 

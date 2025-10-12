@@ -3,43 +3,66 @@ export interface Question {
   title: string;
   content: string;
   authorName: string;
+  createdByUserId: string; // ✅ Match backend field name
   createdAt: string;
   updatedAt: string;
   tags: string[];
-  votes: number;
+  views: number; // ✅ Match backend field name
   isClosed: boolean;
 }
 
 export interface CreateQuestionDTO {
   title: string;
   content: string;
-  createdByUserId: string;
   tags: string[];
-}
-
-export interface VoteSummary {
-  questionId: string;
-  upvotes: number;
-  downvotes: number;
-  totalVotes: number;
-  userVote: number | null; // 1 = Upvote, -1 = Downvote, null = no vote
+  createdByUserId: string;
 }
 
 export interface Answer {
   id: string;
   content: string;
-  createdAt: string;
-  updatedAt: string;
   questionId: string;
   authorId: string;
-  authorName?: string;
-  parentAnswerId?: string | null;
-  replies?: Answer[]; // Nested replies for threaded view
+  authorName: string;
+  createdAt: string;
+  updatedAt: string;
+  replies?: Answer[];
+  parentAnswerId?: string;
 }
 
 export interface CreateAnswerRequest {
   content: string;
   questionId: string;
   userId: string;
-  parentAnswerId?: string | null; // For nested replies
+  parentAnswerId?: string;
+}
+
+// UserProfile types
+export interface UserProfile {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  dateOfBirth: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateUserProfileDto {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  phoneNumber: string;
+  dateOfBirth: string;
+}
+
+export interface UpdateUserProfileDto {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  username?: string;
+  dateOfBirth?: string;
 }

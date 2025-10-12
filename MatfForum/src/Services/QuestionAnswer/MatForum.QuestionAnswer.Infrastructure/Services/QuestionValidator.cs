@@ -17,6 +17,7 @@ namespace MatForum.QuestionAnswer.Infrastructure.Services
 
         public async Task<bool> ExistsAsync(Guid questionId, CancellationToken cancellationToken)
         {
+            // No JWT forwarding needed - services trust internal requests
             var response = await _httpClient.GetAsync($"/api/questions/{questionId}/exists", cancellationToken);
             return response.IsSuccessStatusCode;
         }

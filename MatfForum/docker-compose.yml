@@ -9,11 +9,18 @@ services:
     ports:
       - "5000:80"
     depends_on:
-      - user-service
-      - question-service
-      - voting-service
-      - identityserver-service
-      - answer-service
+      postgres:
+        condition: service_healthy  # Add this!
+      user-service:
+        condition: service_started
+      question-service:
+        condition: service_started
+      voting-service:
+        condition: service_started
+      identityserver-service:
+        condition: service_started
+      answer-service:
+        condition: service_started
   postgres:
     image: postgres:15
     container_name: matforum-postgres
@@ -27,6 +34,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
       # - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     restart: on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U matforum_user -d matforum"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   user-service:
     build:
@@ -39,6 +51,9 @@ services:
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=matforum;Username=matforum_user;Password=matforum_password
     ports:
       - "5001:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: on-failure
     
   question-service:
@@ -53,7 +68,8 @@ services:
     ports:
       - "5002:80"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     restart: on-failure
   
   voting-service:
@@ -68,7 +84,8 @@ services:
     ports:
       - "5003:80"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     restart: on-failure
     
   answer-service:
@@ -83,7 +100,8 @@ services:
     ports:
       - "5004:80"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     restart: on-failure
 
   identityserver-service:
@@ -91,12 +109,15 @@ services:
       context: .
       dockerfile: src/Security/MatForum.IdentityServer.API/Dockerfile
     container_name: identityserver-service
-    environment:
+    environment:    
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=matforum;Username=matforum_user;Password=matforum_password
     ports:
       - "5005:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: on-failure
 
 volumes:

@@ -13,9 +13,9 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRouteImport } from './routes/~__root'
 import { Route as ProtectedRouteRouteImport } from './routes/~_protected/~route'
 import { Route as ProtectedProfileRouteRouteImport } from './routes/~_protected/~profile/~route'
+import { Route as ProtectedAskRouteRouteImport } from './routes/~_protected/~ask/~route'
 import { Route as publicAuthRouteRouteImport } from './routes/~(public)/~_auth/~route'
 import { Route as publicIndexRouteRouteImport } from './routes/~(public)/~index/~route'
-import { Route as publicQuestionsAskRouteImport } from './routes/~(public)/~questions/~ask'
 import { Route as publicAuthSignupRouteRouteImport } from './routes/~(public)/~_auth/~signup/~route'
 import { Route as publicAuthLoginRouteRouteImport } from './routes/~(public)/~_auth/~login/~route'
 import { Route as publicQuestionsIndexRouteImport } from './routes/~(public)/~questions/~index'
@@ -35,6 +35,11 @@ const ProtectedProfileRouteRoute = ProtectedProfileRouteRouteImport.update({
   path: '/profile',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
+const ProtectedAskRouteRoute = ProtectedAskRouteRouteImport.update({
+  id: '/ask',
+  path: '/ask',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
 const publicAuthRouteRoute = publicAuthRouteRouteImport.update({
   id: '/_auth',
   getParentRoute: () => publicRoute,
@@ -43,11 +48,6 @@ const publicIndexRouteRoute = publicIndexRouteRouteImport.update({
   id: '/(public)/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
-const publicQuestionsAskRoute = publicQuestionsAskRouteImport.update({
-  id: '/questions/ask',
-  path: '/questions/ask',
-  getParentRoute: () => publicRoute,
 } as any)
 const publicAuthSignupRouteRoute = publicAuthSignupRouteRouteImport.update({
   id: '/signup',
@@ -67,19 +67,19 @@ const publicQuestionsIndexRoute = publicQuestionsIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof publicAuthRouteRouteWithChildren
+  '/ask': typeof ProtectedAskRouteRoute
   '/profile': typeof ProtectedProfileRouteRoute
   '/questions': typeof publicQuestionsIndexRoute
   '/login': typeof publicAuthLoginRouteRoute
   '/signup': typeof publicAuthSignupRouteRoute
-  '/questions/ask': typeof publicQuestionsAskRoute
 }
 export interface FileRoutesByTo {
   '/': typeof publicAuthRouteRouteWithChildren
+  '/ask': typeof ProtectedAskRouteRoute
   '/profile': typeof ProtectedProfileRouteRoute
   '/questions': typeof publicQuestionsIndexRoute
   '/login': typeof publicAuthLoginRouteRoute
   '/signup': typeof publicAuthSignupRouteRoute
-  '/questions/ask': typeof publicQuestionsAskRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,34 +87,28 @@ export interface FileRoutesById {
   '/(public)/': typeof publicIndexRouteRoute
   '/(public)': typeof publicRouteWithChildren
   '/(public)/_auth': typeof publicAuthRouteRouteWithChildren
+  '/_protected/ask': typeof ProtectedAskRouteRoute
   '/_protected/profile': typeof ProtectedProfileRouteRoute
   '/(public)/questions/': typeof publicQuestionsIndexRoute
   '/(public)/_auth/login': typeof publicAuthLoginRouteRoute
   '/(public)/_auth/signup': typeof publicAuthSignupRouteRoute
-  '/(public)/questions/ask': typeof publicQuestionsAskRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/profile'
-    | '/questions'
-    | '/login'
-    | '/signup'
-    | '/questions/ask'
+  fullPaths: '/' | '/ask' | '/profile' | '/questions' | '/login' | '/signup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile' | '/questions' | '/login' | '/signup' | '/questions/ask'
+  to: '/' | '/ask' | '/profile' | '/questions' | '/login' | '/signup'
   id:
     | '__root__'
     | '/_protected'
     | '/(public)/'
     | '/(public)'
     | '/(public)/_auth'
+    | '/_protected/ask'
     | '/_protected/profile'
     | '/(public)/questions/'
     | '/(public)/_auth/login'
     | '/(public)/_auth/signup'
-    | '/(public)/questions/ask'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -146,6 +140,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedProfileRouteRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/ask': {
+      id: '/_protected/ask'
+      path: '/ask'
+      fullPath: '/ask'
+      preLoaderRoute: typeof ProtectedAskRouteRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/(public)/_auth': {
       id: '/(public)/_auth'
       path: '/'
@@ -159,13 +160,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof publicIndexRouteRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/(public)/questions/ask': {
-      id: '/(public)/questions/ask'
-      path: '/questions/ask'
-      fullPath: '/questions/ask'
-      preLoaderRoute: typeof publicQuestionsAskRouteImport
-      parentRoute: typeof publicRoute
     }
     '/(public)/_auth/signup': {
       id: '/(public)/_auth/signup'
@@ -192,10 +186,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface ProtectedRouteRouteChildren {
+  ProtectedAskRouteRoute: typeof ProtectedAskRouteRoute
   ProtectedProfileRouteRoute: typeof ProtectedProfileRouteRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
+  ProtectedAskRouteRoute: ProtectedAskRouteRoute,
   ProtectedProfileRouteRoute: ProtectedProfileRouteRoute,
 }
 
@@ -220,13 +216,11 @@ const publicAuthRouteRouteWithChildren = publicAuthRouteRoute._addFileChildren(
 interface publicRouteChildren {
   publicAuthRouteRoute: typeof publicAuthRouteRouteWithChildren
   publicQuestionsIndexRoute: typeof publicQuestionsIndexRoute
-  publicQuestionsAskRoute: typeof publicQuestionsAskRoute
 }
 
 const publicRouteChildren: publicRouteChildren = {
   publicAuthRouteRoute: publicAuthRouteRouteWithChildren,
   publicQuestionsIndexRoute: publicQuestionsIndexRoute,
-  publicQuestionsAskRoute: publicQuestionsAskRoute,
 }
 
 const publicRouteWithChildren =

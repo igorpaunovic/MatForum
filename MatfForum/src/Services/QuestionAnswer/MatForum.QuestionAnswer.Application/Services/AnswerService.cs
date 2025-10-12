@@ -7,13 +7,12 @@ namespace MatForum.QuestionAnswer.Application.Services;
 public class AnswerService : IAnswerService
 {
     private readonly IAnswerRepository _answerRepository;
-    // private readonly IQuestionValidator _questionValidator;
-    // You would inject IUserValidator here as well
+    private readonly IUserService _userService;
 
-    public AnswerService(IAnswerRepository answerRepository)
+    public AnswerService(IAnswerRepository answerRepository, IUserService userService)
     {
         _answerRepository = answerRepository;
-        // _questionValidator = questionValidator;
+        _userService = userService;
     }
 
     public async Task<Guid> CreateAnswerAsync(string content, Guid questionId, Guid authorId, Guid? parentAnswerId, CancellationToken cancellationToken)
@@ -38,6 +37,11 @@ public class AnswerService : IAnswerService
     {
         var answer = await _answerRepository.GetById(answerId); 
         if (answer == null) return null;
+        
+        // Fetch author name from UserManagement service
+        var user = await _userService.GetByIdAsync(answer.AuthorId);
+        var authorName = user != null ? user.Username : "Anonymous";
+        
         return new AnswerDto
         {
             Id = answer.Id,
@@ -46,6 +50,7 @@ public class AnswerService : IAnswerService
             UpdatedAt = answer.UpdatedAt, 
             QuestionId = answer.QuestionId,
             AuthorId = answer.AuthorId,
+            AuthorName = authorName,
             ParentAnswerId = answer.ParentAnswerId
         };
     }
@@ -58,11 +63,21 @@ public class AnswerService : IAnswerService
         // Build threaded structure - only return top-level answers (without parent)
         var topLevelAnswers = answersList.Where(a => a.ParentAnswerId == null);
         
-        return topLevelAnswers.Select(answer => MapToThreadedDto(answer, answersList));
+        var result = new List<AnswerDto>();
+        foreach (var answer in topLevelAnswers)
+        {
+            result.Add(await MapToThreadedDto(answer, answersList));
+        }
+        
+        return result;
     }
 
-    private AnswerDto MapToThreadedDto(Answer answer, List<Answer> allAnswers)
+    private async Task<AnswerDto> MapToThreadedDto(Answer answer, List<Answer> allAnswers)
     {
+        // Fetch author name from UserManagement service
+        var user = await _userService.GetByIdAsync(answer.AuthorId);
+        var authorName = user != null ? user.Username : "Anonymous";
+        
         var dto = new AnswerDto
         {
             Id = answer.Id,
@@ -71,6 +86,7 @@ public class AnswerService : IAnswerService
             UpdatedAt = answer.UpdatedAt,
             QuestionId = answer.QuestionId,
             AuthorId = answer.AuthorId,
+            AuthorName = authorName,
             ParentAnswerId = answer.ParentAnswerId,
             Replies = new List<AnswerDto>()
         };
@@ -79,7 +95,7 @@ public class AnswerService : IAnswerService
         var replies = allAnswers.Where(a => a.ParentAnswerId == answer.Id);
         foreach (var reply in replies)
         {
-            dto.Replies.Add(MapToThreadedDto(reply, allAnswers));
+            dto.Replies.Add(await MapToThreadedDto(reply, allAnswers));
         }
 
         return dto;

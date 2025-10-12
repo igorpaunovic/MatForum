@@ -1,6 +1,8 @@
-using MatForum.IdentityServer.Infrastructure.Extensions;
 using MatForum.IdentityServer.Application.Interfaces;
 using MatForum.IdentityServer.Application.Services;
+using MatForum.IdentityServer.Infrastructure.Data;
+using MatForum.IdentityServer.Infrastructure.Extensions;
+using Microsoft.EntityFrameworkCore; // ADD THIS
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,8 +28,37 @@ builder.Services.AddAutoMapper(Assembly.Load("MatForum.IdentityServer.Applicatio
 // Register Application services with fully qualified names to avoid namespace collision
 builder.Services.AddScoped<MatForum.IdentityServer.Application.Interfaces.IAuthenticationService, MatForum.IdentityServer.Application.Services.AuthenticationService>();
 
+// Register HttpClient for UserManagement service
+builder.Services.AddHttpClient<MatForum.IdentityServer.Infrastructure.Clients.UserManagementHttpClient>(client =>
+{
+    client.BaseAddress = new Uri("http://user-service/");
+});
+
+
 
 var app = builder.Build();
+
+
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        // Replace with your actual DbContext class name!
+        var dbContext = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
+        dbContext.Database.Migrate();
+
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation("IdentityServer database migrations applied successfully.");
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the IdentityServer database.");
+        throw;
+    }
+}
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

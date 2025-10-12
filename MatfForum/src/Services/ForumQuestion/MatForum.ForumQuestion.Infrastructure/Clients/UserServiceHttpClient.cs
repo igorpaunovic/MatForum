@@ -10,6 +10,7 @@ namespace MatForum.ForumQuestion.Infrastructure.Clients
     public class UserServiceHttpClient : IUserService
     {
         private readonly HttpClient _httpClient;
+        
         public UserServiceHttpClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -17,20 +18,21 @@ namespace MatForum.ForumQuestion.Infrastructure.Clients
 
         public async Task<UserDto?> GetByIdAsync(Guid userId)
         {
+            // No JWT forwarding needed - services trust internal requests
             var response = await _httpClient.GetAsync($"/api/users/{userId}");
             if (!response.IsSuccessStatusCode)
                 return null;
 
-            var rawJson = await response.Content.ReadAsStringAsync();
-
-            // Try to deserialize
             return await response.Content.ReadFromJsonAsync<UserDto>();
         }
 
         public async Task<bool> ExistsAsync(Guid userId)
         {
-            var response = await _httpClient.GetAsync($"/users/{userId}/exists");
-            response.EnsureSuccessStatusCode();
+            // No JWT forwarding needed - services trust internal requests
+            var response = await _httpClient.GetAsync($"/api/users/{userId}/exists");
+            if (!response.IsSuccessStatusCode)
+                return false;
+
             var exists = await response.Content.ReadAsStringAsync();
             return bool.TryParse(exists, out var result) && result;
         }

@@ -9,8 +9,11 @@ import answerService from '@/services/api-answer-service';
 import { formatDate } from '@/lib/utils';
 import { Pencil, Trash2 } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useMe } from '@/api/auth';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, tags, isClosed }: Question) => {
+const QuestionCard = ({ id, title, content, authorName, createdByUserId, createdAt, updatedAt, tags, isClosed }: Question) => {
   const queryClient = useQueryClient();
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showAnswers, setShowAnswers] = useState(false);
@@ -24,6 +27,11 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, ta
   const [editTags, setEditTags] = useState<string[]>(tags || []);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  
+  // Auth check
+  const { data: user } = useMe();
+  const isAuthenticated = !!user;
+  const isOwner = isAuthenticated && user?.id && createdByUserId && user.id === createdByUserId;
 
   const isEdited = updatedAt && createdAt && new Date(updatedAt).getTime() !== new Date(createdAt).getTime();
 
@@ -95,13 +103,17 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, ta
     setIsUpdating(true);
 
     try {
+      if (!user?.id) {
+        alert('You must be logged in to edit questions');
+        return;
+      }
+
       const questionService = (await import('@/services/api-question-service')).default;
-      // Using first user ID as placeholder - ideally this would come from auth context
       await questionService.updateQuestion(id, {
         title: editTitle,
         content: editContent,
         tags: editTags,
-        updatedByUserId: '550e8400-e29b-41d4-a716-446655440010'
+        updatedByUserId: user.id // ✅ Use actual authenticated user ID
       });
       setShowEditForm(false);
 
@@ -121,7 +133,7 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, ta
       <div className="flex gap-4">
         {/* Voting Section */}
         <div className="flex-shrink-0">
-          <VotingButtons questionId={id} />
+          <VotingButtons questionId={id} user={user} />
         </div>
 
         {/* Content Section */}
@@ -137,24 +149,72 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, ta
                 Closed
               </span>
             )}</h3>
-            <div className="flex gap-2">
-              {!isClosed && (
-                <button
-                  onClick={() => setShowEditForm(!showEditForm)}
-                  className="text-blue-600 hover:text-blue-800 p-1 transition-colors"
-                  title="Edit question"
-                >
-                  <Pencil className="w-4 h-4" />
-                </button>
-              )}
-              <button
-                onClick={() => setShowDeleteConfirm(true)}
-                className="text-red-600 hover:text-red-800 p-1 transition-colors"
-                title="Delete question"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
+            <TooltipProvider>
+              <div className="flex gap-2">
+                {!isClosed && isOwner && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowEditForm(!showEditForm)}
+                        className="p-1 h-auto text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Edit question</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+                {isOwner && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowDeleteConfirm(true)}
+                        className="p-1 h-auto text-red-600 hover:text-red-800 hover:bg-red-50"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Delete question</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+                {isOwner && (
+                  <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Delete Question</DialogTitle>
+                        <DialogDescription>
+                          Are you sure you want to delete this question? This action cannot be undone and will also delete all associated answers.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <DialogFooter>
+                        <Button 
+                          variant="outline" 
+                          onClick={() => setShowDeleteConfirm(false)}
+                          disabled={isDeleting}
+                        >
+                          Cancel
+                        </Button>
+                        <Button 
+                          variant="destructive" 
+                          onClick={handleDelete}
+                          disabled={isDeleting}
+                        >
+                          {isDeleting ? 'Deleting...' : 'Delete'}
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                )}
+              </div>
+            </TooltipProvider>
           </div>
           <p className="text-gray-600 mb-3">{content}</p>
           <div className="flex flex-wrap justify-between items-center text-sm text-gray-500">
@@ -178,13 +238,33 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, ta
           {/* Action Buttons */}
           <div className="flex gap-2 mt-4">
             {!isClosed && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowReplyForm(!showReplyForm)}
-              >
-                {showReplyForm ? 'Cancel' : 'Answer Question'}
-              </Button>
+              isAuthenticated ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowReplyForm(!showReplyForm)}
+                >
+                  {showReplyForm ? 'Cancel' : 'Answer Question'}
+                </Button>
+              ) : (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled
+                        className="text-gray-400 cursor-not-allowed"
+                      >
+                        Answer Question
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Login to answer</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )
             )}
             <Button
               variant="ghost"
@@ -248,25 +328,6 @@ const QuestionCard = ({ id, title, content, authorName, createdAt, updatedAt, ta
             />
           )}
 
-          {/* Delete Confirmation Modal */}
-          {showDeleteConfirm && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-                <h3 className="text-lg font-semibold mb-3">Delete Question?</h3>
-                <p className="text-gray-600 mb-6">
-                  Are you sure you want to delete this question? This action cannot be undone.
-                </p>
-                <div className="flex gap-3 justify-end">
-                  <Button onClick={() => setShowDeleteConfirm(false)} variant="outline" disabled={isDeleting}>
-                    Cancel
-                  </Button>
-                  <Button onClick={handleDelete} variant="destructive" disabled={isDeleting}>
-                    {isDeleting ? 'Deleting...' : 'Delete'}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* Answers List */}
           {showAnswers && (

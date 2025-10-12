@@ -20,7 +20,7 @@ namespace MatForum.IdentityServer.Application.DTOs
         [Required(ErrorMessage = "Email is required")]
         public String Email { get; set; }
         
-        public String PhoneNumber { get; set; }
+        public String? PhoneNumber { get; set; } // Optional
         
     }
 }

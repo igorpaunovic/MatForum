@@ -19,6 +19,7 @@ namespace MatForum.Voting.API.Controllers
         }
 
         [HttpPost("vote")]
+        // No [Authorize] needed - API Gateway handles authentication
         public async Task<ActionResult<VoteDto>> VoteQuestion([FromBody] VoteQuestionCommand command)
         {
             if (!ModelState.IsValid)
@@ -48,6 +49,7 @@ namespace MatForum.Voting.API.Controllers
         }
 
         [HttpPut("change")]
+        // No [Authorize] needed - API Gateway handles authentication
         public async Task<ActionResult<VoteDto>> ChangeVote([FromBody] ChangeVoteCommand command)
         {
             if (!ModelState.IsValid)
@@ -81,6 +83,7 @@ namespace MatForum.Voting.API.Controllers
         }
 
         [HttpDelete("remove")]
+        // No [Authorize] needed - API Gateway handles authentication
         public async Task<IActionResult> RemoveVote([FromBody] RemoveVoteCommand command)
         {
             if (!ModelState.IsValid)
@@ -108,6 +111,7 @@ namespace MatForum.Voting.API.Controllers
         }
 
         [HttpGet("user/{questionId}/{userId}")]
+        // No [Authorize] needed - API Gateway handles authentication
         public async Task<ActionResult<VoteDto>> GetUserVote(Guid questionId, Guid userId)
         {
             if (questionId == Guid.Empty)

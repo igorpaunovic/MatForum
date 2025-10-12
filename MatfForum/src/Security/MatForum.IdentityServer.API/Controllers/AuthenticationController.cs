@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using System.Data;
 
 using MatForum.IdentityServer.Application.Interfaces;
+using MatForum.IdentityServer.Infrastructure.Clients;
 
 namespace MatForum.IdentityServer.API.Controllers
 {
@@ -17,14 +18,14 @@ namespace MatForum.IdentityServer.API.Controllers
     [ApiController]
     public class AuthenticationController : RegistrationControllerBase
     {
-
         private readonly IAuthenticationService _authService;
-
+        private readonly UserManagementHttpClient _userManagementClient;
 
         public AuthenticationController(ILogger<AuthenticationController> logger, IMapper mapper,
-            UserManager<AppUser> userManager, RoleManager<IdentityRole<Guid>> roleManager, IAuthenticationService authService) : base(logger, mapper, userManager, roleManager)
+            UserManager<AppUser> userManager, RoleManager<IdentityRole<Guid>> roleManager, IAuthenticationService authService, UserManagementHttpClient userManagementClient) : base(logger, mapper, userManager, roleManager)
         {
             _authService = authService ?? throw new ArgumentNullException(nameof(authService));
+            _userManagementClient = userManagementClient ?? throw new ArgumentNullException(nameof(userManagementClient));
         }
 
         [HttpPost("[action]")]
@@ -32,7 +33,30 @@ namespace MatForum.IdentityServer.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RegisterUser([FromBody] NewUserDto newUser)
         {
-            return await RegisterNewUserWithRoles(newUser, new string[] { Roles.DefaulUser });
+            // First, register the user in IdentityServer
+            var (result, user) = await RegisterNewUserWithRolesInternal(newUser, new string[] { Roles.DefaulUser });
+            
+            // If registration was successful, create user profile with SAME GUID
+            if (result is StatusCodeResult statusResult && statusResult.StatusCode == 201 && user != null)
+            {
+                try
+                {
+                    await _userManagementClient.CreateUserProfileAsync(
+                        user.Id, // ← Use the SAME GUID from IdentityServer!
+                        newUser.FirstName, 
+                        newUser.LastName, 
+                        newUser.Email, 
+                        newUser.UserName,
+                        newUser.PhoneNumber);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to create user profile for {Username}", newUser.UserName);
+                    // Don't fail registration if profile creation fails
+                }
+            }
+            
+            return result;
         }
 
 
@@ -41,7 +65,30 @@ namespace MatForum.IdentityServer.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RegisterAdmin([FromBody] NewUserDto newUser)
         {
-            return await RegisterNewUserWithRoles(newUser, new string[] { Roles.Admin });
+            // First, register the user in IdentityServer
+            var (result, user) = await RegisterNewUserWithRolesInternal(newUser, new string[] { Roles.Admin });
+            
+            // If registration was successful, create user profile with SAME GUID
+            if (result is StatusCodeResult statusResult && statusResult.StatusCode == 201 && user != null)
+            {
+                try
+                {
+                    await _userManagementClient.CreateUserProfileAsync(
+                        user.Id, // ← Use the SAME GUID from IdentityServer!
+                        newUser.FirstName, 
+                        newUser.LastName, 
+                        newUser.Email, 
+                        newUser.UserName,
+                        newUser.PhoneNumber);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to create user profile for admin {Username}", newUser.UserName);
+                    // Don't fail registration if profile creation fails
+                }
+            }
+            
+            return result;
         }
 
         [HttpPost("[action]")]

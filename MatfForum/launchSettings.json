@@ -5,7 +5,11 @@
       "commandVersion": "1.0",
       "serviceActions": {
         "matforum.apigateway": "StartDebugging",
-        "matforum.identityserver.api": "StartDebugging"
+        "identityserver-service": "StartDebugging",
+        "user-service": "StartDebugging",
+        "question-service": "StartDebugging",
+        "voting-service": "StartDebugging",
+        "answer-service": "StartDebugging"
       }
     }
   }
