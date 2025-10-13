@@ -64,6 +64,13 @@ public class AnswerRepository : IAnswerRepository
             .ToListAsync();
     }
 
+    public async Task<IEnumerable<Answer>> GetByUserIdAsync(Guid userId)
+    {
+        return await _context.Answers
+            .Where(a => !a.IsDeleted && a.AuthorId == userId)
+            .ToListAsync();
+    }
+
     public async Task<int> GetCount()
     {
         return await _context.Answers

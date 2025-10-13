@@ -109,6 +109,15 @@ public class AnswersController : ControllerBase
         var answers = await _answerService.GetAnswersByUserIdAsync(userId, cancellationToken);
         return Ok(answers.Count());
     }
+
+    [HttpDelete("by-question/{questionId}")]
+    public async Task<IActionResult> DeleteAnswersByQuestionId(Guid questionId, CancellationToken cancellationToken)
+    {
+        var deleted = await _answerService.DeleteAnswersByQuestionIdAsync(questionId, cancellationToken);
+        if (!deleted)
+            return BadRequest(new { Message = "Delete failed." });
+        return NoContent();
+    }
 }
 
 public class CreateAnswerRequest

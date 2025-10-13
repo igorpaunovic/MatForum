@@ -7,5 +7,6 @@ namespace MatForum.ForumQuestion.Application.Interfaces
     {
         Task<IEnumerable<Question>> SearchQuestions(string searchTerm);
         Task<IEnumerable<Question>> GetSimilarQuestions(Guid questionId, int count = 3);
+        Task<IEnumerable<Question>> GetByUserIdAsync(Guid userId);
     }
 }
