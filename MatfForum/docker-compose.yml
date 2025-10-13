@@ -72,6 +72,24 @@ services:
         condition: service_healthy
     restart: on-failure
   
+  question-grpc-service:
+    build:
+      context: .
+      dockerfile: src/Services/ForumQuestion/MatForum.ForumQuestion.GRPC/Dockerfile
+    container_name: question-grpc-service
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=matforum;Username=matforum_user;Password=matforum_password
+    ports:
+      - "5010:443"
+    volumes:
+      - ./certs:/app/certs:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+  
   voting-service:
     build:
       context: .
@@ -99,9 +117,13 @@ services:
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=matforum;Username=matforum_user;Password=matforum_password
     ports:
       - "5004:80"
+    volumes:
+      - ./certs:/app/certs:ro
     depends_on:
       postgres:
         condition: service_healthy
+      question-grpc-service:
+        condition: service_started
     restart: on-failure
 
   identityserver-service:
