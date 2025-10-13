@@ -113,7 +113,7 @@ namespace MatForum.Voting.Application.Services
             return true;
         }
 
-        public async Task<VoteDto> GetUserVoteAsync(Guid questionId, Guid userId)
+        public async Task<VoteDto?> GetUserVoteAsync(Guid questionId, Guid userId)
         {
             var vote = await _voteRepository.GetByQuestionAndUserAsync(questionId, userId);
             return vote != null ? MapToDto(vote) : null;

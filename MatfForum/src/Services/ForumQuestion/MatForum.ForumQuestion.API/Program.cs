@@ -26,6 +26,12 @@ builder.Services.AddHttpClient<IUserService, UserServiceHttpClient>(client =>
     client.BaseAddress = new Uri("http://user-service");
 });
 
+// Register the HttpClient for the AnswerServiceHttpClient
+builder.Services.AddHttpClient<IAnswerServiceClient, AnswerServiceHttpClient>(client =>
+{
+    client.BaseAddress = new Uri("http://answer-service");
+});
+
 // Add Entity Framework
 builder.Services.AddDbContext<QuestionDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

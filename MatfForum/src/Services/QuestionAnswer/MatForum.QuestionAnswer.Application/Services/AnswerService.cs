@@ -117,6 +117,18 @@ public class AnswerService : IAnswerService
         return await _answerRepository.Delete(answerId);
     }
 
+    public async Task<bool> DeleteAnswersByQuestionIdAsync(Guid questionId, CancellationToken cancellationToken)
+    {
+        var answers = await _answerRepository.GetByQuestionIdAsync(questionId);
+        if (!answers.Any()) return true; // No answers to delete
+
+        foreach (var answer in answers)
+        {
+            await _answerRepository.Delete(answer.Id);
+        }
+        return true;
+    }
+
     public async Task<int> GetCountAsync(CancellationToken cancellationToken)
     {
         return await _answerRepository.GetCount();
@@ -124,8 +136,7 @@ public class AnswerService : IAnswerService
 
     public async Task<IEnumerable<AnswerDto>> GetAnswersByUserIdAsync(Guid userId, CancellationToken cancellationToken)
     {
-        var allAnswers = await _answerRepository.GetAll();
-        var userAnswers = allAnswers.Where(a => a.AuthorId == userId);
+        var userAnswers = await _answerRepository.GetByUserIdAsync(userId);
         
         return userAnswers.Select(answer => new AnswerDto
         {

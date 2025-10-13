@@ -13,11 +13,13 @@ namespace MatForum.ForumQuestion.Application.Services
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IUserService _userService;
+        private readonly IAnswerServiceClient _answerServiceClient;
 
-        public ForumQuestionService(IQuestionRepository questionRepository, IUserService userService)
+        public ForumQuestionService(IQuestionRepository questionRepository, IUserService userService, IAnswerServiceClient answerServiceClient)
         {
             _questionRepository = questionRepository;
             _userService = userService;
+            _answerServiceClient = answerServiceClient;
         }
 
         public async Task<QuestionDto> CreateQuestion(CreateQuestionCommand command)
@@ -128,6 +130,11 @@ namespace MatForum.ForumQuestion.Application.Services
         {
             var question = await _questionRepository.GetById(id);
             if (question == null) return false;
+            
+            // Cascade delete: Delete all answers for this question first
+            await _answerServiceClient.DeleteAnswersByQuestionIdAsync(id);
+            
+            // Then delete the question
             await _questionRepository.Delete(id);
             return true;
         }
@@ -163,8 +170,7 @@ namespace MatForum.ForumQuestion.Application.Services
 
         public async Task<IEnumerable<QuestionDto>> GetQuestionsByUserId(Guid userId)
         {
-            var allQuestions = await _questionRepository.GetAll();
-            var userQuestions = allQuestions.Where(q => q.CreatedByUserId == userId);
+            var userQuestions = await _questionRepository.GetByUserIdAsync(userId);
             var dtos = new List<QuestionDto>();
             foreach (var question in userQuestions)
             {

@@ -55,5 +55,13 @@ namespace MatForum.ForumQuestion.Infrastructure.Repositories
 
             return similarQuestions;
         }
+
+        public async Task<IEnumerable<Question>> GetByUserIdAsync(Guid userId)
+        {
+            var allQuestions = await GetAll();
+            return allQuestions
+                .Where(q => !q.IsDeleted && q.CreatedByUserId == userId)
+                .OrderByDescending(q => q.CreatedAt);
+        }
     }
 }
