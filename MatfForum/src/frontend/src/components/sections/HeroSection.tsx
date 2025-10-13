@@ -38,7 +38,7 @@ export default function HeroSection() {
 
   return (
     <>
-      <div className="text-center mb-12">
+      <div className="text-center mb-12 pt-16">
         <h1 className={`text-3xl font-bold mb-4 transition-all duration-700 ${
           headerVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
         }`}>

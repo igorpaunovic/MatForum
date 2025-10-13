@@ -75,17 +75,16 @@ function MembersPage() {
 
       {contributors && contributors.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* treba da postoji index  */}
-          {contributors.map((contributor) => (
+          {contributors.map((contributor, index) => (
             <Link
               key={contributor.id}
               to="/members/$userId"
               params={{ userId: contributor.id }}
               className="group"
             >
-              <div className="border border-gray-200 dark:border-[#343536] rounded-lg p-6 hover:shadow-lg transition-all bg-white dark:bg-[#1A1A1B] hover:border-blue-500 dark:hover:border-blue-500">
-                {/* Rank Badge ovo sam izbacio */}
-                {/* {index < 3 && (
+              <div className="relative border border-gray-200 dark:border-[#343536] rounded-lg p-6 hover:shadow-lg transition-all bg-white dark:bg-[#1A1A1B] hover:border-blue-500 dark:hover:border-blue-500">
+                {/* Rank Badge - Top 3 contributors */}
+                {index < 3 && (
                   <div className="absolute top-4 right-4">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${
                       index === 0 ? 'bg-yellow-500' : index === 1 ? 'bg-gray-400' : 'bg-orange-600'
@@ -93,7 +92,7 @@ function MembersPage() {
                       {index + 1}
                     </div>
                   </div>
-                )} */}
+                )}
 
                 {/* Avatar */}
                 <div className="flex items-center mb-4">

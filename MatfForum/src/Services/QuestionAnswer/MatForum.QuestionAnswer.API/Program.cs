@@ -3,10 +3,14 @@ using MatForum.QuestionAnswer.Application.Services;
 using MatForum.QuestionAnswer.Infrastructure.Repositories;
 using MatForum.QuestionAnswer.Infrastructure.Data;
 using MatForum.QuestionAnswer.Infrastructure.Services;
+using MatForum.ForumQuestion.GRPC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
+// Enable HTTP/2 without TLS (h2c) for gRPC client in Docker
+AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,11 +44,25 @@ builder.Services.AddHttpClient<IUserService, MatForum.QuestionAnswer.Infrastruct
     client.BaseAddress = new Uri("http://user-service/");
 });
 
-// Register the HttpClient for the QuestionValidator
-builder.Services.AddHttpClient<IQuestionValidator, QuestionValidator>(client =>
+// Register gRPC client for QuestionValidator (pointing to dedicated gRPC service with HTTPS)
+var isDevelopment = builder.Environment.IsDevelopment();
+builder.Services.AddGrpcClient<QuestionValidationService.QuestionValidationServiceClient>(options =>
 {
-    client.BaseAddress = new Uri("http://question-service/");
+    options.Address = new Uri("https://question-grpc-service");
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler();
+    // Accept self-signed certificates in development
+    if (isDevelopment)
+    {
+        handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+    }
+    return handler;
 });
+
+// Register QuestionValidator
+builder.Services.AddScoped<IQuestionValidator, QuestionValidator>();
 
 // Add Entity Framework
 builder.Services.AddDbContext<QuestionAnswerDbContext>(options =>

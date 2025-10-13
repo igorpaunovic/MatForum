@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option csharp_namespace = "MatForum.ForumQuestion.GRPC";
+
+service QuestionValidationService {
+  rpc ValidateQuestion (ValidateQuestionRequest) returns (ValidateQuestionResponse);
+}
+
+message ValidateQuestionRequest {
+  string questionId = 1;
+}
+
+message ValidateQuestionResponse {
+  bool exists = 1;
+  bool isActive = 2;
+  string message = 3;
+}
+

@@ -78,9 +78,9 @@ const VotingButtons = ({ questionId, user }: VotingButtonsProps) => {
               disabled={isLoading || !isAuthenticated}
               className={`p-1 h-auto transition-colors ${
                 isUpvoted
-                  ? "text-green-600 bg-green-50 hover:bg-green-100"
+                  ? "text-green-600 bg-green-50 hover:bg-green-100 active:bg-green-200 dark:active:bg-green-900"
                   : isAuthenticated
-                  ? "hover:bg-gray-100 text-gray-600"
+                  ? "hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-700 dark:active:bg-gray-800 text-gray-600"
                   : "text-gray-400 cursor-not-allowed"
               } disabled:opacity-50`}
             >
@@ -113,9 +113,9 @@ const VotingButtons = ({ questionId, user }: VotingButtonsProps) => {
               disabled={isLoading || !isAuthenticated}
               className={`p-1 h-auto transition-colors ${
                 isDownvoted
-                  ? "text-red-600 bg-red-50 hover:bg-red-100"
+                  ? "text-red-600 bg-red-50 hover:bg-red-100 active:bg-red-200 dark:active:bg-red-900"
                   : isAuthenticated
-                  ? "hover:bg-gray-100 text-gray-600"
+                  ? "hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-700 dark:active:bg-gray-800 text-gray-600"
                   : "text-gray-400 cursor-not-allowed"
               } disabled:opacity-50`}
             >

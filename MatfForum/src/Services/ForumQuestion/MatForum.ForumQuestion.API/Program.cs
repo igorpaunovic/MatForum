@@ -10,19 +10,6 @@ using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// const string CorsPolicy = "ViteDev";
-
-// CORS
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy(CorsPolicy, policy =>
-//        policy.WithOrigins("http://localhost:5173") 
-//              .AllowAnyHeader()
-//              .AllowAnyMethod()
-//    );
-//});
-
-
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -38,6 +25,7 @@ builder.Services.AddHttpClient<IUserService, UserServiceHttpClient>(client =>
 {
     client.BaseAddress = new Uri("http://user-service");
 });
+
 // Add Entity Framework
 builder.Services.AddDbContext<QuestionDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -60,11 +48,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-// app.UseHttpsRedirection();   
-
-// CORS before auth
-// app.UseCors(CorsPolicy);
 
 // No authentication middleware needed - API Gateway handles it
 
