@@ -12,6 +12,27 @@ export const useVoteSummary = (questionId: string) => {
   });
 };
 
+// Hook to fetch vote summaries for multiple questions
+export const useMultipleVoteSummaries = (questionIds: string[]) => {
+  return useQuery({
+    queryKey: [votingConfigKey, "summaries", questionIds],
+    queryFn: async () => {
+      const summaries = await Promise.all(
+        questionIds.map(id => votingService.getVoteSummary(id, TEMP_USER_ID))
+      );
+      // Return as a map for easy lookup: { questionId: voteSummary }
+      return summaries.reduce((acc, summary) => {
+        if (summary.questionId) {
+          acc[summary.questionId] = summary;
+        }
+        return acc;
+      }, {} as Record<string, typeof summaries[0]>);
+    },
+    enabled: questionIds.length > 0,
+    staleTime: 1000 * 60, // 1 minut
+  });
+};
+
 export const useVote = (questionId: string) => {
   const queryClient = useQueryClient();
 
@@ -27,6 +48,10 @@ export const useVote = (questionId: string) => {
       queryClient.invalidateQueries({ 
         queryKey: [votingConfigKey, "summary", questionId] 
       });
+      // Also invalidate the multiple summaries query
+      queryClient.invalidateQueries({ 
+        queryKey: [votingConfigKey, "summaries"] 
+      });
     },
   });
 };
@@ -39,6 +64,10 @@ export const useRemoveVote = (questionId: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ 
         queryKey: [votingConfigKey, "summary", questionId] 
+      });
+      // Also invalidate the multiple summaries query
+      queryClient.invalidateQueries({ 
+        queryKey: [votingConfigKey, "summaries"] 
       });
     },
   });
