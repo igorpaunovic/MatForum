@@ -1,6 +1,6 @@
 // import type { router } from '@/app/router'
 // import { createRootRoute, Outlet } from '@tanstack/react-router'
-// import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+// // import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 // import { Toaster } from 'sonner'
 // import Navbar from "@/components/layout/navbar.tsx";
 
@@ -25,7 +25,7 @@
   
 import { Toaster } from 'sonner'
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+// import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
 import type { router } from '@/app/router'
 import { queryClient } from '@/shared/api/queryClient'
@@ -37,7 +37,7 @@ export const Route = createRootRouteWithContext()({
         <Outlet />
       </main>
       <Toaster position="bottom-right" richColors closeButton />
-      <TanStackRouterDevtools />
+      {/* <TanStackRouterDevtools /> */}
     </div>
   ),
   beforeLoad: () => {
