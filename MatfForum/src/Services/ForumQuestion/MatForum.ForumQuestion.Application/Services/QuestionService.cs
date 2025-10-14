@@ -9,12 +9,26 @@ using System.Threading.Tasks;
 
 namespace MatForum.ForumQuestion.Application.Services
 {
+    /// <summary>
+    /// Servis za upravljanje forum pitanjima
+    /// </summary>
+    /// <remarks>
+    /// Implementira IForumQuestionService interfejs i pruža funkcionalnosti
+    /// za kreiranje, čitanje, ažuriranje i brisanje pitanja.
+    /// Komunicira sa User servisom i Answer servisom preko HTTP klijenata.
+    /// </remarks>
     public class ForumQuestionService : IForumQuestionService
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IUserService _userService;
         private readonly IAnswerServiceClient _answerServiceClient;
 
+        /// <summary>
+        /// Konstruktor za ForumQuestionService
+        /// </summary>
+        /// <param name="questionRepository">Repository za pristup pitanjima u bazi</param>
+        /// <param name="userService">Servis za komunikaciju sa User mikroservisom</param>
+        /// <param name="answerServiceClient">Klijent za komunikaciju sa Answer mikroservisom</param>
         public ForumQuestionService(IQuestionRepository questionRepository, IUserService userService, IAnswerServiceClient answerServiceClient)
         {
             _questionRepository = questionRepository;
@@ -22,6 +36,12 @@ namespace MatForum.ForumQuestion.Application.Services
             _answerServiceClient = answerServiceClient;
         }
 
+        /// <summary>
+        /// Kreira novo forum pitanje
+        /// </summary>
+        /// <param name="command">Komanda sa podacima za kreiranje pitanja</param>
+        /// <returns>DTO kreiranog pitanja sa svim podacima uključujući ime autora</returns>
+        /// <exception cref="InvalidOperationException">Baca se kada korisnik ne postoji</exception>
         public async Task<QuestionDto> CreateQuestion(CreateQuestionCommand command)
         {
             var user = await _userService.GetByIdAsync(command.CreatedByUserId);
@@ -126,6 +146,15 @@ namespace MatForum.ForumQuestion.Application.Services
             return true;
         }
 
+        /// <summary>
+        /// Briše pitanje i sve povezane odgovore (cascade delete)
+        /// </summary>
+        /// <param name="id">ID pitanja koje treba obrisati</param>
+        /// <returns>True ako je pitanje uspešno obrisano, false ako pitanje ne postoji</returns>
+        /// <remarks>
+        /// Prvo briše sve odgovore povezane sa pitanjem pozivom Answer servisa,
+        /// zatim briše samo pitanje. Ovo osigurava integritet podataka.
+        /// </remarks>
         public async Task<bool> DeleteQuestion(Guid id)
         {
             var question = await _questionRepository.GetById(id);

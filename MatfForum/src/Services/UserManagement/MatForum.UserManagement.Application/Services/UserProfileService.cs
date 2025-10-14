@@ -5,12 +5,26 @@ using System.Linq;
 
 namespace MatForum.UserManagement.Application.Services;
 
+/// <summary>
+/// Servis za upravljanje korisničkim profilima
+/// </summary>
+/// <remarks>
+/// Implementira IUserProfileService interfejs i pruža funkcionalnosti
+/// za CRUD operacije nad korisničkim profilima, kao i komunikaciju
+/// sa Question i Answer servisima za dobijanje statistika.
+/// </remarks>
 public class UserProfileService : IUserProfileService
 {
     private readonly IUserProfileRepository _userRepository;
     private readonly IQuestionServiceClient _questionServiceClient;
     private readonly IAnswerServiceClient _answerServiceClient;
 
+    /// <summary>
+    /// Konstruktor za UserProfileService
+    /// </summary>
+    /// <param name="userRepository">Repository za pristup korisničkim profilima</param>
+    /// <param name="questionServiceClient">Klijent za komunikaciju sa Question servisom</param>
+    /// <param name="answerServiceClient">Klijent za komunikaciju sa Answer servisom</param>
     public UserProfileService(
         IUserProfileRepository userRepository,
         IQuestionServiceClient questionServiceClient,
@@ -86,6 +100,15 @@ public class UserProfileService : IUserProfileService
         return await _userRepository.GetCount();
     }
 
+    /// <summary>
+    /// Dobija listu top korisnika po broju doprinosa
+    /// </summary>
+    /// <param name="count">Broj korisnika koji treba da se vrati (default: 10)</param>
+    /// <returns>Lista top korisnika sortirana po ukupnom broju doprinosa</returns>
+    /// <remarks>
+    /// Računa ukupan broj pitanja i odgovora za svakog korisnika
+    /// pozivom Question i Answer servisa, zatim sortira po ukupnom broju.
+    /// </remarks>
     public async Task<IEnumerable<TopContributorDto>> GetTopContributors(int count = 10)
     {
         var allUsers = await _userRepository.GetAll();

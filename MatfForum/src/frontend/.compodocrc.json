@@ -1,0 +1,19 @@
+{
+  "name": "MatForum Frontend Documentation",
+  "output": "../../docs/compodoc",
+  "tsconfig": "./tsconfig.json",
+  "theme": "material",
+  "includes": "./src",
+  "includesName": "Documentation",
+  "disableCoverage": false,
+  "disablePrivate": false,
+  "disableProtected": false,
+  "disableInternal": false,
+  "disableLifeCycleHooks": false,
+  "disableRoutesGraph": false,
+  "disableSearch": false,
+  "disableDependencies": false,
+  "language": "en-US",
+  "hideGenerator": false
+}
+

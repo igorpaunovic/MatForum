@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatForum Frontend Dokumentacija</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: #667eea;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        h3 {
+            color: #764ba2;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .card {
+            background: white;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .tech-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .tech-item h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        
+        ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .structure {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🎨 MatForum Frontend Dokumentacija</h1>
+            <p>Moderni React aplikacija sa TypeScript-om i TanStack Router-om</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2>📋 Pregled</h2>
+            <p>MatForum frontend je moderna web aplikacija izgrađena sa React-om i TypeScript-om. Koristi najnovije tehnologije i best practices za izgradnju performantnih i održivih aplikacija.</p>
+        </div>
+        
+        <div class="card">
+            <h2>🚀 Tehnologije</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <h4>React 18</h4>
+                    <p>Biblioteka za izgradnju korisničkih interfejsa</p>
+                </div>
+                <div class="tech-item">
+                    <h4>TypeScript</h4>
+                    <p>Statički tipizirani JavaScript</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Vite</h4>
+                    <p>Brzi build tool i dev server</p>
+                </div>
+                <div class="tech-item">
+                    <h4>TanStack Router</h4>
+                    <p>Type-safe routing za React</p>
+                </div>
+                <div class="tech-item">
+                    <h4>TanStack Query</h4>
+                    <p>Data fetching i caching</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Tailwind CSS</h4>
+                    <p>Utility-first CSS framework</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Radix UI</h4>
+                    <p>Pristupačne UI komponente</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Axios</h4>
+                    <p>HTTP klijent za API pozive</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>📁 Struktura Projekta</h2>
+            <div class="structure">
+src/
+├── components/          # Reusable komponente
+│   ├── features/       # Feature-specific komponente
+│   │   ├── questions/  # Komponente za pitanja
+│   │   ├── voting/     # Komponente za glasanje
+│   │   └── auth/       # Komponente za autentifikaciju
+│   └── ui/             # Osnovne UI komponente
+├── routes/             # TanStack Router rute
+│   ├── ~(public)/      # Javne rute
+│   │   └── ~_auth/     # Auth rute (login, signup)
+│   └── ~_protected/    # Zaštićene rute
+│       ├── ~ask/       # Postavi pitanje
+│       └── ~questions/ # Lista pitanja
+├── lib/                # Utility funkcije
+├── hooks/              # Custom React hooks
+└── api/                # API klijenti i tipovi
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>🛠️ Instalacija i Pokretanje</h2>
+            
+            <h3>Instalacija zavisnosti</h3>
+            <pre><code>cd MatfForum/src/frontend
+npm install --legacy-peer-deps</code></pre>
+            
+            <h3>Pokretanje development servera</h3>
+            <pre><code>npm run dev</code></pre>
+            <p>Aplikacija će biti dostupna na <code>http://localhost:5173</code></p>
+            
+            <h3>Build za produkciju</h3>
+            <pre><code>npm run build</code></pre>
+            
+            <h3>Preview produkcijskog build-a</h3>
+            <pre><code>npm run preview</code></pre>
+        </div>
+        
+        <div class="card">
+            <h2>🎯 Ključne Funkcionalnosti</h2>
+            
+            <h3>Autentifikacija</h3>
+            <ul>
+                <li>Registracija korisnika</li>
+                <li>Prijava (login)</li>
+                <li>Odjava (logout)</li>
+                <li>JWT token management</li>
+            </ul>
+            
+            <h3>Pitanja</h3>
+            <ul>
+                <li>Pregled svih pitanja</li>
+                <li>Postavljanje novih pitanja</li>
+                <li>Pretraga pitanja</li>
+                <li>Filtriranje po kategorijama</li>
+            </ul>
+            
+            <h3>Odgovori</h3>
+            <ul>
+                <li>Pregled odgovora na pitanja</li>
+                <li>Dodavanje novih odgovora</li>
+                <li>Uređivanje odgovora</li>
+            </ul>
+            
+            <h3>Glasanje</h3>
+            <ul>
+                <li>Upvote/Downvote za pitanja</li>
+                <li>Upvote/Downvote za odgovore</li>
+                <li>Prikaz broja glasova</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h2>🔌 API Integracija</h2>
+            <p>Frontend komunicira sa backend-om preko API Gateway-a na <code>http://localhost:5000</code></p>
+            
+            <h3>Glavni API Endpoints</h3>
+            <ul>
+                <li><code>POST /api/auth/login</code> - Prijava korisnika</li>
+                <li><code>POST /api/auth/register</code> - Registracija korisnika</li>
+                <li><code>GET /api/questions</code> - Lista pitanja</li>
+                <li><code>POST /api/questions</code> - Kreiranje pitanja</li>
+                <li><code>GET /api/questions/{id}/answers</code> - Odgovori na pitanje</li>
+                <li><code>POST /api/answers</code> - Kreiranje odgovora</li>
+                <li><code>POST /api/votes</code> - Glasanje</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h2>🎨 Styling</h2>
+            <p>Projekat koristi <strong>Tailwind CSS</strong> za styling sa dodatnim custom komponentama iz <strong>Radix UI</strong>.</p>
+            
+            <h3>Tailwind Konfiguracija</h3>
+            <p>Tailwind je konfigurisan sa custom temom koja uključuje:</p>
+            <ul>
+                <li>Custom boje</li>
+                <li>Custom spacing</li>
+                <li>Custom font familije</li>
+                <li>Dark mode podrška</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h2>🧪 Testiranje</h2>
+            <p>Za testiranje se koristi:</p>
+            <ul>
+                <li><strong>Vitest</strong> - Unit testovi</li>
+                <li><strong>React Testing Library</strong> - Component testovi</li>
+            </ul>
+            
+            <h3>Pokretanje testova</h3>
+            <pre><code>npm run test</code></pre>
+        </div>
+        
+        <div class="card">
+            <h2>📝 Code Style</h2>
+            <p>Projekat koristi ESLint za održavanje konzistentnog code style-a.</p>
+            
+            <h3>Pokretanje lintera</h3>
+            <pre><code>npm run lint</code></pre>
+        </div>
+        
+        <div class="card">
+            <h2>🔗 Korisni Linkovi</h2>
+            <ul>
+                <li><a href="https://react.dev/" target="_blank">React Dokumentacija</a></li>
+                <li><a href="https://www.typescriptlang.org/" target="_blank">TypeScript Dokumentacija</a></li>
+                <li><a href="https://tanstack.com/router" target="_blank">TanStack Router</a></li>
+                <li><a href="https://tanstack.com/query" target="_blank">TanStack Query</a></li>
+                <li><a href="https://tailwindcss.com/" target="_blank">Tailwind CSS</a></li>
+                <li><a href="https://www.radix-ui.com/" target="_blank">Radix UI</a></li>
+                <li><a href="https://vitejs.dev/" target="_blank">Vite</a></li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h2>👥 Kontakt</h2>
+            <p>Za pitanja i sugestije, kontaktirajte tim za razvoj.</p>
+        </div>
+    </div>
+</body>
+</html>
+

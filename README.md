@@ -169,6 +169,133 @@ MatForum/
 3. **Answer Service → Question gRPC**: gRPC sa HTTPS
 4. **Mikroservisi → PostgreSQL**: Entity Framework
 
+## 📚 Dokumentacija
+
+Projekat ima kompletnu dokumentaciju za backend i frontend.
+
+### 🌐 Pregled Dokumentacije
+
+#### Backend Dokumentacija (Doxygen)
+Otvorite `docs/doxygen/html/index.html` u browseru ili pokrenite:
+```bash
+open docs/doxygen/html/index.html
+```
+
+Backend dokumentacija uključuje:
+- **Pregled svih servisa** - Centralna strana sa linkovima ka svim servisima
+- **User Management Service** - Upravljanje korisničkim profilima
+- **Forum Question Service** - Upravljanje pitanjima
+- **Question Answer Service** - Upravljanje odgovorima
+- **Voting Service** - Sistem glasanja
+- **Identity Server** - Autentifikacija i autorizacija
+- **API Gateway** - YARP reverse proxy
+- **API Reference** - Sve klase, interfejsi i metode
+- **Dijagrami** - Class diagrams, call graphs
+
+#### Frontend Dokumentacija
+Otvorite `docs/frontend/index.html` u browseru ili pokrenite:
+```bash
+open docs/frontend/index.html
+```
+
+Frontend dokumentacija uključuje:
+- Pregled tehnologija (React, TypeScript, Vite, TanStack)
+- Strukturu projekta
+- Instalaciju i pokretanje
+- Ključne funkcionalnosti
+- API integraciju
+- Styling sa Tailwind CSS
+
+### 🔄 Regenerisanje Dokumentacije
+
+#### Backend dokumentacija (Doxygen)
+```bash
+# Iz root direktorijuma projekta
+cd /Users/factoryww/MatForum
+doxygen Doxyfile
+
+# Dokumentacija će biti generisana u docs/doxygen/html/
+```
+
+#### Frontend dokumentacija
+Frontend dokumentacija je već generisana i nalazi se u `docs/frontend/index.html`.
+
+Ako želite da regenerišete backend dokumentaciju:
+```bash
+# Iz root direktorijuma projekta
+cd /Users/factoryww/MatForum
+doxygen Doxyfile
+```
+
+### 📖 Pristup Dokumentaciji
+
+#### Lokalni pregled
+```bash
+# Backend dokumentacija
+open docs/doxygen/html/index.html
+
+# Frontend dokumentacija
+open docs/frontend/index.html
+
+# Ili koristite Python HTTP server za sve
+cd docs
+python3 -m http.server 8000
+# Backend: http://localhost:8000/doxygen/html/
+# Frontend: http://localhost:8000/frontend/
+```
+
+### Sadržaj dokumentacije
+
+Svaki README fajl sadrži:
+- **Pregled servisa** - Opis funkcionalnosti
+- **Arhitektura** - Dijagram komunikacije
+- **API Endpoints** - Kompletna lista endpoint-a
+- **Struktura projekta** - Organizacija fajlova
+- **Baza podataka** - Konfiguracija i migracije
+- **Komunikacija** - Inter-service komunikacija
+- **Autentifikacija** - JWT i autorizacija
+- **Docker konfiguracija** - Container setup
+- **Pokretanje** - Instrukcije za development
+- **Testiranje** - cURL primeri i testovi
+- **Troubleshooting** - Rešavanje problema
+- **Performance** - Optimizacije
+- **Security** - Sigurnosne mere
+- **Deployment** - Production setup
+
+### Pisanje dokumentacionih komentara
+
+#### Backend (C# - Doxygen format)
+```csharp
+/// <summary>
+/// Kreira novo forum pitanje
+/// </summary>
+/// <param name="command">Komanda sa podacima za kreiranje pitanja</param>
+/// <returns>DTO kreiranog pitanja</returns>
+/// <exception cref="InvalidOperationException">Baca se kada korisnik ne postoji</exception>
+public async Task<QuestionDto> CreateQuestion(CreateQuestionCommand command)
+{
+    // Implementation
+}
+```
+
+#### Frontend (TypeScript - JSDoc format)
+```typescript
+/**
+ * Komponenta za prikaz liste pitanja
+ * @component
+ * @param {QuestionListProps} props - Props objekat
+ * @param {Question[]} props.questions - Lista pitanja
+ * @returns {JSX.Element} JSX element sa listom pitanja
+ * @example
+ * ```tsx
+ * <QuestionList questions={questions} />
+ * ```
+ */
+const QuestionList = ({ questions }: QuestionListProps) => {
+    // Implementation
+};
+```
+
 ## 🛠️ Razvoj
 
 ### Pokretanje frontend-a za razvoj
