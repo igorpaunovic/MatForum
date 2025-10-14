@@ -70,11 +70,23 @@ builder.Services.AddDbContext<QuestionAnswerDbContext>(options =>
 
 var app = builder.Build();
 
-// Ensure database is created
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<QuestionAnswerDbContext>();
-    context.Database.EnsureCreated();
+    try
+    {
+        // Replace with your actual DbContext class name!
+        var dbContext = scope.ServiceProvider.GetRequiredService<QuestionAnswerDbContext>();
+        dbContext.Database.Migrate();
+
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation("QuestionAnswer database migrations applied successfully.");
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the QuestionAnswer database.");
+        throw;
+    }
 }
 
 // Configure the HTTP request pipeline.
