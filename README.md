@@ -95,7 +95,7 @@ MatForum/
 │   │   │   │   ├── MatForum.QuestionAnswer.Application/
 │   │   │   │   ├── MatForum.QuestionAnswer.Domain/
 │   │   │   │   └── MatForum.QuestionAnswer.Infrastructure/
-│   │   │   └── Voting/                   # Glasovanje
+│   │   │   └── Voting/                   # Glasanje
 │   │   │       ├── MatForum.Voting.API/
 │   │   │       ├── MatForum.Voting.Application/
 │   │   │       ├── MatForum.Voting.Domain/
@@ -187,17 +187,6 @@ cd MatfForum/src/frontend
 npm run build
 ```
 
-### Pregled logova
-
-```bash
-# Svi servisi
-docker-compose logs -f
-
-# Specifičan servis
-docker-compose logs -f user-service
-docker-compose logs -f question-service
-```
-
 ### Zaustavljanje servisa
 
 ```bash
@@ -209,32 +198,6 @@ docker-compose down
 ```bash
 docker-compose down -v
 ```
-
-## 📋 API Endpoints
-
-### Autentifikacija
-- `POST /api/auth/login` - Prijava
-- `POST /api/auth/register` - Registracija
-
-### Pitanja
-- `GET /api/questions` - Lista pitanja
-- `POST /api/questions` - Kreiranje pitanja (auth)
-- `GET /api/questions/{id}` - Detalji pitanja
-- `PUT /api/questions/{id}` - Ažuriranje pitanja (auth)
-
-### Odgovori
-- `GET /api/answers` - Lista odgovora
-- `POST /api/answers` - Kreiranje odgovora (auth)
-- `GET /api/answers/{id}` - Detalji odgovora
-
-### Glasovanje
-- `POST /api/votes` - Glasovanje (auth)
-- `GET /api/votes` - Lista glasova
-
-### Korisnici
-- `GET /api/users/count` - Broj korisnika
-- `GET /api/users/top-contributors` - Top korisnici
-- `GET /api/users/{id}/exists` - Provera postojanja korisnika
 
 ## 🚨 Troubleshooting
 
