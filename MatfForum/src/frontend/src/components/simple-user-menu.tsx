@@ -31,6 +31,7 @@ export const SimpleUserMenu = () => {
     try {
       await logoutMutation.mutateAsync();
       navigate({ to: "/" });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Logout failed");
     }
