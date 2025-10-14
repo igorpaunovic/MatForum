@@ -55,7 +55,6 @@ npm run dev
 - **API Gateway**: http://localhost:5000
 - **PostgreSQL**: localhost:15432
 - **Swagger dokumentacija**: 
-  - API Gateway: http://localhost:5000/swagger
   - User Service: http://localhost:5001/swagger
   - Question Service: http://localhost:5002/swagger
   - Answer Service: http://localhost:5004/swagger
