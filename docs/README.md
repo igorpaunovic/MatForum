@@ -17,7 +17,7 @@ Dobrodošli u MatForum dokumentaciju! Ovde možete pronaći kompletnu tehničku 
 **Otvorite**: `open doxygen/html/index.html` ili `file:///Users/factoryww/MatForum/docs/doxygen/html/index.html`
 
 ### Frontend Dokumentacija (Compodoc)
-- **Lokacija**: `compodoc/index.html`
+- **Lokacija**: `frontend/index.html`
 - **Tehnologija**: Compodoc
 - **Pokriva**:
   - React komponente
@@ -26,7 +26,7 @@ Dobrodošli u MatForum dokumentaciju! Ovde možete pronaći kompletnu tehničku 
   - Routing struktura
   - API klijente
 
-**Otvorite**: `open compodoc/index.html` ili `file:///Users/factoryww/MatForum/docs/compodoc/index.html`
+**Otvorite**: `open frontend/index.html` ili `file:///Users/factoryww/MatForum/docs/frontend/index.html`
 
 ## 🔄 Regenerisanje dokumentacije
 
