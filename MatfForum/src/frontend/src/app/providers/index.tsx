@@ -1,6 +1,6 @@
 // import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // import { router } from "@/app/router";
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+// // import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 // import { RouterProvider } from "@tanstack/react-router";
 // import { Toaster } from "sonner";
 
@@ -20,10 +20,10 @@
 // }
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { router } from "@/app/router";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { RouterProvider } from "@tanstack/react-router";
 import { Suspense } from "react";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+// import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { DefaultPendingComponent } from "@/components/default-pending-component";
 import { ThemeProvider } from "@/hooks/use-theme";
 
@@ -41,10 +41,10 @@ export const Providers = ({ router, client }: Props) => {
           <Suspense fallback={<DefaultPendingComponent />}>  {/* ovde nisam siguran za fallback da li da bude Loading ili nesto drugo to treba videti */}
           {/* If you don't need auth in router context, render RouterProvider directly */}
               <RouterProvider router={router} />
-              <TanStackRouterDevtools router={router} />
-              <ReactQueryDevtools />
+              {/* <TanStackRouterDevtools router={router} /> */}
+              {/* <ReactQueryDevtools /> */}
           </Suspense>
-          <ReactQueryDevtools />
+          {/* <ReactQueryDevtools /> */}
       </QueryClientProvider>
     </ThemeProvider>
   )
