@@ -5,11 +5,33 @@ import { useMe } from "@/api/auth";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
+/**
+ * Props za VotingButtons komponentu
+ * @interface VotingButtonsProps
+ */
 interface VotingButtonsProps {
+  /** ID pitanja za koje se glasuje */
   questionId: string;
-  user?: { id: string } | null; // Pass user as prop instead of calling useMe
+  /** Trenutno ulogovani korisnik (opciono) */
+  user?: { id: string } | null;
 }
 
+/**
+ * Komponenta za glasanje (upvote/downvote) na pitanja
+ * @component
+ * @param {VotingButtonsProps} props - Props objekat
+ * @param {string} props.questionId - ID pitanja
+ * @param {Object} props.user - Trenutno ulogovani korisnik
+ * @returns {JSX.Element} JSX element sa dugmićima za glasanje i prikazom rezultata
+ * @example
+ * ```tsx
+ * <VotingButtons questionId="123" user={currentUser} />
+ * ```
+ * @description
+ * Prikazuje dva dugmeta (upvote i downvote) sa trenutnim rezultatom glasanja.
+ * Korisnici mogu glasati samo ako su ulogovani. Ako korisnik već glasao,
+ * može promeniti glas ili ga ukloniti klikom na isto dugme.
+ */
 const VotingButtons = ({ questionId, user }: VotingButtonsProps) => {
   const { data: voteSummary, isPending } = useVoteSummary(questionId);
   const voteMutation = useVote(questionId);

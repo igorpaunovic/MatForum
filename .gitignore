@@ -97,3 +97,8 @@ _MigrationBackup/
 !.env.example
 appsettings.*.local.json
 
+# --- Documentation generated files ---
+docs/doxygen/
+docs/compodoc/
+Doxyfile.bak
+
