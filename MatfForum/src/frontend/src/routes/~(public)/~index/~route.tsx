@@ -14,11 +14,13 @@ function RouteComponent() {
   return (
     <>
       <Navbar />
-      <HeroSection />
-      <GuidelinesSection />
-      <QuickStartSection />
-      <PopularTopicsSection />
-      <CTASection />
+      <div className="max-w-6xl mx-auto px-4">
+        <HeroSection />
+        <GuidelinesSection />
+        <QuickStartSection />
+        <PopularTopicsSection />
+        <CTASection />
+      </div>
     </>
   )
 }
