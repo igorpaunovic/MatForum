@@ -8,6 +8,7 @@
         "identityserver-service": "StartDebugging",
         "user-service": "StartDebugging",
         "question-service": "StartDebugging",
+        "question-grpc-service": "StartDebugging",
         "voting-service": "StartDebugging",
         "answer-service": "StartDebugging"
       }
