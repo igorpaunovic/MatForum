@@ -39,9 +39,6 @@ const QuestionDetail = ({ question }: QuestionDetailProps) => {
   const isAuthenticated = !!user;
   const isOwner = isAuthenticated && user?.id && question.createdByUserId && user.id === question.createdByUserId;
 
-  const isEdited = question.updatedAt && question.createdAt && 
-    new Date(question.updatedAt).getTime() !== new Date(question.createdAt).getTime();
-
   // Load all answers on mount - they should be expanded by default
   useEffect(() => {
     const loadAnswers = async () => {
@@ -193,7 +190,7 @@ const QuestionDetail = ({ question }: QuestionDetailProps) => {
                 <div className="flex flex-wrap justify-between items-center text-sm text-gray-500 dark:text-[#818384] mt-4 pt-4 border-t border-gray-200 dark:border-[#343536]">
                   <div className="flex items-center gap-4">
                     <span className="font-medium">Asked by {question.authorName}</span>
-                    {isEdited && (
+                    {question.isEdited && (
                       <span className="inline-flex items-center bg-gray-100 text-gray-800 text-xs px-2 py-0.5 rounded-full" title={`Edited on ${formatDate(question.updatedAt)}`}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
                           <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
@@ -325,6 +322,7 @@ const QuestionDetail = ({ question }: QuestionDetailProps) => {
                     answer={answer}
                     depth={0}
                     onReplySubmitted={loadAnswers}
+                    isClosed={question.isClosed}
                   />
                 ))}
               </div>

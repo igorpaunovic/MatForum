@@ -41,11 +41,22 @@ builder.Services.AddScoped<IQuestionRepository, EfQuestionRepository>();
 
 var app = builder.Build();
 
-// Ensure database is created
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<QuestionDbContext>();
-    context.Database.EnsureCreated();
+    try
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<QuestionDbContext>();
+        dbContext.Database.Migrate();
+
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation("ForumQuestion database migrations applied successfully.");
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the ForumQuestion database.");
+        throw;
+    }
 }
 
 // Configure the HTTP request pipeline.

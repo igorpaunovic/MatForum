@@ -14,6 +14,7 @@ namespace MatForum.ForumQuestion.Application.DTOs
         public DateTimeOffset UpdatedAt { get; set; }
         public int Views { get; set; }
         public bool IsClosed { get; set; }
+        public bool IsEdited { get; set; }
         public List<string> Tags { get; set; } = new List<string>();
     }
 

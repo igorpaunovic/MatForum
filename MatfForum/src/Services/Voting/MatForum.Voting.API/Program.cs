@@ -29,11 +29,22 @@ builder.Services.AddScoped<IVoteService, VoteService>();
 
 var app = builder.Build();
 
-// Ensure database is created
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<VotingDbContext>();
-    context.Database.EnsureCreated();
+    try
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<VotingDbContext>();
+        dbContext.Database.Migrate();
+
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation("Voting database migrations applied successfully.");
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the Voting database.");
+        throw;
+    }
 }
 
 // Configure the HTTP request pipeline.

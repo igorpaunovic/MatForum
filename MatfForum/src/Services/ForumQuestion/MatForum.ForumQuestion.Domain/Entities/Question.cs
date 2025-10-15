@@ -11,6 +11,7 @@ public class Question : BaseEntity
     // public DateTimeOffset UpdatedAt { get; private set; }
     public int Views { get; private set; }
     public bool IsClosed { get; private set; }
+    public bool IsEdited { get; private set; }
     public List<string> Tags { get; private set; } = new List<string>();
 
     // Constructor for creating new questions
@@ -28,6 +29,7 @@ public class Question : BaseEntity
         base.UpdatedAt = base.CreatedAt;
         Views = 0;
         IsClosed = false;
+        IsEdited = false;
         Tags = tags ?? new List<string>();
     }
 
@@ -40,6 +42,7 @@ public class Question : BaseEntity
         Title = title;
         Content = content;
         base.UpdatedAt = DateTime.UtcNow;
+        IsEdited = true;
         Tags = tags ?? new List<string>();
     }
 

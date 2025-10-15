@@ -88,6 +88,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      question-service:
+        condition: service_started
     restart: on-failure
   
   voting-service:

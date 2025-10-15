@@ -18,13 +18,6 @@ builder.Services.AddDbContext<QuestionDbContext>(options =>
 
 var app = builder.Build();
 
-// Ensure database is created
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<QuestionDbContext>();
-    context.Database.EnsureCreated();
-}
-
 // Configure the HTTP request pipeline.
 app.MapGrpcService<QuestionValidationGrpcService>();
 

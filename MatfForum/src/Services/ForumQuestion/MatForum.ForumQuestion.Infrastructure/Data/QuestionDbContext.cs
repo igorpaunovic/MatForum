@@ -45,6 +45,10 @@ namespace MatForum.ForumQuestion.Infrastructure.Data
                     .IsRequired()
                     .HasDefaultValue(false);
                 
+                entity.Property(e => e.IsEdited)
+                    .IsRequired()
+                    .HasDefaultValue(false);
+                
                 entity.Property(e => e.Tags)
                     .HasColumnType("text[]"); // PostgreSQL array type
                 
