@@ -39,8 +39,7 @@ const QuestionDetail = ({ question }: QuestionDetailProps) => {
   const isAuthenticated = !!user;
   const isOwner = isAuthenticated && user?.id && question.createdByUserId && user.id === question.createdByUserId;
 
-  const isEdited = question.updatedAt && question.createdAt && 
-    new Date(question.updatedAt).getTime() !== new Date(question.createdAt).getTime();
+  const isEdited = (new Date(question.updatedAt).getTime() - new Date(question.createdAt).getTime()) > 2000;
 
   // Load all answers on mount - they should be expanded by default
   useEffect(() => {
