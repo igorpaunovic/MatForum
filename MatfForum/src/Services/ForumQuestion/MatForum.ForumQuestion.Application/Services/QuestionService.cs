@@ -62,6 +62,7 @@ namespace MatForum.ForumQuestion.Application.Services
                 UpdatedAt = question.UpdatedAt,
                 Views = question.Views,
                 IsClosed = question.IsClosed,
+                IsEdited = question.IsEdited,
                 Tags = question.Tags
             };
         }
@@ -84,6 +85,7 @@ namespace MatForum.ForumQuestion.Application.Services
                 UpdatedAt = question.UpdatedAt,
                 Views = question.Views,
                 IsClosed = question.IsClosed,
+                IsEdited = question.IsEdited,
                 Tags = question.Tags
             };
         }
@@ -105,6 +107,7 @@ namespace MatForum.ForumQuestion.Application.Services
                     UpdatedAt = question.UpdatedAt,
                     Views = question.Views,
                     IsClosed = question.IsClosed,
+                    IsEdited = question.IsEdited,
                     Tags = question.Tags
                 });
             }
@@ -129,6 +132,7 @@ namespace MatForum.ForumQuestion.Application.Services
                     UpdatedAt = question.UpdatedAt,
                     Views = question.Views,
                     IsClosed = question.IsClosed,
+                    IsEdited = question.IsEdited,
                     Tags = question.Tags
                 });
             }
@@ -186,6 +190,7 @@ namespace MatForum.ForumQuestion.Application.Services
                     UpdatedAt = question.UpdatedAt,
                     Views = question.Views,
                     IsClosed = question.IsClosed,
+                    IsEdited = question.IsEdited,
                     Tags = question.Tags
                 });
             }
@@ -215,6 +220,7 @@ namespace MatForum.ForumQuestion.Application.Services
                     UpdatedAt = question.UpdatedAt,
                     Views = question.Views,
                     IsClosed = question.IsClosed,
+                    IsEdited = question.IsEdited,
                     Tags = question.Tags
                 });
             }

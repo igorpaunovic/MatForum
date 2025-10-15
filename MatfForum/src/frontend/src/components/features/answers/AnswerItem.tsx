@@ -8,7 +8,7 @@ import { useAnswerVote, useAnswerVoteSummary, useRemoveAnswerVote } from '@/hook
 import { VOTE_TYPE_UPVOTE, VOTE_TYPE_DOWNVOTE } from '@/services/api-voting-service';
 import answerService from '@/services/api-answer-service';
 import { useMe } from '@/api/auth';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface AnswerItemProps {

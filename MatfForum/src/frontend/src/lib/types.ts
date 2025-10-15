@@ -9,6 +9,7 @@ export interface Question {
   tags: string[];
   views: number; // ✅ Match backend field name
   isClosed: boolean;
+  isEdited: boolean;
 }
 
 export interface CreateQuestionDTO {

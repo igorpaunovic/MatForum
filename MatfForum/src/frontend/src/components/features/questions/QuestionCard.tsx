@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Link } from '@tanstack/react-router';
 
-const QuestionCard = ({ id, title, content, authorName, createdByUserId, createdAt, updatedAt, tags, isClosed }: Question) => {
+const QuestionCard = ({ id, title, content, authorName, createdByUserId, createdAt, updatedAt, tags, isClosed, isEdited }: Question) => {
   const queryClient = useQueryClient();
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showAnswers, setShowAnswers] = useState(false);
@@ -33,8 +33,6 @@ const QuestionCard = ({ id, title, content, authorName, createdByUserId, created
   const { data: user } = useMe();
   const isAuthenticated = !!user;
   const isOwner = isAuthenticated && user?.id && createdByUserId && user.id === createdByUserId;
-
-  const isEdited = updatedAt && createdAt && new Date(updatedAt).getTime() !== new Date(createdAt).getTime();
 
   // Load answer count on mount
   useEffect(() => {
