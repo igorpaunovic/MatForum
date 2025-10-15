@@ -180,7 +180,7 @@ function QuestionComponent() {
               </Link>
             )}
             <Link to="/ask">
-              <Button size="sm">
+              <Button variant="outline" size="sm">
                 Ask Question
               </Button>
             </Link>
