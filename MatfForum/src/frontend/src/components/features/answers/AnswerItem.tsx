@@ -15,9 +15,10 @@ interface AnswerItemProps {
   answer: Answer;
   depth?: number;
   onReplySubmitted?: () => void;
+  isClosed: boolean;
 }
 
-const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) => {
+const AnswerItem = ({ answer, depth = 0, onReplySubmitted, isClosed }: AnswerItemProps) => {
   // const queryClient = useQueryClient();
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(true);
@@ -302,7 +303,7 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
 
             {/* Action buttons */}
             <div className="flex items-center gap-3">
-              {isAuthenticated ? (
+              {(isAuthenticated && !isClosed) ? (
                 <Button
                   variant="ghost"
                   size="sm"
@@ -371,6 +372,7 @@ const AnswerItem = ({ answer, depth = 0, onReplySubmitted }: AnswerItemProps) =>
               answer={reply}
               depth={depth + 1}
               onReplySubmitted={onReplySubmitted}
+              isClosed={isClosed}
             />
           ))}
         </div>
