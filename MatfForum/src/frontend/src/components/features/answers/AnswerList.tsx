@@ -4,9 +4,10 @@ import AnswerItem from './AnswerItem';
 interface AnswerListProps {
   answers: Answer[];
   onReplySubmitted?: () => void;
+  isClosed: boolean;
 }
 
-const AnswerList = ({ answers, onReplySubmitted }: AnswerListProps) => {
+const AnswerList = ({ answers, onReplySubmitted, isClosed }: AnswerListProps) => {
   if (answers.length === 0) {
     return (
       <div className="text-center py-4 text-gray-500 dark:text-[#818384]">
@@ -26,6 +27,7 @@ const AnswerList = ({ answers, onReplySubmitted }: AnswerListProps) => {
           answer={answer}
           depth={0}
           onReplySubmitted={onReplySubmitted}
+          isClosed={isClosed}
         />
       ))}
     </div>

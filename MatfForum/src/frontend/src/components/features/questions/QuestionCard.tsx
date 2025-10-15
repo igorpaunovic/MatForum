@@ -338,7 +338,7 @@ const QuestionCard = ({ id, title, content, authorName, createdByUserId, created
               {isLoadingAnswers ? (
                 <div className="text-center py-4 text-gray-500 dark:text-[#818384]">Loading answers...</div>
               ) : (
-                <AnswerList answers={answers} onReplySubmitted={loadAnswers} />
+                <AnswerList answers={answers} onReplySubmitted={loadAnswers} isClosed={isClosed} />
               )}
             </div>
           )}
