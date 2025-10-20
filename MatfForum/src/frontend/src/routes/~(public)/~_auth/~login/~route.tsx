@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
+import Logo from "@/components/common/Logo.tsx";
 
 import {
   Card,
@@ -79,9 +80,7 @@ function LoginComponent() {
         <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-white to-blue-50 items-center justify-center p-12">
           <div className="max-w-md">
             <div className="text-center mb-8">
-              <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <span className="text-white font-bold text-3xl">M</span>
-              </div>
+              <Logo size="large" className="mx-auto mb-6" />
               <h1 className="text-4xl font-bold text-gray-800 mb-3">MatForum</h1>
               <p className="text-gray-600 text-lg">Your community for mathematics, programming, and academic discussions</p>
             </div>
@@ -136,9 +135,7 @@ function LoginComponent() {
         <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
           <div className="w-full max-w-md">
             <div className="text-center mb-8 lg:hidden">
-              <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <span className="text-white font-bold text-2xl">M</span>
-              </div>
+              <Logo size="medium" className="mx-auto mb-4" />
               <h1 className="text-3xl font-bold text-gray-800">MatForum</h1>
             </div>
 
@@ -154,9 +151,7 @@ function LoginComponent() {
 
             <Card className="border-0 shadow-2xl bg-white/90 backdrop-blur-sm">
               <CardHeader className="text-center pb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md">
-                  <span className="text-white font-bold text-lg">M</span>
-                </div>
+                <Logo size="small" className="h-12 w-12 mx-auto mb-4" />
                 <CardTitle className="text-3xl font-bold text-gray-800">{formLabels.title}</CardTitle>
                 <CardDescription className="text-gray-600 text-lg">{formLabels.description}</CardDescription>
               </CardHeader>
