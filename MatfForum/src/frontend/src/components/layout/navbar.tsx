@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSearchQuestions } from "@/hooks/use-search-questions";
 import { SimpleUserMenu } from "@/components/simple-user-menu.tsx";
 import { ThemeToggle } from "@/components/theme-toggle";
+import Logo from "@/components/common/Logo.tsx";
 
 const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,7 +54,10 @@ const Navbar = () => {
     <nav className="bg-white dark:bg-[#1A1A1B] border-b border-gray-200 dark:border-[#343536] px-4 py-3">
       <div className="flex items-center justify-between max-w-6xl mx-auto gap-4">
         <Link to="/" className="font-bold text-gray-900 dark:text-[#D7DADC] flex-shrink-0">
-          MATForum
+          <div className="flex items-center">
+            <Logo size="small" />
+            <span className="ml-1 text-xl font-bold text-gray-800">MATForum</span>
+          </div>
         </Link>
 
         <div className="flex-1 max-w-2xl mx-4 relative" ref={searchRef}>
